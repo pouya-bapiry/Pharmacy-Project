@@ -14,6 +14,14 @@
 		<PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
 		<PackageReference Include="SixLabors.ImageSharp" Version="3.1.11" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="DTO\" />
+	  <Folder Include="Extensions\" />
+	  <Folder Include="EntitiesExtensions\" />
+	  <Folder Include="Utilities\" />
+	  <Folder Include="Services\" />
+	</ItemGroup>
 	
 
 </Project>
