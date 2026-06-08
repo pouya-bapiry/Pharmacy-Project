@@ -19,10 +19,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Entities\" />
-    <Folder Include="Common\" />
-    <Folder Include="IRepository\" />
-  </ItemGroup>
-
 </Project>
