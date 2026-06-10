@@ -16,11 +16,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="DTO\" />
 	  <Folder Include="Extensions\" />
 	  <Folder Include="EntitiesExtensions\" />
 	  <Folder Include="Utilities\" />
-	  <Folder Include="Services\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Pharmacy.Domain\Pharmacy.Domain.csproj" />
 	</ItemGroup>
 	
 
