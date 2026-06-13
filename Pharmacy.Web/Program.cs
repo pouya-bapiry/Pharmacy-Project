@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Pharmacy.Infrastructure.Context;
 using Pharmacy.Web.DI;
@@ -10,7 +11,22 @@ builder.Services.AddControllersWithViews();
 #region DI
 builder.Services.RegisterService();
 #endregion
+#region Authentication
 
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+}).AddCookie(options =>
+{
+    options.LoginPath = "/Login";
+    options.LogoutPath = "/Logout";
+    options.AccessDeniedPath = "/404-page-not-found";
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(10000);
+});
+
+#endregion
 #region DatabaseConfig
 var connectionString = builder.Configuration.GetConnectionString("Pharmacy_Project");
 
@@ -33,7 +49,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

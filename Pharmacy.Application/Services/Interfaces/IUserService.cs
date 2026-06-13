@@ -15,6 +15,7 @@ namespace Pharmacy.Application.Services.Interfaces
         Task<RegisterUserResult> RegisterUser(RegisterUserDto register);
         Task<bool> IsUserExistByMobile(string mobile);
         Task<User> GetUserByMobile(string mobile);
+        Task<UserLoginResult> UserLogin(LoginUserDto login);
         #endregion
 
     }

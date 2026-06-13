@@ -1,9 +1,12 @@
 ﻿using GoogleReCaptcha.V3.Interface;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Pharmacy.Application.DTO.Account;
 using Pharmacy.Application.Services.Interfaces;
 using Pharmacy.Domain.Entities.Account;
 using Pharmacy.Domain.IRepository;
+using System.Security.Claims;
 
 namespace Pharmacy.Web.Controllers
 {
@@ -11,14 +14,16 @@ namespace Pharmacy.Web.Controllers
     {
         #region Fields
 
-        private readonly IUserService _userService;     
-        private readonly IGenericRepository<User> _userRepository;       
+        private readonly IUserService _userService;
+        private readonly IGenericRepository<User> _userRepository;
+        public static string ReturnUrl { get; set; }
+
 
         public AccountController(IUserService userService, IGenericRepository<User> userRepository)
         {
-            _userService = userService;        
+            _userService = userService;
             _userRepository = userRepository;
-          
+
         }
 
 
@@ -41,33 +46,108 @@ namespace Pharmacy.Web.Controllers
             //if (ModelState.IsValid)
             //{
             var result = await _userService.RegisterUser(register);
-          
 
-         
+
+
+
+            switch (result)
+            {
+                case RegisterUserResult.PasswordError:
+                    TempData[InfoMessage] = $"رمز عبور وارد شده با رمز عبوری که قبلا ثبت کرده اید تطابقت ندارد";
+                    TempData[WarningMessage] = $"لطفا رمز عبور را به درستی وارد کنید و همچنین حساب کاربری خود را فعال سازی کنید در صورت فراموشی رمز عبور با پشتیبانی تماس بگیرید";
+                    return RedirectToAction("RegisterUser", "Account");
+                case RegisterUserResult.MobileExists:
+                    TempData[WarningMessage] = $"شماره همراه : {register.Mobile} تکراری می باشد.";
+                    ModelState.AddModelError("Mobile", "شماره همراه تکراری می باشد.");
+                    break;
+                    return RedirectToAction("Index", "Home");
+                case RegisterUserResult.Error:
+                    TempData[ErrorMessage] = "در ثبت اطلاعات خطایی رخ داد. لطفا دوباره تلاش نمایید.";
+                    break;
+                case RegisterUserResult.Success:
+                    TempData[SuccessMessage] = $"حساب کاربری شما با موفقیت ایجاد شد";
+                    return RedirectToAction("Index", "Home");
+
+
+            }
+
+            //}
+            return View(register);
+        }
+
+        [HttpGet("login")]
+        public IActionResult Login(string returnUrl)
+        {
+            if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            ReturnUrl = returnUrl;
+            return View();
+
+        }
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(LoginUserDto login)
+        {
+            //if (!await _captchaValidator.IsCaptchaPassedAsync(login.Captcha))
+            //{
+            //    TempData[ErrorMessage] = "کد کپچای شما تایید نشد. چند ثانیه بعد دوباره تلاش کنید";
+            //    TempData[InfoMessage] = "لطفا از اتصال اینترنت خود مطمئن شوید";
+            //    return View(login);
+            //}
+            if (ModelState.IsValid)
+            {
+                var result = await _userService.UserLogin(login);
 
                 switch (result)
                 {
-                    case RegisterUserResult.PasswordError:
-                        TempData[InfoMessage] = $"رمز عبور وارد شده با رمز عبوری که قبلا ثبت کرده اید تطابقت ندارد";
-                        TempData[WarningMessage] = $"لطفا رمز عبور را به درستی وارد کنید و همچنین حساب کاربری خود را فعال سازی کنید در صورت فراموشی رمز عبور با پشتیبانی تماس بگیرید";
-                        return RedirectToAction("RegisterUser", "Account");                                    
-                    case RegisterUserResult.MobileExists:
-                        TempData[WarningMessage] = $"شماره همراه : {register.Mobile} تکراری می باشد.";
-                        ModelState.AddModelError("Mobile", "شماره همراه تکراری می باشد.");
-                    break;
-                        return RedirectToAction("Index", "Home");
-                    case RegisterUserResult.Error:
-                        TempData[ErrorMessage] = "در ثبت اطلاعات خطایی رخ داد. لطفا دوباره تلاش نمایید.";
+                    case UserLoginResult.UserNotFound:
+                        TempData[WarningMessage] = "کاربری با این مشخصات یافت نشد.";
+                        ModelState.AddModelError("Mobile", "کاربری با این مشخصات یافت نشد.");
                         break;
-                    case RegisterUserResult.Success:
-                        TempData[SuccessMessage] = $"حساب کاربری شما با موفقیت ایجاد شد";                      
-                        return RedirectToAction("Index", "Home");
-                      
+                  
+                    case UserLoginResult.WrongPassword:
+                        TempData[ErrorMessage] = "رمز عبور شما اشتباه میباشد";
+                        break;
+                    case UserLoginResult.IsBlocked:
+                        TempData[InfoMessage] = "لطفا با پشتیبانی سایت تماس حاصل فرمایید";
+                        TempData[WarningMessage] = "کاربری مورد نظر بلاک شده است. ";
+                        ModelState.AddModelError("Mobile", "کاربری با این مشخصات یافت نشد.");
+                        break;
+                    case UserLoginResult.Success:
+                        var user = await _userService.GetUserByMobile(login.Mobile);
+                        var claims = new List<Claim>
+                        {
+                            new Claim(ClaimTypes.MobilePhone, user.Mobile),
+                            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                            //new Claim(ClaimTypes.Email, user.Email),
+                            new Claim(ClaimTypes.Name,user.FirstName+" "+user.LastName),
+                            new Claim(ClaimTypes.Role, user.RoleId.ToString()),
+                        };
+
+                        var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                        var principal = new ClaimsPrincipal(identity);
+
+                        var properties = new AuthenticationProperties()
+                        {
+                            IsPersistent = login.RememberMe,
+                            RedirectUri = HttpContext.Request.Query["RedirectUri"]
+
+                        };
+                        await HttpContext.SignInAsync(principal, properties);
+                        TempData[SuccessMessage] = "شما با موفقیت وارد سایت شدید";
+
+                        if (!string.IsNullOrEmpty(ReturnUrl) && Url.IsLocalUrl(ReturnUrl))
+                            return Redirect(ReturnUrl);
+                        else
+                            return Redirect("/");
 
                 }
-            
-            //}
-            return View(register);
+
+            }
+
+            return View(login);
         }
 
         #endregion

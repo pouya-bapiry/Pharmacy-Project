@@ -350,7 +350,7 @@
                         }
                         else
                         {
-                            <a class="btn btn-info" asp-controller="Account" asp-action="RegisterUser">
+                            <a class="btn btn-info" asp-controller="Account" asp-action="Login">
 
                                 <i class="bi bi-person"></i>
                                 <span class="fw-bold ms-1">ورود کاربر</span>
@@ -381,11 +381,10 @@
             <!-- contact -->
             <div class="col-xl-4 order-xl-2 d-xl-block d-none">
                 <div class="d-flex justify-content-end align-items-center">
-                    <small class="text-muted font-12">هفت روز هفته، 24 ساعت شبانه‌روز پاسخگوی شما</small>
-                    <div class="d-flex align-items-center ms-2">
-                        <span class="fw-bold bs-text-red-600">12345678</span>
-                        <span class="ms-1">021</span>
-                    </div>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <strong class="text-muted font-15"><b class="text-danger">@User.Identity.Name</b> عزیز, خوش آمدید.</strong>
+                    }
                 </div>
             </div>
             <!-- logo -->

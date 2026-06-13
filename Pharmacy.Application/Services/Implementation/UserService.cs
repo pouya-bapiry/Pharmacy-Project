@@ -73,10 +73,35 @@ namespace Pharmacy.Application.Services.Implementation
 
         #endregion
 
+        #region Login
+        public async Task<UserLoginResult> UserLogin(LoginUserDto login)
+        {
+            var user = await _userRepository.GetQuery()
+                .AsQueryable()
+                .SingleOrDefaultAsync(x => x.Mobile == login.Mobile);
 
+            if (user == null)
+            {
+                return UserLoginResult.UserNotFound;
+            }
+
+            if (user.IsBlocked)
+            {
+                return UserLoginResult.IsBlocked;
+            }
+
+            if (user.Password != login.Password)
+            {
+                return UserLoginResult.WrongPassword;
+            }
+            return UserLoginResult.Success;
+            //return user.Password != _passwordHasher.EncodePasswordMd5(login.Password)
+            //    ? UserLoginResult.UserNotFound : UserLoginResult.Success;
+        }
 
         #endregion
 
+        #endregion
 
         #region dipose
 
