@@ -1,10 +1,15 @@
 using Microsoft.EntityFrameworkCore;
 using Pharmacy.Infrastructure.Context;
+using Pharmacy.Web.DI;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+#region DI
+builder.Services.RegisterService();
+#endregion
 
 #region DatabaseConfig
 var connectionString = builder.Configuration.GetConnectionString("Pharmacy_Project");

@@ -17,7 +17,7 @@ namespace Pharmacy.Application.Services.Implementation
         private readonly IGenericRepository<User> _userRepository;
         private readonly IGenericRepository<Role> _roleRepository;
 
-        public UserService(IGenericRepository<User> userRepository,IGenericRepository<Role> roleRepository)
+        public UserService(IGenericRepository<User> userRepository, IGenericRepository<Role> roleRepository)
         {
             _userRepository = userRepository;
             _roleRepository = roleRepository;
@@ -26,7 +26,9 @@ namespace Pharmacy.Application.Services.Implementation
 
         #endregion
         #region User Methods
-         public async Task<RegisterUserResult> RegisterUser(RegisterUserDto register)
+
+        #region Register
+        public async Task<RegisterUserResult> RegisterUser(RegisterUserDto register)
         {
             if (await IsUserExistByMobile(register.Mobile) == false)
             {
@@ -50,7 +52,7 @@ namespace Pharmacy.Application.Services.Implementation
             return RegisterUserResult.MobileExists;
 
         }
-        
+
         public async Task<bool> IsUserExistByMobile(string mobile)
         {
             return await _userRepository
@@ -60,9 +62,20 @@ namespace Pharmacy.Application.Services.Implementation
                (x => x.Mobile == mobile);
         }
 
+        public async Task<User> GetUserByMobile(string mobile)
+        {
+            return await _userRepository
+                .GetQuery()
+                .AsQueryable()
+                .SingleOrDefaultAsync
+                (x => x.Mobile == mobile);
+        }
+
+        #endregion
 
 
-            #endregion
+
+        #endregion
 
 
         #region dipose

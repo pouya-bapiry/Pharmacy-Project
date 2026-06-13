@@ -1,4 +1,5 @@
 ﻿using Pharmacy.Application.DTO.Account;
+using Pharmacy.Domain.Entities.Account;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,7 @@ namespace Pharmacy.Application.Services.Interfaces
         #region User
         Task<RegisterUserResult> RegisterUser(RegisterUserDto register);
         Task<bool> IsUserExistByMobile(string mobile);
+        Task<User> GetUserByMobile(string mobile);
         #endregion
 
     }
