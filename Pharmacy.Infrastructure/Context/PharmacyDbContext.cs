@@ -22,6 +22,8 @@ namespace Pharmacy.Infrastructure.Context
 
         public DbSet<SiteSetting> SiteSettings { get; set; }
 
+        public DbSet<AboutUs> AboutUs { get; set; }
+
         #endregion
 
         #region OnModelCreating

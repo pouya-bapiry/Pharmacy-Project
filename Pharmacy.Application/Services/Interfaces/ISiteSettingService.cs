@@ -1,6 +1,4 @@
-﻿
-
-using Pharmacy.Application.DTO.Site;
+﻿using Pharmacy.Application.DTO.Site;
 
 namespace Pharmacy.Application.Services.Interfaces
 {
@@ -10,7 +8,7 @@ namespace Pharmacy.Application.Services.Interfaces
 
         Task<SiteSettingDto> GetDefaultSiteSetting();
 
-        //Task<List<AboutUsDto>> GetAboutUs();
+        Task<List<AboutUsDto>> GetAboutUs();
 
         //Task<EditSiteSettingDto> GetSiteSettingForEdit(long id);
         //Task<bool> EditSiteSetting(EditSiteSettingDto edit, string username);
