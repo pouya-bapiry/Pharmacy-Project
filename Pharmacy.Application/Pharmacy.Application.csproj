@@ -18,7 +18,6 @@
 	<ItemGroup>
 	  <Folder Include="Extensions\" />
 	  <Folder Include="EntitiesExtensions\" />
-	  <Folder Include="Utilities\" />
 	</ItemGroup>
 
 	<ItemGroup>

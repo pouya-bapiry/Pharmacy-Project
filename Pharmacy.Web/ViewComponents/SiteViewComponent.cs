@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Pharmacy.Application.Services.Interfaces;
+
 
 namespace ServiceHost.ViewComponents
 {
@@ -17,17 +19,20 @@ namespace ServiceHost.ViewComponents
     #region Site Footer
     public class SiteFooterViewComponent : ViewComponent
     {
-        //private readonly ISiteSettingService _siteSettingService;
+        private readonly ISiteSettingService _siteSettingService;
 
-        //public SiteFooterViewComponent(ISiteSettingService siteSettingService)
-        //{
-        //    _siteSettingService = siteSettingService;
-        //}
+        public SiteFooterViewComponent(ISiteSettingService siteSettingService)
+        {
+            _siteSettingService = siteSettingService;
+        }
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
             
-            return View("SiteFooter");
+                var siteSetting = await _siteSettingService.GetDefaultSiteSetting();
+                return View("SiteFooter", siteSetting);
+            
+          
         }
     }
     #endregion

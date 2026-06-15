@@ -2,6 +2,7 @@
 using GoogleReCaptcha.V3.Interface;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration.UserSecrets;
+
 using Pharmacy.Application.Services.Implementation;
 using Pharmacy.Application.Services.Interfaces;
 using Pharmacy.Domain.IRepository;
@@ -28,7 +29,7 @@ namespace Pharmacy.Web.DI
             #region General Services
 
             services.AddScoped<IUserService, UserService>();
-            //services.AddScoped<ISiteSettingService, SiteSettingService>();
+            services.AddScoped<ISiteSettingService, SiteSettingService>();
             //services.AddScoped<ISmsService, SmsService>();
             //services.AddScoped<IContactService, ContactService>();
             //services.AddScoped<ISiteImagesService, SiteImagesService>();
