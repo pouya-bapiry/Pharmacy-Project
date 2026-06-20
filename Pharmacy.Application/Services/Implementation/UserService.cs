@@ -61,7 +61,8 @@ namespace Pharmacy.Application.Services.Implementation
               .AnyAsync
                (x => x.Mobile == mobile);
         }
-
+        #endregion
+        #region Get User
         public async Task<User> GetUserByMobile(string mobile)
         {
             return await _userRepository
@@ -71,6 +72,13 @@ namespace Pharmacy.Application.Services.Implementation
                 (x => x.Mobile == mobile);
         }
 
+        public async Task<string?> GetUserImage(long userId)
+        {
+            var user = await _userRepository.GetQuery().AsQueryable()
+                .FirstOrDefaultAsync(x => x.Id == userId);
+
+            return user?.Avatar;
+        }
         #endregion
 
         #region Login

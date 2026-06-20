@@ -23,7 +23,7 @@ builder.Services.AddAuthentication(options =>
     options.LoginPath = "/Login";
     options.LogoutPath = "/Logout";
     options.AccessDeniedPath = "/404-page-not-found";
-    options.ExpireTimeSpan = TimeSpan.FromMinutes(10000);
+    options.ExpireTimeSpan = TimeSpan.FromDays(100);
 });
 
 #endregion
@@ -51,6 +51,11 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapControllerRoute(
+    name: "areas",
+    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+);
 
 app.MapControllerRoute(
     name: "default",

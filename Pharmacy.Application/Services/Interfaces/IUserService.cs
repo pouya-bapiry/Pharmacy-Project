@@ -16,6 +16,8 @@ namespace Pharmacy.Application.Services.Interfaces
         Task<bool> IsUserExistByMobile(string mobile);
         Task<User> GetUserByMobile(string mobile);
         Task<UserLoginResult> UserLogin(LoginUserDto login);
+        Task<string?> GetUserImage(long userId);
+
         #endregion
 
     }

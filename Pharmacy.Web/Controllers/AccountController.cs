@@ -31,6 +31,8 @@ namespace Pharmacy.Web.Controllers
 
         #region Actions
 
+        #region Register
+
         [HttpGet("register")]
         public async Task<IActionResult> RegisterUser()
         {
@@ -87,6 +89,9 @@ namespace Pharmacy.Web.Controllers
             return View();
 
         }
+        #endregion
+
+        #region Log In/Out
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginUserDto login)
         {
@@ -106,7 +111,7 @@ namespace Pharmacy.Web.Controllers
                         TempData[WarningMessage] = "کاربری با این مشخصات یافت نشد.";
                         ModelState.AddModelError("Mobile", "کاربری با این مشخصات یافت نشد.");
                         break;
-                  
+
                     case UserLoginResult.WrongPassword:
                         TempData[ErrorMessage] = "رمز عبور شما اشتباه میباشد";
                         break;
@@ -143,12 +148,26 @@ namespace Pharmacy.Web.Controllers
                         else
                             return Redirect("/");
 
+
                 }
+
+
 
             }
 
+
             return View(login);
         }
+
+        [HttpGet("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync();
+            return Redirect("/");
+        }
+        #endregion
+
+
 
         #endregion
     }
