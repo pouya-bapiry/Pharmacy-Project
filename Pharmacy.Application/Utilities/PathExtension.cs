@@ -1,4 +1,4 @@
-﻿namespace Eshop.Application.Utilities
+﻿namespace Pharmacy.Application.Utilities
 {
     public static class PathExtension
     {

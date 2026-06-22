@@ -1,4 +1,5 @@
-﻿using Pharmacy.Application.DTO.Account;
+﻿using Microsoft.AspNetCore.Http;
+using Pharmacy.Application.DTO.Account;
 using Pharmacy.Domain.Entities.Account;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,8 @@ namespace Pharmacy.Application.Services.Interfaces
         Task<User> GetUserByMobile(string mobile);
         Task<UserLoginResult> UserLogin(LoginUserDto login);
         Task<string?> GetUserImage(long userId);
+        Task<EditUserProfileDto> GetProfileForEdit(long userId);
+        Task<EditUserProfileResult> EditUserProfile(EditUserProfileDto profile, long userId, IFormFile avatarImage);
 
         #endregion
 
