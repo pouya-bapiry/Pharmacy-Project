@@ -20,6 +20,7 @@ namespace Pharmacy.Application.Services.Interfaces
         Task<string?> GetUserImage(long userId);
         Task<EditUserProfileDto> GetProfileForEdit(long userId);
         Task<EditUserProfileResult> EditUserProfile(EditUserProfileDto profile, long userId, IFormFile avatarImage);
+        Task<ChangePasswordResult> ChangeUserPassword(ChangePasswordDto changePassword, long userId);
 
         #endregion
 

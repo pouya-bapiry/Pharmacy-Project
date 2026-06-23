@@ -167,6 +167,39 @@ namespace Pharmacy.Application.Services.Implementation
         }
         #endregion
 
+        #region Change User Password
+
+        public async Task<ChangePasswordResult> ChangeUserPassword(ChangePasswordDto changePassword, long userId)
+        {
+            var user=await _userRepository.GetEntityById(userId);
+            if (user == null)
+            {
+                return ChangePasswordResult.Error;
+            }
+            if (changePassword.NewPassword==user.Password)
+            {
+
+                return ChangePasswordResult.NewPasswordSameAsOld;
+
+            }
+            if (changePassword.CurrentPassword!=user.Password)
+            {
+
+                return ChangePasswordResult.WrongCurrentPassword;
+
+            }
+
+
+            user.Password=changePassword.NewPassword;
+
+            _userRepository.EditEntity(user);
+            await _userRepository.SaveChanges();
+            return ChangePasswordResult.Success;
+        }
+
+
+        #endregion
+
         #endregion
 
         #region dipose
@@ -181,6 +214,7 @@ namespace Pharmacy.Application.Services.Implementation
             }
         }
 
+      
 
 
 

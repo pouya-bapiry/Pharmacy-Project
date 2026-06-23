@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Mvc;
 using Pharmacy.Application.DTO.Account;
 using Pharmacy.Application.Services.Interfaces;
 using Pharmacy.Web.PresentationExtensions;
@@ -17,6 +18,7 @@ namespace Pharmacy.Web.Areas.User.Controllers
 
 
         #endregion
+
         #region Edit Profile
         [HttpGet("edit-profile")]
         public async Task<IActionResult> EditProfile(long userId)
@@ -59,6 +61,51 @@ namespace Pharmacy.Web.Areas.User.Controllers
             }
             return View(editProfile);
         }
+        #endregion
+
+        #region Change Password
+
+        [HttpGet("change-password")]
+        public async Task<IActionResult> ChangePassword()
+        {
+            return View();
+        }
+
+        [HttpPost("change-password"), ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangePassword(ChangePasswordDto passwordDto)
+        {
+
+            if (ModelState.IsValid)
+            {
+                //var user = await _userService.GetUserById(User.GetUserId());
+                //var currentPassword = _passwordHasher.EncodePasswordMd5(passwordDto.CurrentPassword);
+
+
+                var result = await _userService.ChangeUserPassword(passwordDto, User.GetUserId());
+
+                switch (result)
+                {
+                    case ChangePasswordResult.Success:
+                        TempData[SuccessMessage] = "رمز عبور شما تغییر یافت";
+                        TempData[InfoMessage] = "لطفا جهت تکمیل فرایند تغییر رمز عبور ، مجددا وارد سایت شوید";
+                        await HttpContext.SignOutAsync();
+                        return RedirectToAction("Login", "Account", new { area = "" });
+                    case ChangePasswordResult.WrongCurrentPassword:
+                        TempData[ErrorMessage] = "رمز عبور فعلی شما اشتباه می باشد";
+                        break;
+                    case ChangePasswordResult.Error:
+                        TempData[ErrorMessage] = "در تغییر رمز عبور خطایی روی داد";
+                        break;
+                    case ChangePasswordResult.NewPasswordSameAsOld:
+                        TempData[ErrorMessage] = "رمز عبور جدید باید با رمز عبور فعلی تفاوت داشته باشد ";
+                        break;
+                }
+
+            }
+
+            return View(passwordDto);
+        }
+
         #endregion
     }
 }
