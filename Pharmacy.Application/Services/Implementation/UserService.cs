@@ -100,10 +100,7 @@ namespace Pharmacy.Application.Services.Implementation
                 return UserLoginResult.IsBlocked;
             }
 
-            if (user.Password != login.Password)
-            {
-                return UserLoginResult.WrongPassword;
-            }
+          
             if (user.Password != _passwordHasher.EncodePasswordMd5(login.Password))
             {
                 return UserLoginResult.WrongPassword;

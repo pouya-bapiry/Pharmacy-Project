@@ -30,8 +30,9 @@ builder.Services.AddAuthentication(options =>
 #region DatabaseConfig
 var connectionString = builder.Configuration.GetConnectionString("Pharmacy_Project");
 
-builder.Services.AddDbContext<PharmacyDbContext>(option =>
-option.UseSqlServer(connectionString), ServiceLifetime.Transient);
+builder.Services.AddDbContext<PharmacyDbContext>(
+    option => option.UseSqlServer(connectionString),
+    ServiceLifetime.Scoped);
 #endregion
 
 
