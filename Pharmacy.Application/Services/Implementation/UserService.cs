@@ -15,11 +15,13 @@ namespace Pharmacy.Application.Services.Implementation
         #region Fields and ctor
         private readonly IGenericRepository<User> _userRepository;
         private readonly IGenericRepository<Role> _roleRepository;
+        private readonly IPasswordHasher _passwordHasher;
 
-        public UserService(IGenericRepository<User> userRepository, IGenericRepository<Role> roleRepository)
+        public UserService(IGenericRepository<User> userRepository, IGenericRepository<Role> roleRepository, IPasswordHasher passwordHasher)
         {
             _userRepository = userRepository;
             _roleRepository = roleRepository;
+            _passwordHasher = passwordHasher;
         }
 
 
@@ -37,7 +39,7 @@ namespace Pharmacy.Application.Services.Implementation
                     LastName = register.LastName,
                     Email = register.Email,
                     Mobile = register.Mobile,
-                    Password = register.Password,
+                    Password = _passwordHasher.EncodePasswordMd5(register.Password),
                     Avatar = null,
                     RoleId = 2,
                 };
@@ -85,8 +87,8 @@ namespace Pharmacy.Application.Services.Implementation
         public async Task<UserLoginResult> UserLogin(LoginUserDto login)
         {
             var user = await _userRepository.GetQuery()
-                .AsQueryable()
-                .SingleOrDefaultAsync(x => x.Mobile == login.Mobile);
+                  .AsQueryable()
+                  .SingleOrDefaultAsync(x => x.Mobile == login.Mobile);
 
             if (user == null)
             {
@@ -102,7 +104,12 @@ namespace Pharmacy.Application.Services.Implementation
             {
                 return UserLoginResult.WrongPassword;
             }
+            if (user.Password != _passwordHasher.EncodePasswordMd5(login.Password))
+            {
+                return UserLoginResult.WrongPassword;
+            }
             return UserLoginResult.Success;
+
             //return user.Password != _passwordHasher.EncodePasswordMd5(login.Password)
             //    ? UserLoginResult.UserNotFound : UserLoginResult.Success;
         }
@@ -171,28 +178,22 @@ namespace Pharmacy.Application.Services.Implementation
 
         public async Task<ChangePasswordResult> ChangeUserPassword(ChangePasswordDto changePassword, long userId)
         {
-            var user=await _userRepository.GetEntityById(userId);
+            var user = await _userRepository.GetEntityById(userId);
             if (user == null)
-            {
                 return ChangePasswordResult.Error;
-            }
-            if (changePassword.NewPassword==user.Password)
-            {
 
-                return ChangePasswordResult.NewPasswordSameAsOld;
 
-            }
-            if (changePassword.CurrentPassword!=user.Password)
-            {
-
+            var currentPasswordHash = _passwordHasher.EncodePasswordMd5(changePassword.CurrentPassword);
+            if (user.Password != currentPasswordHash)
                 return ChangePasswordResult.WrongCurrentPassword;
 
-            }
+
+            var newPasswordHash = _passwordHasher.EncodePasswordMd5(changePassword.NewPassword);
+            if (user.Password == newPasswordHash)
+                return ChangePasswordResult.NewPasswordSameAsOld;
 
 
-            user.Password=changePassword.NewPassword;
-
-            _userRepository.EditEntity(user);
+            user.Password = newPasswordHash;
             await _userRepository.SaveChanges();
             return ChangePasswordResult.Success;
         }

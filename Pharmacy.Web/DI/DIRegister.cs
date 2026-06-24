@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration.UserSecrets;
 
 using Pharmacy.Application.Services.Implementation;
+using Pharmacy.Application.Services.Implementations;
 using Pharmacy.Application.Services.Interfaces;
 using Pharmacy.Domain.IRepository;
 using Pharmacy.Infrastructure.Repository;
@@ -46,7 +47,7 @@ namespace Pharmacy.Web.DI
             //services.AddHttpContextAccessor();
             //services.AddSingleton<HtmlEncoder>(
             //    HtmlEncoder.Create(allowedRanges: new[] { UnicodeRanges.BasicLatin, UnicodeRanges.Arabic }));
-            //services.AddScoped<IPasswordHasher, PasswordHasher>();
+            services.AddScoped<IPasswordHasher, PasswordHasher>();
             //services.AddHttpClient<ICaptchaValidator, GoogleReCaptchaValidator>();
             //services.AddScoped<IAuthHelper, AuthHelper>();
 
