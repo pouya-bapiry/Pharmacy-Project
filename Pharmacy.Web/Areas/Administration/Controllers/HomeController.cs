@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Pharmacy.Application.DTO.Contact;
 using Pharmacy.Application.DTO.Site;
+using Pharmacy.Application.Services.Implementation;
 using Pharmacy.Application.Services.Interfaces;
 using Pharmacy.Web.PresentationExtensions;
 
@@ -12,12 +14,14 @@ namespace Pharmacy.Web.Areas.Administration.Controllers
 
         private readonly IUserService _userService;
         private readonly ISiteSettingService _siteSettingService;
+        private readonly IContactService _contactService;
 
-        public HomeController(IUserService userService, ISiteSettingService siteSettingService)
+        public HomeController(IUserService userService, ISiteSettingService siteSettingService, IContactService contactService)
         {
 
             _userService = userService;
             _siteSettingService = siteSettingService;
+            _contactService = contactService;
         }
 
 
@@ -72,7 +76,8 @@ namespace Pharmacy.Web.Areas.Administration.Controllers
 
         #endregion
 
-        #region GetAllAboutUs
+        #region AboutUs
+#region GetAllAboutUs
 
         [HttpGet("about-us")]
         //public async Task<IActionResult> AboutUsList()
@@ -111,7 +116,26 @@ namespace Pharmacy.Web.Areas.Administration.Controllers
         #endregion
 
         #region Edit AboutUs
+
+
         #endregion
+        #endregion
+
+        #region ContactUs
+
+        #region Contact Us 
+
+        [HttpGet("contact-us-list")]
+        public async Task<IActionResult> ContactUsList(FilterContactUs filter)
+        {
+            var contactUs = await _contactService.FilterContactUs(filter);
+            return View(contactUs);
+        }
+
+        #endregion
+
+        #endregion
+
     }
 }
 

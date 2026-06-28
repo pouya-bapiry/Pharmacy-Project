@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 
-namespace Eshop.Application.Utilities
+namespace Pharmacy.Application.Utilities
 {
     public static class PersianDate
     {

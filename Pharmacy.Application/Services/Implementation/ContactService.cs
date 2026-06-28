@@ -1,18 +1,13 @@
-﻿using Eshop.Application.Utilities;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Pharmacy.Application.DTO.Contact;
+using Pharmacy.Application.DTO.Paging;
 using Pharmacy.Application.DTO.Site;
 using Pharmacy.Application.Services.Interfaces;
+using Pharmacy.Application.Utilities;
 using Pharmacy.Domain.Dtos.Contact;
 using Pharmacy.Domain.Entities.Contact;
 using Pharmacy.Domain.Entities.Site;
 using Pharmacy.Domain.IRepository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Pharmacy.Application.Services.Implementation
 {
@@ -150,9 +145,36 @@ namespace Pharmacy.Application.Services.Implementation
         }
 
 
-        public Task<FilterContactUs> FilterContactUs(FilterContactUs filter)
+        public async Task<FilterContactUs> FilterContactUs(FilterContactUs filter)
         {
-            throw new NotImplementedException();
+            var query = _contactRepository
+                .GetQuery()
+                .AsQueryable()
+                .Include(x => x.User)
+                .OrderByDescending(x => x.Id);
+
+            #region Filter
+            if (!string.IsNullOrEmpty(filter.Email))
+            {
+                query = query.Where(x => EF.Functions.Like(x.Email, $"%{filter.Email}%")).OrderByDescending(x => x.CreateDate);
+            }
+
+
+            #endregion
+
+            #region Paging
+
+            var contactCount = await query.CountAsync();
+
+            var pager = Pager.Build(filter.PageId, contactCount, filter.TakeEntity,
+                filter.HowManyShowPageAfterAndBefore);
+
+            var allEntities = await query.Paging(pager).ToListAsync();
+
+            #endregion
+
+            return filter.SetPaging(pager).SetContactUs(allEntities);
+
         }
 
         #endregion

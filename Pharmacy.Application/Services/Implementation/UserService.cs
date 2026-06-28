@@ -1,5 +1,4 @@
-﻿using Eshop.Application.Utilities;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Pharmacy.Application.DTO.Account;
 using Pharmacy.Application.Extensions;
