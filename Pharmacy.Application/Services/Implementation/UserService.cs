@@ -81,6 +81,15 @@ namespace Pharmacy.Application.Services.Implementation
 
             return user?.Avatar;
         }
+
+        public async Task<User> GetUserById(long id)
+        {
+            return await _userRepository
+                 .GetQuery()
+                 .AsQueryable()
+            .SingleOrDefaultAsync
+                 (x => x.Id == id);
+        }
         #endregion
 
         #region Login

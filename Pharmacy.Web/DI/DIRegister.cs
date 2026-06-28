@@ -31,8 +31,8 @@ namespace Pharmacy.Web.DI
 
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ISiteSettingService, SiteSettingService>();
-            //services.AddScoped<ISmsService, SmsService>();
-            //services.AddScoped<IContactService, ContactService>();
+         
+            services.AddScoped<IContactService, ContactService>();
             //services.AddScoped<ISiteImagesService, SiteImagesService>();
             //services.AddScoped<IProductService, ProductService>();
             //services.AddScoped<IProductDiscountService, ProductDiscountService>();

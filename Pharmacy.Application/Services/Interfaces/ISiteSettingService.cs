@@ -10,8 +10,8 @@ namespace Pharmacy.Application.Services.Interfaces
 
         Task<List<AboutUsDto>> GetAboutUs();
 
-        //Task<EditSiteSettingDto> GetSiteSettingForEdit(long id);
-        //Task<bool> EditSiteSetting(EditSiteSettingDto edit, string username);
+        Task<EditSiteSettingDto> GetSiteSettingForEdit(long id);
+        Task<bool> EditSiteSetting(EditSiteSettingDto edit, string username);
 
         #endregion
     }

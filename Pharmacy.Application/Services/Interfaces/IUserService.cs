@@ -18,6 +18,7 @@ namespace Pharmacy.Application.Services.Interfaces
         Task<User> GetUserByMobile(string mobile);
         Task<UserLoginResult> UserLogin(LoginUserDto login);
         Task<string?> GetUserImage(long userId);
+        Task<User> GetUserById(long id);
         Task<EditUserProfileDto> GetProfileForEdit(long userId);
         Task<EditUserProfileResult> EditUserProfile(EditUserProfileDto profile, long userId, IFormFile avatarImage);
         Task<ChangePasswordResult> ChangeUserPassword(ChangePasswordDto changePassword, long userId);

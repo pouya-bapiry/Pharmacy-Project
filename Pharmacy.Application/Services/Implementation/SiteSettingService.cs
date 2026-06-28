@@ -4,11 +4,6 @@ using Pharmacy.Application.DTO.Site;
 using Pharmacy.Application.Services.Interfaces;
 using Pharmacy.Domain.Entities.Site;
 using Pharmacy.Domain.IRepository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Pharmacy.Application.Services.Implementation
 {
@@ -57,6 +52,56 @@ namespace Pharmacy.Application.Services.Implementation
             }).FirstOrDefaultAsync(x => x.IsDefault);
             return siteSetting ?? new SiteSettingDto();
         }
+
+
+        public async Task<EditSiteSettingDto> GetSiteSettingForEdit(long id)
+        {
+            var setting = await _siteRepository
+               .GetQuery()
+               .AsQueryable()
+               .SingleOrDefaultAsync(x => x.Id == id);
+            if (setting == null)
+            {
+                return null;
+            }
+
+            return new EditSiteSettingDto
+            {
+                Id = setting.Id,
+                Address = setting.Address,
+                CopyRight = setting.CopyRight,
+                Email = setting.Email,
+                FooterText = setting.FooterText,
+                IsDefault = setting.IsDefault,
+                Mobile = setting.Mobile,
+                Phone = setting.Phone
+            };
+        }
+
+        public async Task<bool> EditSiteSetting(EditSiteSettingDto edit, string username)
+        {
+
+            var mainSetting = await _siteRepository
+                .GetQuery()
+                .AsQueryable()
+                .SingleOrDefaultAsync(x => x.Id == edit.Id);
+            if (mainSetting == null)
+            {
+                return false;
+            }
+            mainSetting.Id = edit.Id;
+            mainSetting.Address = edit.Address;
+            mainSetting.CopyRight = edit.CopyRight;
+            mainSetting.Email = edit.Email;
+            mainSetting.FooterText = edit.FooterText;
+            mainSetting.Mobile = edit.Mobile;
+            mainSetting.Phone = edit.Phone;
+
+            _siteRepository.EditEntityByUser(mainSetting, username);
+            _siteRepository.SaveChanges();
+            return true;
+        }
+
         #endregion
 
         #region About Us

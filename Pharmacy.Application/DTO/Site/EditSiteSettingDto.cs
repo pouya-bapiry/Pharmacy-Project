@@ -26,8 +26,7 @@ namespace Pharmacy.Application.DTO.Site
         [Display(Name = "متن فوتر")]
         public string FooterText { get; set; }
 
-        [Display(Name = "آدرس نقشه")]
-        public string MapScript { get; set; }
+       
 
         [Display(Name = "آدرس")]
         public string Address { get; set; }

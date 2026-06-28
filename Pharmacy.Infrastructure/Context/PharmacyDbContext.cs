@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Pharmacy.Domain.Entities.Account;
+using Pharmacy.Domain.Entities.Contact;
 using Pharmacy.Domain.Entities.Site;
 using System;
 using System.Collections.Generic;
@@ -17,12 +18,10 @@ namespace Pharmacy.Infrastructure.Context
         #region DB Set
 
         public DbSet<User> Users { get; set; }
-
         public DbSet<Role> Roles { get; set; }
-
         public DbSet<SiteSetting> SiteSettings { get; set; }
-
         public DbSet<AboutUs> AboutUs { get; set; }
+        public  DbSet<ContactUs> ContactUs { get; set; }
 
         #endregion
 
