@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using Pharmacy.Application.Utilities;
 using Pharmacy.Infrastructure.Context;
 using Pharmacy.Web.DI;
 
@@ -11,6 +12,7 @@ builder.Services.AddControllersWithViews();
 #region DI
 builder.Services.RegisterService();
 #endregion
+
 #region Authentication
 
 builder.Services.AddAuthentication(options =>
@@ -27,6 +29,7 @@ builder.Services.AddAuthentication(options =>
 });
 
 #endregion
+
 #region DatabaseConfig
 var connectionString = builder.Configuration.GetConnectionString("Pharmacy_Project");
 
@@ -35,6 +38,21 @@ builder.Services.AddDbContext<PharmacyDbContext>(
     ServiceLifetime.Scoped);
 #endregion
 
+#region Policy
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminArea",
+        builders
+            => builders.RequireRole(new List<string>
+                { Roles.Administrator, Roles.AdminAssistant, Roles.ContentUploader }));
+
+    options.AddPolicy("UserManagement",
+        builders
+            => builders.RequireRole(new List<string>
+                { Roles.Administrator, Roles.AdminAssistant }));
+
+});
+#endregion
 
 var app = builder.Build();
 
