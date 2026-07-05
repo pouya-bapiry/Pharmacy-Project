@@ -23,6 +23,7 @@ namespace Pharmacy.Infrastructure.Context
         public DbSet<AboutUs> AboutUs { get; set; }
         public  DbSet<ContactUs> ContactUs { get; set; }
         public DbSet<Slider> Sliders { get; set; }
+        public DbSet<SiteBanner> SiteBanners { get; set; }
 
         #endregion
 

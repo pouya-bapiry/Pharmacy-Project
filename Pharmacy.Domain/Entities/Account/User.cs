@@ -1,5 +1,6 @@
 ﻿using Pharmacy.Domain.Common;
 using Pharmacy.Domain.Entities.Contact;
+using Pharmacy.Domain.Entities.Site;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -60,6 +61,7 @@ namespace Pharmacy.Domain.Entities.Account
         #region Relations
         public Role Role { get; set; }
         public ICollection<ContactUs> ContactUs { get; set; }
+        public ICollection<SiteBanner> SiteBanner { get; set; }
         #endregion
 
     }

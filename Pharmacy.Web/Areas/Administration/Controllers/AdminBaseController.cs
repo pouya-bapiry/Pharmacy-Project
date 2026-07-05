@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Pharmacy.Web.Areas.Administration.Controllers
 {
-  //[Authorize("AdminArea")]
+    [Authorize]
     [Area("Administration")]
     [Route("administration")]
     public class AdminBaseController : Controller

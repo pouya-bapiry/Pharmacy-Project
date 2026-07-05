@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Pharmacy.Application.DTO.Site.Banner;
 using Pharmacy.Application.DTO.Site.Slider;
 using Pharmacy.Domain.Entities.Site;
 using System;
@@ -24,5 +25,18 @@ namespace Pharmacy.Application.Services.Interfaces
 
         #endregion
 
+        #region banners
+
+
+        Task<List<FilterBannerDto>> GetBannersByPlacement(BannerPlacement placement);
+        Task<List<FilterBannerDto>> GetAllBanners();
+        Task<CreateBannerResult> CreateBanner(CreateBannerDto banner, IFormFile bannerImage, string username);
+        Task<EditBannerDto> GetBannerForEdit(long bannerId);
+        Task<EditBannerResult> EditBanner(EditBannerDto edit, IFormFile bannerImage, string username);
+        Task<bool> ActiveBanner(long bannerId, string username);
+        Task<bool> DeActiveBanner(long bannerId, string username);
+
+
+        #endregion
     }
 }

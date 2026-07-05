@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Pharmacy.Application.DTO.Site.Banner;
 using Pharmacy.Application.DTO.Site.Slider;
 using Pharmacy.Application.Services.Implementation;
 using Pharmacy.Application.Services.Interfaces;
@@ -13,7 +14,7 @@ namespace Pharmacy.Web.Areas.Administration.Controllers
         private readonly ISiteImagesService _siteImagesService;
         private readonly IUserService _userService;
 
-        public ImageController(ISiteImagesService siteImagesService,IUserService userService)
+        public ImageController(ISiteImagesService siteImagesService, IUserService userService)
         {
             _siteImagesService = siteImagesService;
             _userService = userService;
@@ -46,7 +47,7 @@ namespace Pharmacy.Web.Areas.Administration.Controllers
         public async Task<IActionResult> CreateSlider(CreateSliderDto slider, IFormFile sliderImage,
             IFormFile mobileSliderImage)
         {
-            
+
             var result = await _siteImagesService.CreateSlider(slider, sliderImage, mobileSliderImage);
 
             switch (result)
@@ -143,6 +144,116 @@ namespace Pharmacy.Web.Areas.Administration.Controllers
 
         #endregion
 
+
+        #endregion
+
+        #region Banner
+
+
+
+
+        #region Get
+        [HttpGet("banners-list")]
+        public async Task<IActionResult> BannerList()
+        {
+            var banner = await _siteImagesService.GetAllBanners();
+
+            if (banner == null)
+            {
+                return NotFound();
+            }
+            return View(banner);
+        }
+        #endregion
+
+        #region Create
+        [HttpGet("create-banner")]
+        public async Task<IActionResult> CreateBanner()
+        {
+            return View();
+        }
+
+
+        [HttpPost("create-banner"), ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateBanner(CreateBannerDto banner, IFormFile bannerImage)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userService.GetUserById(User.GetUserId());
+                var username = user.FirstName + " " + user.LastName;
+                var result = await _siteImagesService.CreateBanner(banner, bannerImage, username);
+
+                switch (result)
+                {
+                    case CreateBannerResult.Error:
+                        TempData[ErrorMessage] = "در عملیات افزودن بنر خطایی رخ داد";
+                        break;
+                    case CreateBannerResult.Success:
+                        TempData[SuccessMessage] = "بنر با موفقیت ایجاد گردید";
+                        return RedirectToAction("BannerList", "Image");
+                }
+            }
+
+            return View();
+        }
+
+
+        #endregion
+
+        #region Edit
+        [HttpGet("edit-banner/{bannerId}")]
+        public async Task<IActionResult> EditBanner(long bannerId)
+        {
+            var banner = await _siteImagesService.GetBannerForEdit(bannerId);
+            return View(banner);
+        }
+
+        [HttpPost("edit-banner/{bannerId}"), ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditBanner(EditBannerDto edit, IFormFile bannerImage)
+        {
+            if (ModelState.IsValid || edit.ImageName != null)
+            {
+                var user = await _userService.GetUserById(User.GetUserId());
+                var username = user.FirstName + " " + user.LastName;
+                var result = await _siteImagesService.EditBanner(edit, bannerImage, username);
+
+                switch (result)
+                {
+                    case EditBannerResult.Error:
+                        TempData[ErrorMessage] = "اطلاعات مورد نظر یافت نشد";
+                        break;
+                    case EditBannerResult.Success:
+                        TempData[SuccessMessage] = "ویرایش بنر با موفقیت انجام شد";
+                        return RedirectToAction("BannerList", "Image");
+
+                }
+            }
+
+
+            return View();
+
+        }
+        #endregion
+
+        #region Active DeActive
+        [HttpGet("active-banner/{bannerId}")]
+        public async Task<IActionResult> ActiveBanner(long bannerId)
+        {
+            var user = await _userService.GetUserById(User.GetUserId());
+            var username = user.FirstName + " " + user.LastName;
+            var banner = await _siteImagesService.ActiveBanner(bannerId, username);
+            return RedirectToAction("BannerList", "Image");
+        }
+
+        [HttpGet("deactive-banner/{bannerId}")]
+        public async Task<IActionResult> DeactiveBanner(long bannerId)
+        {
+            var user = await _userService.GetUserById(User.GetUserId());
+            var username = user.FirstName + " " + user.LastName;
+            var banner = await _siteImagesService.DeActiveBanner(bannerId, username);
+            return RedirectToAction("BannerList", "Image");
+        }
+        #endregion
 
         #endregion
     }
