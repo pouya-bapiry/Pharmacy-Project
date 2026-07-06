@@ -22,6 +22,19 @@ namespace Pharmacy.Application.Services.Interfaces
         Task<EditUserProfileDto> GetProfileForEdit(long userId);
         Task<EditUserProfileResult> EditUserProfile(EditUserProfileDto profile, long userId, IFormFile avatarImage);
         Task<ChangePasswordResult> ChangeUserPassword(ChangePasswordDto changePassword, long userId);
+        Task<FilterUserDto> FilterUser(FilterUserDto filter);
+        Task<EditUserDto> GetUserForEdit(long userId);
+        Task<EditUserResult> EditUser(EditUserDto edit, string username);
+
+        #endregion
+
+        #region Role
+
+        Task<FilterRoleDto> FilterRole(FilterRoleDto filter);
+        Task<CreateRoleResult> CreateRole(CreateRoleDto role);
+        Task<EditRoleDto> GetRoleForEdit(long roleId);
+        Task<EditRoleResult> EditRole(EditRoleDto edit, string username);
+        Task<List<Role>> GetRoles();
 
         #endregion
 

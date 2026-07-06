@@ -1,11 +1,7 @@
-﻿using GoogleReCaptcha.V3;
-using GoogleReCaptcha.V3.Interface;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration.UserSecrets;
-
-using Pharmacy.Application.Services.Implementation;
+﻿using Pharmacy.Application.Services.Implementation;
 using Pharmacy.Application.Services.Implementations;
 using Pharmacy.Application.Services.Interfaces;
+using Pharmacy.Application.Utilities;
 using Pharmacy.Domain.IRepository;
 using Pharmacy.Infrastructure.Repository;
 using System.Text.Encodings.Web;
@@ -43,12 +39,12 @@ namespace Pharmacy.Web.DI
 
             #region Common Services
 
-            //services.AddHttpContextAccessor();
-            //services.AddSingleton<HtmlEncoder>(
-            //    HtmlEncoder.Create(allowedRanges: new[] { UnicodeRanges.BasicLatin, UnicodeRanges.Arabic }));
+            services.AddHttpContextAccessor();
+            services.AddSingleton<HtmlEncoder>(
+                HtmlEncoder.Create(allowedRanges: new[] { UnicodeRanges.BasicLatin, UnicodeRanges.Arabic }));
             services.AddScoped<IPasswordHasher, PasswordHasher>();
             //services.AddHttpClient<ICaptchaValidator, GoogleReCaptchaValidator>();
-            //services.AddScoped<IAuthHelper, AuthHelper>();
+            services.AddScoped<IAuthHelper, AuthHelper>();
 
             #endregion
 

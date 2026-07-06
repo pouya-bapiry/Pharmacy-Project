@@ -65,8 +65,14 @@ namespace Pharmacy.Web.Controllers
             return View();
         }
         #endregion
+        #region NotFound
+        [HttpGet("/404-page-not-found")]
+        public async Task<IActionResult> PageNotFound()
+        {
+            return View();
+        }
+        #endregion
 
-       
 
     }
 }
