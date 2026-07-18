@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Pharmacy.Domain.Entities.Account;
 using Pharmacy.Domain.Entities.Contact;
+using Pharmacy.Domain.Entities.Product;
 using Pharmacy.Domain.Entities.Site;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,7 @@ namespace Pharmacy.Infrastructure.Context
         public  DbSet<ContactUs> ContactUs { get; set; }
         public DbSet<Slider> Sliders { get; set; }
         public DbSet<SiteBanner> SiteBanners { get; set; }
+        public DbSet<Product> Products { get; set; }
 
         #endregion
 

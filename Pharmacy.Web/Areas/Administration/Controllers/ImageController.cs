@@ -47,18 +47,21 @@ namespace Pharmacy.Web.Areas.Administration.Controllers
         public async Task<IActionResult> CreateSlider(CreateSliderDto slider, IFormFile sliderImage,
             IFormFile mobileSliderImage)
         {
-
-            var result = await _siteImagesService.CreateSlider(slider, sliderImage, mobileSliderImage);
-
-            switch (result)
+            if (ModelState.IsValid)
             {
-                case CreateSliderResult.Error:
-                    TempData[ErrorMessage] = "در افزودن اسلایدر خطایی رخ داد";
-                    break;
-                case CreateSliderResult.Success:
-                    TempData[SuccessMessage] = "عملیات ثبت اسلایدر با موفقیت انجام شد";
-                    return RedirectToAction("SliderList", "Image");
+                var result = await _siteImagesService.CreateSlider(slider, sliderImage, mobileSliderImage);
+
+                switch (result)
+                {
+                    case CreateSliderResult.Error:
+                        TempData[ErrorMessage] = "در افزودن اسلایدر خطایی رخ داد";
+                        break;
+                    case CreateSliderResult.Success:
+                        TempData[SuccessMessage] = "عملیات ثبت اسلایدر با موفقیت انجام شد";
+                        return RedirectToAction("SliderList", "Image");
+                }
             }
+
 
             return View();
         }
@@ -78,11 +81,13 @@ namespace Pharmacy.Web.Areas.Administration.Controllers
         public async Task<IActionResult> EditSlider(EditSliderDto edit, IFormFile sliderImage,
             IFormFile mobileSliderImage)
         {
+            var user = await _userService.GetUserById(User.GetUserId());
+            var username = user.FirstName + " " + user.LastName;
+            var result = await _siteImagesService.EditSlider(edit, sliderImage, mobileSliderImage, username);
+
             if (ModelState.IsValid || edit.ImageName == null || edit.MobileImageName == null)
             {
-                var user = await _userService.GetUserById(User.GetUserId());
-                var username = user.FirstName + " " + user.LastName;
-                var result = await _siteImagesService.EditSlider(edit, sliderImage, mobileSliderImage, username);
+
                 switch (result)
                 {
                     case EditSliderResult.Error:
@@ -127,6 +132,7 @@ namespace Pharmacy.Web.Areas.Administration.Controllers
         [HttpGet("deactive-slider/{sliderId}")]
         public async Task<IActionResult> DeactiveSlider(long sliderId)
         {
+
             var user = await _userService.GetUserById(User.GetUserId());
             var username = user.FirstName + " " + user.LastName;
             var result = await _siteImagesService.DeActiveSlider(sliderId, username);

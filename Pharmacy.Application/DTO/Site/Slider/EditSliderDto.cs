@@ -18,12 +18,12 @@ namespace Pharmacy.Application.DTO.Site.Slider
 
        
         [Display(Name = "نام تصویر")]
-        [MaxLength(200, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
+     
         public string? ImageName { get; set; }
 
        
         [Display(Name = "نام تصویر موبایل")]
-        [MaxLength(200, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
+       
         public string? MobileImageName { get; set; }
 
         [Display(Name = "فعال / غیرفعال")]

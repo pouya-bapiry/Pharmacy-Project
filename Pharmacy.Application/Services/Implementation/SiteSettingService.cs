@@ -57,9 +57,9 @@ namespace Pharmacy.Application.Services.Implementation
         public async Task<EditSiteSettingDto> GetSiteSettingForEdit(long id)
         {
             var setting = await _siteRepository
-               .GetQuery()
-               .AsQueryable()
-               .SingleOrDefaultAsync(x => x.Id == id);
+                .GetQuery()
+                .AsQueryable()
+                .SingleOrDefaultAsync(x => x.Id == id);
             if (setting == null)
             {
                 return null;

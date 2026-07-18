@@ -176,7 +176,7 @@ namespace Pharmacy.Application.Services.Implementation
                 IsActive = slider.IsActive
             };
         }
-        public async Task<EditSliderResult> EditSlider(EditSliderDto edit, IFormFile sliderImage, IFormFile mobileSliderImage, string username)
+        public async Task<EditSliderResult> EditSlider(EditSliderDto edit, IFormFile sliderImage, IFormFile? mobileSliderImage, string username)
         {
             var mainSlider = await _sliderRepository.GetQuery()
                 .AsQueryable()
@@ -186,6 +186,7 @@ namespace Pharmacy.Application.Services.Implementation
             {
                 return EditSliderResult.NotFound;
             }
+           
 
 
             if (sliderImage != null && sliderImage.IsImage())
@@ -205,10 +206,14 @@ namespace Pharmacy.Application.Services.Implementation
                 mainSlider.MobileImageName = mobileImageName;
 
             }
-
-
+           
+                
             mainSlider.Link = edit.Link;
-            mainSlider.Description = edit.Description;
+            //if (edit.Description==null)
+            //{
+            //    edit.Description = mainSlider.Description; 
+            //}
+            mainSlider.Description = edit.Description.KeepOld(mainSlider.Description);
             //mainSlider.IsActive = edit.IsActive;
             mainSlider.LastUpdateDate = DateTime.Now;
 

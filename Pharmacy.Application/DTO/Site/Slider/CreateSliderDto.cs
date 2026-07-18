@@ -14,13 +14,12 @@ namespace Pharmacy.Application.DTO.Site.Slider
         [Display(Name = "توضیحات")]
         public string Description { get; set; }
 
-        [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
+       
         [Display(Name = "نام تصویر")]
         [MaxLength(200, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
         public string ImageName { get; set; }
 
-        [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
-        [Display(Name = "نام تصویر موبایل")]
+        [Display(Name = " تصویر موبایل")]
         [MaxLength(200, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
         public string? MobileImageName { get; set; }
 
