@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Pharmacy.Application.DTO.Product;
+using Pharmacy.Application.DTO.ProductCategory;
 using Pharmacy.Domain.Entities.Product;
 using System;
 using System.Collections.Generic;
@@ -24,5 +25,17 @@ namespace Pharmacy.Application.Services.Interfaces
         //Task<ProductDetailsDto> GetProductDetails(long productId);
         #endregion
 
+        #region Product Category
+
+        Task<FilterProductCategoryDto> FilterProductCategory(FilterProductCategoryDto filter);
+        Task<FilterProductCategoryDto> FilterProductSubCategory(FilterProductCategoryDto filter, long? parentId);
+        Task<List<ProductCategory>> GetAllProductCategoriesBy(long? parentId);
+        Task<List<ProductCategory>> GetAllActiveProductCategories();
+        Task<CreateProductCategoryResult> CreateProductCategory(CreateProductCategoryDto category, IFormFile image);
+        Task<EditProductCategoryDto> GetProductCategoryForEdit(long categoryId);
+        Task<EditProductCategoryResult> EditProductCategory(EditProductCategoryDto edit, IFormFile image);
+
+
+        #endregion
     }
 }

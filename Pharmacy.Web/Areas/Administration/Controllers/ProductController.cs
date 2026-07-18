@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Pharmacy.Application.DTO.Product;
+using Pharmacy.Application.DTO.ProductCategory;
 using Pharmacy.Application.Services.Interfaces;
 
 namespace Pharmacy.Web.Areas.Administration.Controllers
@@ -127,6 +128,149 @@ namespace Pharmacy.Web.Areas.Administration.Controllers
 
         #endregion
 
+
+        #endregion
+
+        #region Product Category
+
+        #region Filter
+
+        [HttpGet("product-category-list")]
+        public async Task<IActionResult> ProductCategoryList(FilterProductCategoryDto filter)
+        {
+            var productCategories = await _productService.FilterProductCategory(filter);
+
+            if (productCategories == null)
+            {
+                return RedirectToAction("PageNotFound", "Home");
+            }
+            return View(productCategories);
+
+        }
+        #endregion
+
+        #region Filter Product Sub Category
+
+
+
+
+        [HttpGet("product-sub-category-list/{parentId}/{categoryName}")]
+        public async Task<IActionResult> ProductSubCategoryList(FilterProductCategoryDto filter, long? parentId)
+        {
+
+            var productSubCategories = await _productService.FilterProductSubCategory(filter, parentId);
+
+            if (productSubCategories == null)
+            {
+                return RedirectToAction("PageNotFound", "Home", new { area = "" });
+            }
+
+            return View(filter);
+        }
+        #endregion
+
+        #region Create Product Category
+
+
+        [HttpGet("create-product-category")]
+        public async Task<IActionResult> CreateProductCategory()
+        {
+            return View();
+        }
+
+        [HttpPost("create-product-category"), ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateProductCategory(CreateProductCategoryDto category, IFormFile categoryImage)
+        {
+            var result = await _productService.CreateProductCategory(category, categoryImage);
+
+            switch (result)
+            {
+                case CreateProductCategoryResult.ImageErrorType:
+                    TempData[ErrorMessage] = "فرمت تصویر صحیح نمی باشد";
+                    break;
+                case CreateProductCategoryResult.Error:
+                    TempData[ErrorMessage] = "در ثبت اطلاعات خطایی رخ داد";
+                    break;
+                case CreateProductCategoryResult.Success:
+                    TempData[SuccessMessage] = "افزودن دسته محصول با موفقیت انجام شد";
+                    return RedirectToAction("ProductCategoryList", "Product");
+            }
+
+            return View();
+        }
+
+
+        #endregion
+
+        #region Create Product SubCategory
+
+        [HttpGet("create-product-sub-category/{parentId}/{categoryName}")]
+        public async Task<IActionResult> CreateProductSubCategory(long? parentId)
+        {
+            return View();
+        }
+
+        [HttpPost("create-product-sub-category/{parentId}/{categoryName}"), ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateProductSubCategory(CreateProductCategoryDto category, IFormFile categoryImage)
+        {
+            var result = await _productService.CreateProductCategory(category, categoryImage);
+
+            if (string.IsNullOrWhiteSpace(category.Title))
+            {
+                TempData[ErrorMessage] = "عنوان یا لینک دسته نمی تواند خالی باشد";
+            }
+
+            switch (result)
+            {
+                case CreateProductCategoryResult.ImageErrorType:
+                    TempData[ErrorMessage] = "فرمت تصویر صحیح نمی باشد";
+                    break;
+                case CreateProductCategoryResult.Error:
+                    TempData[ErrorMessage] = "در ثبت اطلاعات خطایی رخ داد";
+                    break;
+                case CreateProductCategoryResult.Success:
+                    TempData[SuccessMessage] = "افزودن دسته محصول با موفقیت انجام شد";
+                    return category.ParentId == null ? RedirectToAction("ProductCategoryList", "Product") :
+                        RedirectToAction("ProductSubCategoryList", "Product", new { parentId = category.ParentId, categoryName = category.Title });
+            }
+
+            return View();
+        }
+
+
+        #endregion
+
+        #region Edit Product Category
+
+        [HttpGet("edit-product-category/{id}")]
+        public async Task<IActionResult> EditProductCategory(long id)
+        {
+            var productCategory = await _productService.GetProductCategoryForEdit(id);
+            return View(productCategory);
+        }
+
+        [HttpPost("edit-product-category/{id}"), ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditProductCategory(EditProductCategoryDto edit, IFormFile categoryImage)
+        {
+            if (ModelState.IsValid || edit.Image == null)
+            {
+                var result = await _productService.EditProductCategory(edit, categoryImage);
+
+                switch (result)
+                {
+                    case EditProductCategoryResult.NotFound:
+                        TempData[WarningMessage] = "اطلاعات مورد نظر یافت نشد";
+                        break;
+                    case EditProductCategoryResult.Success:
+                        TempData[SuccessMessage] = "ویرایش اطلاعات دسته بندی محصول با موفقیت انجام شد";
+                        return edit.ParentId == null ? RedirectToAction("ProductCategoryList", "Product") :
+                            RedirectToAction("ProductSubCategoryList", "Product", new { parentId = edit.ParentId, categoryName = edit.Title });
+                }
+            }
+
+            return View();
+        }
+        #endregion
 
         #endregion
 

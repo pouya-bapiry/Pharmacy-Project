@@ -26,6 +26,8 @@ namespace Pharmacy.Infrastructure.Context
         public DbSet<Slider> Sliders { get; set; }
         public DbSet<SiteBanner> SiteBanners { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<ProductCategory> ProductCategories { get; set; }
+        public DbSet<ProductSelectedCategory> ProductSelectedCategories { get; set; }
 
         #endregion
 
