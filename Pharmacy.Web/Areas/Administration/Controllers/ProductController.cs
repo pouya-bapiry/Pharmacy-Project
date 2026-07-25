@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Pharmacy.Application.DTO.Product;
 using Pharmacy.Application.DTO.ProductCategory;
+using Pharmacy.Application.DTO.ProductColor;
+using Pharmacy.Application.Services.Implementation;
 using Pharmacy.Application.Services.Interfaces;
+using Pharmacy.Web.PresentationExtensions;
 
 namespace Pharmacy.Web.Areas.Administration.Controllers
 {
@@ -50,25 +53,25 @@ namespace Pharmacy.Web.Areas.Administration.Controllers
         {
             if (ModelState.IsValid)
             {
-            var result = await _productService.CreateProduct(product, productImage);
+                var result = await _productService.CreateProduct(product, productImage);
 
-            switch (result)
-            {
-                case CreateProductResult.HasNoImage:
-                    TempData[WarningMessage] = "لطفا تصویر محصول را آپلود نمایید";
-                    TempData[InfoMessage] = "فرمت تصاویر باید به صورت jpg, jpeg, png  باشد";
-                    break;
-                case CreateProductResult.ImageErrorType:
-                    TempData[WarningMessage] = "لطفا تصویر محصول را طبق فرمت های ذکر شده وارد نمایید";
-                    TempData[InfoMessage] = "فرمت تصاویر باید به صورت jpg, jpeg, png  باشد";
-                    break;
-                case CreateProductResult.Error:
-                    TempData[ErrorMessage] = "عملیات ثبت محصول با خطا مواجه شد";
-                    break;
-                case CreateProductResult.Success:
-                    TempData[SuccessMessage] = $"محصول مورد نظر با عنوان {product.Title} با موفقیت ثبت شد";
-                    return RedirectToAction("FilterProduct", "Product");
-            }
+                switch (result)
+                {
+                    case CreateProductResult.HasNoImage:
+                        TempData[WarningMessage] = "لطفا تصویر محصول را آپلود نمایید";
+                        TempData[InfoMessage] = "فرمت تصاویر باید به صورت jpg, jpeg, png  باشد";
+                        break;
+                    case CreateProductResult.ImageErrorType:
+                        TempData[WarningMessage] = "لطفا تصویر محصول را طبق فرمت های ذکر شده وارد نمایید";
+                        TempData[InfoMessage] = "فرمت تصاویر باید به صورت jpg, jpeg, png  باشد";
+                        break;
+                    case CreateProductResult.Error:
+                        TempData[ErrorMessage] = "عملیات ثبت محصول با خطا مواجه شد";
+                        break;
+                    case CreateProductResult.Success:
+                        TempData[SuccessMessage] = $"محصول مورد نظر با عنوان {product.Title} با موفقیت ثبت شد";
+                        return RedirectToAction("FilterProduct", "Product");
+                }
             }
 
 
@@ -272,10 +275,138 @@ namespace Pharmacy.Web.Areas.Administration.Controllers
         }
         #endregion
 
+       
+
+
+        #region Active and DeActive Category
+
+        [HttpGet("active-category/{categoryId}")]
+        public async Task<IActionResult> ActiveCategory(long categoryId)
+        {
+           
+            var category = await _productService.ActiveCategory(categoryId);
+            return RedirectToAction("ProductCategoryList", "Product", new { area = "Administration" });
+        }
+        [HttpGet("deActive-category/{categoryId}")]
+        public async Task<IActionResult> DeActiveCategory(long categoryId)
+        {
+            
+            var category = await _productService.DeActiveCategory(categoryId);
+            return RedirectToAction("ProductCategoryList", "Product", new { area = "Administration" });
+        }
+
+        #endregion
+  
+
         #endregion
 
+        #region Product Color
+
+        #region Product color list
 
 
+        [HttpGet("product-color-list/{productId}")]
+        public async Task<IActionResult> FilterProductColor(long productId)
+        {
+            ViewBag.ProductId = productId;
+            //ProductId = productId;
+            var productColor = await _productService.GetAllProductColorInAdminPanel(productId);
+            if (productColor == null)
+            {
+                return RedirectToAction("PageNotFound", "Home");
+            }
+
+
+
+            return View(productColor);
+        }
+
+        #endregion
+
+        #region Create Color
+
+
+        [HttpGet("create-product-color/{productId}")]
+        public async Task<IActionResult> CreateProductColor(long productId)
+        {
+            var model = new CreateProductColorDto();
+            return View(model);
+        }
+
+        [HttpPost("create-product-color/{productId}"), ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateProductColor(CreateProductColorDto color, long productId)
+        {
+
+         
+                var result = await _productService.CreateProductColor(color, productId);
+
+                switch (result)
+                {
+                    case CreateProductColorResult.Error:
+                        TempData[ErrorMessage] = "در ثبت اطلاعات خطایی رخ داد";
+                        break;
+                    case CreateProductColorResult.ProductNotFound:
+                        TempData[ErrorMessage] = "محصول مورد نظر یافت نشد";
+                        break;
+                    case CreateProductColorResult.DuplicateColor:
+                        TempData[WarningMessage] = "رنگ انتخابی وارد شده تکراری می باشد";
+                        break;
+
+                    case CreateProductColorResult.Success:
+                        TempData[SuccessMessage] = $"رنگ های انتخابی با موفقیت افزوده شدند.";
+                        return RedirectToAction("FilterProductColor", "Product", new { area = "Administration", ProductId = productId });
+
+                }
+            
+
+
+
+            return View(color);
+        }
+
+        #endregion
+
+        #region Edit Product Color
+
+        [HttpGet("edit-product-color/{colorId}/")]
+        public async Task<IActionResult> EditProductColor(long colorId)
+        {
+            var productColor = await _productService.GetProductColorForEdit(colorId);
+
+            if (productColor == null)
+            {
+                return RedirectToAction("PageNotFound", "Home");
+            }
+            return View(productColor);
+        }
+
+        [HttpPost("edit-product-color/{colorId}/")]
+        public async Task<IActionResult> EditProductColor(EditProductColorDto edit, long colorId)
+        
+        {
+            if (ModelState.IsValid)
+            {
+
+                var result = await _productService.EditProductColor(edit, colorId);
+                switch (result)
+                {
+                    case EditProductColorResult.ColorNotFound:
+                        TempData[WarningMessage] = "اطلاعات مورد نظر یافت نشد";
+                        break;
+                    case EditProductColorResult.DuplicateColor:
+                        TempData[WarningMessage] = "رنگ انتخابی وارد شده تکراری می باشد";
+                        break;
+                    case EditProductColorResult.Success:
+                        TempData[SuccessMessage] = "ویرایش اطلاعات رنگ محصول با موفقیت انجام شد";
+                        return RedirectToAction("FilterProductColor", "Product", new { area = "Administration", productId = edit.ProductId });
+                }
+            }
+            return View();
+        }
+
+        #endregion
+
+        #endregion
         #endregion
     }
 }

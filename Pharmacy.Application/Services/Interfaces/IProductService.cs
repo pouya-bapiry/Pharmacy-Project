@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Pharmacy.Application.DTO.Product;
 using Pharmacy.Application.DTO.ProductCategory;
+using Pharmacy.Application.DTO.ProductColor;
 using Pharmacy.Domain.Entities.Product;
 using System;
 using System.Collections.Generic;
@@ -10,11 +11,11 @@ using System.Threading.Tasks;
 
 namespace Pharmacy.Application.Services.Interfaces
 {
-    public interface IProductService:IAsyncDisposable
+    public interface IProductService : IAsyncDisposable
     {
 
         #region Product
-       // Task<FilterProductDto> FilterProducts(FilterProductDto filter);
+        // Task<FilterProductDto> FilterProducts(FilterProductDto filter);
         Task<FilterProductDto> FilterProductsInAdmin(FilterProductDto filter);
         Task<CreateProductResult> CreateProduct(CreateProductDto product, IFormFile productImage);
         Task<EditProductDto> GetProductForEdit(long productId);
@@ -34,8 +35,17 @@ namespace Pharmacy.Application.Services.Interfaces
         Task<CreateProductCategoryResult> CreateProductCategory(CreateProductCategoryDto category, IFormFile image);
         Task<EditProductCategoryDto> GetProductCategoryForEdit(long categoryId);
         Task<EditProductCategoryResult> EditProductCategory(EditProductCategoryDto edit, IFormFile image);
+        Task<bool> ActiveCategory(long categoryId);
+        Task<bool> DeActiveCategory(long categoryId);
 
 
+        #endregion
+
+        #region Product Color
+        Task<List<FilterProductColorDto>> GetAllProductColorInAdminPanel(long productId);
+        Task<CreateProductColorResult> CreateProductColor(CreateProductColorDto color, long productId);
+        Task<EditProductColorDto> GetProductColorForEdit(long colorId);
+        Task<EditProductColorResult> EditProductColor(EditProductColorDto color, long colorId);
         #endregion
     }
 }

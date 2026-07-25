@@ -44,5 +44,12 @@ namespace Pharmacy.Domain.Entities.Product
 
 
         #endregion
+
+        #region Relations 
+
+        public ICollection<ProductSelectedCategory> ProductSelectedCategories { get; set; }
+        public ICollection<ProductColor> ProductColors { get; set; }
+
+        #endregion
     }
 }

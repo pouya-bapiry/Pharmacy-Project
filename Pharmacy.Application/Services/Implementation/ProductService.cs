@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Pharmacy.Application.DTO.Paging;
 using Pharmacy.Application.DTO.Product;
 using Pharmacy.Application.DTO.ProductCategory;
+using Pharmacy.Application.DTO.ProductColor;
 using Pharmacy.Application.Extensions;
 using Pharmacy.Application.Services.Interfaces;
 using Pharmacy.Application.Utilities;
@@ -23,13 +24,15 @@ namespace Pharmacy.Application.Services.Implementation
         private readonly IGenericRepository<Product> _productRepository;
         private readonly IGenericRepository<ProductCategory> _productCategoryRepository;
         private readonly IGenericRepository<ProductSelectedCategory> _productSelectedRepository;
+        private readonly IGenericRepository<ProductColor> _productColorRepository;
 
         public ProductService(IGenericRepository<Product> productRepository, IGenericRepository<ProductCategory> productCategoryRepository,
-        IGenericRepository<ProductSelectedCategory> productSelectedRepository)
+        IGenericRepository<ProductSelectedCategory> productSelectedRepository, IGenericRepository<ProductColor> productColorRepository)
         {
             _productRepository = productRepository;
             _productCategoryRepository = productCategoryRepository;
             _productSelectedRepository = productSelectedRepository;
+            _productColorRepository = productColorRepository;
         }
 
         #endregion
@@ -42,7 +45,18 @@ namespace Pharmacy.Application.Services.Implementation
             {
                 await _productRepository.DisposeAsync();
             }
-
+            if (_productCategoryRepository != null)
+            {
+                await _productCategoryRepository.DisposeAsync();
+            }
+            if (_productSelectedRepository != null)
+            {
+                await _productSelectedRepository.DisposeAsync();
+            }
+            if (_productColorRepository != null)
+            {
+                await _productColorRepository.DisposeAsync();
+            }
         }
         #endregion
 
@@ -351,7 +365,6 @@ namespace Pharmacy.Application.Services.Implementation
         }
         #endregion
 
-
         #region Create
 
         public async Task<CreateProductCategoryResult> CreateProductCategory(CreateProductCategoryDto category, IFormFile image)
@@ -394,7 +407,6 @@ namespace Pharmacy.Application.Services.Implementation
         }
 
         #endregion
-
 
         #region Edit
 
@@ -454,6 +466,184 @@ namespace Pharmacy.Application.Services.Implementation
 
 
         #endregion
+
+        #region Active DeActive
+        public async Task<bool> ActiveCategory(long categoryId)
+        {
+            var category = await _productCategoryRepository.GetQuery()
+                .AsQueryable()
+                .SingleOrDefaultAsync(x => x.Id == categoryId);
+
+            if (category == null)
+            {
+                return false;
+            }
+
+            category.IsActive = true;
+
+            _productCategoryRepository.EditEntity(category);
+            await _productCategoryRepository.SaveChanges();
+
+            return true;
+        }
+        public async Task<bool> DeActiveCategory(long categoryId)
+        {
+            var category = await _productCategoryRepository.GetQuery()
+                .AsQueryable()
+                .SingleOrDefaultAsync(x => x.Id == categoryId);
+
+            if (category == null)
+            {
+                return false;
+            }
+
+            category.IsActive = false;
+
+            _productCategoryRepository.EditEntity(category);
+            await _productCategoryRepository.SaveChanges();
+
+            return true;
+        }
+        #endregion
+
+        #endregion
+
+        #region Product Color
+        #region get
+
+        public async Task<List<FilterProductColorDto>> GetAllProductColorInAdminPanel(long productId)
+        {
+            return await _productColorRepository
+                .GetQuery()
+                .AsQueryable()
+                .Include(x => x.Product)
+                .Where(x => x.ProductId == productId)
+                .Select(x => new FilterProductColorDto
+                {
+                    Id = x.Id,
+                    ProductId = productId,
+                    ColorName = x.ColorName,
+                    ColorCode = x.ColorCode,
+                    Price = x.Price,
+                    CreateDate = x.CreateDate.ToStringShamsiDate(),
+                }).ToListAsync();
+        }
+
+        #endregion
+
+        #region Create
+
+        public async Task<CreateProductColorResult> CreateProductColor(CreateProductColorDto color, long productId)
+        {
+            var product = await _productRepository.GetEntityById(productId);
+
+            if (product == null)
+            {
+                return CreateProductColorResult.ProductNotFound;
+            }
+            foreach (var item in color.ProductColors)
+            {
+                var isDuplicateColorTitle = await _productColorRepository
+                    .GetQuery()
+                    .AnyAsync(x => x.ColorName == item.ColorName);
+
+                if (isDuplicateColorTitle)
+                {
+                    return CreateProductColorResult.DuplicateColor;
+                }
+            }
+            await AddProductColors(productId, color.ProductColors);
+
+
+            await _productColorRepository.SaveChanges();
+
+
+            return CreateProductColorResult.Success;
+        }
+
+        #endregion
+
+        #region Edit
+
+        public async Task<EditProductColorDto> GetProductColorForEdit(long colorId)
+        {
+            var productColor = await _productColorRepository
+                .GetQuery()
+                .AsQueryable()
+                .Include(x => x.Product)
+                .SingleOrDefaultAsync(x => x.Id == colorId);
+
+            if (productColor == null)
+            {
+                return null;
+            }
+
+            return new EditProductColorDto
+            {
+                Id = productColor.Id,
+                ColorName = productColor.ColorName,
+                ColorCode = productColor.ColorCode,
+                Price = productColor.Price,
+                ProductId = productColor.ProductId
+            };
+        }
+
+        public async Task<EditProductColorResult> EditProductColor(EditProductColorDto color, long colorId)
+        {
+            var mainColor = await _productColorRepository
+                .GetQuery()
+                .AsQueryable()
+                .Include(x => x.Product)
+                .SingleOrDefaultAsync(x => x.Id == colorId);
+
+            if (mainColor == null)
+            {
+                return EditProductColorResult.ColorNotFound;
+            }
+
+
+
+            mainColor.ColorName = color.ColorName;
+            mainColor.ColorCode = color.ColorCode;
+            mainColor.Price = color.Price;
+            mainColor.ProductId = color.ProductId;
+
+            var isDuplicateColorTitle =
+                       await _productColorRepository.GetQuery().AnyAsync(x => x.ColorName == mainColor.ColorName);
+
+            if (isDuplicateColorTitle) return EditProductColorResult.DuplicateColor;
+
+            _productColorRepository.EditEntity(mainColor);
+            _productColorRepository.SaveChanges();
+            return EditProductColorResult.Success;
+        }
+        #endregion
+        #endregion
+
+
+        #region Add or Remove Product Color
+
+        public async Task AddProductColors(long productId, List<CreateProductColorDto> colors)
+        {
+            var productSelectedColor = new List<ProductColor>();
+
+            foreach (var productColor in colors)
+            {
+                if (productSelectedColor.All(x => x.ColorName != productColor.ColorName))
+                {
+                    productSelectedColor.Add(new ProductColor
+                    {
+                        ProductId = productId,
+                        ColorName = productColor.ColorName,
+                        ColorCode = productColor.ColorCode,
+                        Price = productColor.Price
+                    });
+                }
+
+            }
+
+            await _productColorRepository.AddRangeEntities(productSelectedColor);
+        }
 
         #endregion
     }
