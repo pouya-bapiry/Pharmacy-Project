@@ -28,24 +28,7 @@
 				<i class="zmdi zmdi-view-dashboard"></i> <span>داشبورد</span>
 			</a>
 		</li>
-		<li>
-			<a href="javaScript:void();" class="waves-effect">
-				<i class="zmdi zmdi-account"></i>
-				<span>مدیریت فروشندگان</span> <i class="fa fa-angle-left pull-right"></i>
-			</a>
-			<ul class="sidebar-submenu">
-				<li>
-					<a asp-area="Administration" asp-controller="Seller" asp-action="SellerRequest">
-						<i class="zmdi zmdi-long-arrow-right"></i>درخواست های فروشندگی
-					</a>
-				</li>
-				<li>
-					<a asp-area="Administration" asp-controller="Seller" asp-action="LegalCompanyInformation">
-						<i class="zmdi zmdi-long-arrow-right"></i>لیست شرکت های حقوقی
-					</a>
-				</li>
-			</ul>
-		</li>
+		
 		<li>
 			<a href="javaScript:void();" class="waves-effect">
 				<i class="zmdi zmdi-shopping-basket"></i>
@@ -59,7 +42,7 @@
 					<a asp-area="Administration" asp-controller="Product" asp-action="ProductCategoryList">
 						<i class="zmdi zmdi-long-arrow-right"></i>لیست دسته محصولات
 					</a>
-					<a asp-area="Administration" asp-controller="Product" asp-action="FilterFeatureCategory">
+					<a asp-area="Administration" asp-controller="Product" asp-action="FilterFeaturesCategory">
 						<i class="zmdi zmdi-long-arrow-right"></i>لیست دسته بندی ویژگی محصول
 					</a>
 				</li>
@@ -134,24 +117,7 @@
 				</li>
 			</ul>
 		</li>
-		<li>
-			<a href="javaScript:void();" class="waves-effect">
-				<i class="zmdi zmdi-account-circle"></i>
-				<span>مدیریت استخدامی ها</span> <i class="fa fa-angle-left pull-right"></i>
-			</a>
-			<ul class="sidebar-submenu">
-				<li>
-					<a asp-area="Administration" asp-controller="Employment" asp-action="EmploymentList">
-						<i class="zmdi zmdi-long-arrow-right"></i>لیست استخدامی ها
-					</a>
-				</li>
-				<li>
-					<a asp-area="Administration" asp-controller="Employment" asp-action="EmploymentInfoGraphicList">
-						<i class="zmdi zmdi-long-arrow-right"></i>لیست فرایند استخدامی
-					</a>
-				</li>
-			</ul>
-		</li>
+	
 		<li>
 			<a href="javaScript:void();" class="waves-effect">
 				<i class="zmdi zmdi-image"></i>
@@ -162,9 +128,7 @@
 					<a asp-area="Administration" asp-controller="Image" asp-action="SliderList">
 						<i class="zmdi zmdi-long-arrow-right"></i>مدیریت اسلایدر ها
 					</a>
-					<a asp-area="Administration" asp-controller="Home" asp-action="PartnerList">
-						<i class="zmdi zmdi-long-arrow-right"></i>مدیریت همکاران
-					</a>
+					
 					<a asp-area="Administration" asp-controller="Image" asp-action="BannerList">
 						<i class="zmdi zmdi-long-arrow-right"></i>مدیریت بنر ها
 					</a>
@@ -205,9 +169,7 @@
 					<a asp-area="Administration" asp-controller="Home" asp-action="FrequentlyQuestionList">
 						<i class="zmdi zmdi-long-arrow-right"></i>مدیریت سوالات متداول
 					</a>
-					<a asp-area="Administration" asp-controller="Home" asp-action="SellerGuidelineList">
-						<i class="zmdi zmdi-long-arrow-right"></i>مدیریت فروشنده شوید
-					</a>
+					
 				</li>
 			</ul>
 		</li>

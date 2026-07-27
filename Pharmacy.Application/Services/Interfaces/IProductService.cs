@@ -2,6 +2,7 @@
 using Pharmacy.Application.DTO.Product;
 using Pharmacy.Application.DTO.ProductCategory;
 using Pharmacy.Application.DTO.ProductColor;
+using Pharmacy.Application.DTO.ProductFeatures;
 using Pharmacy.Domain.Entities.Product;
 using System;
 using System.Collections.Generic;
@@ -47,5 +48,13 @@ namespace Pharmacy.Application.Services.Interfaces
         Task<EditProductColorDto> GetProductColorForEdit(long colorId);
         Task<EditProductColorResult> EditProductColor(EditProductColorDto color, long colorId);
         #endregion
+
+        #region Product Features
+        Task<List<FilterProductFeatureDto>> GettAllActiveProductFeatures(long productId);
+        Task<CreateProductFeatureResult> CreateProductFeature(CreateProductFeatureDto feature, long productId);
+        Task<EditProductFeatureDto> GetProductFeatureForEdit(long featureId);
+        Task<EditProductFeatureResult> EditProductFeature(EditProductFeatureDto feature,long featureId);
+        #endregion
+
     }
 }

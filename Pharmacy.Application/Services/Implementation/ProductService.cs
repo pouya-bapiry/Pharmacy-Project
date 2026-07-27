@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Pharmacy.Application.DTO.Paging;
 using Pharmacy.Application.DTO.Product;
 using Pharmacy.Application.DTO.ProductCategory;
 using Pharmacy.Application.DTO.ProductColor;
+using Pharmacy.Application.DTO.ProductFeatures;
 using Pharmacy.Application.Extensions;
 using Pharmacy.Application.Services.Interfaces;
 using Pharmacy.Application.Utilities;
@@ -25,14 +27,16 @@ namespace Pharmacy.Application.Services.Implementation
         private readonly IGenericRepository<ProductCategory> _productCategoryRepository;
         private readonly IGenericRepository<ProductSelectedCategory> _productSelectedRepository;
         private readonly IGenericRepository<ProductColor> _productColorRepository;
+        private readonly IGenericRepository<ProductFeature> _productFeaturesRepository;
 
         public ProductService(IGenericRepository<Product> productRepository, IGenericRepository<ProductCategory> productCategoryRepository,
-        IGenericRepository<ProductSelectedCategory> productSelectedRepository, IGenericRepository<ProductColor> productColorRepository)
+        IGenericRepository<ProductSelectedCategory> productSelectedRepository, IGenericRepository<ProductColor> productColorRepository, IGenericRepository<ProductFeature> productFeaturesRepository)
         {
             _productRepository = productRepository;
             _productCategoryRepository = productCategoryRepository;
             _productSelectedRepository = productSelectedRepository;
             _productColorRepository = productColorRepository;
+            _productFeaturesRepository = productFeaturesRepository;
         }
 
         #endregion
@@ -169,7 +173,6 @@ namespace Pharmacy.Application.Services.Implementation
                 ShortDescription = product.ShortDescription,
                 ViewCount = 0,
                 SellCount = 0
-
             };
 
 
@@ -607,16 +610,122 @@ namespace Pharmacy.Application.Services.Implementation
             mainColor.ColorCode = color.ColorCode;
             mainColor.Price = color.Price;
             mainColor.ProductId = color.ProductId;
+           
+                var isDuplicateColorTitle =
+                        await _productColorRepository.GetQuery().AnyAsync(x => x.ColorName == mainColor.ColorName && x.Price==mainColor.Price );
 
-            var isDuplicateColorTitle =
-                       await _productColorRepository.GetQuery().AnyAsync(x => x.ColorName == mainColor.ColorName);
+                if (isDuplicateColorTitle) return EditProductColorResult.DuplicateColor;
 
-            if (isDuplicateColorTitle) return EditProductColorResult.DuplicateColor;
+
 
             _productColorRepository.EditEntity(mainColor);
             _productColorRepository.SaveChanges();
             return EditProductColorResult.Success;
         }
+        #endregion
+        #endregion
+
+        #region Product Features
+
+        #region Get
+
+
+        public async Task<List<FilterProductFeatureDto>> GettAllActiveProductFeatures(long productId)
+        {
+            return await _productFeaturesRepository
+                     .GetQuery()
+                     .AsQueryable()
+
+                    .Where(x => x.ProductId == productId)
+                     .Select(x => new FilterProductFeatureDto
+                     {
+                         Id = x.Id,
+                         ProductId = productId,
+
+                         FeatureTitle = x.FeatureTitle,
+                         FeatureValue = x.FeatureValue,
+                         CreateDate = x.CreateDate.ToStringShamsiDate(),
+                     }).ToListAsync();
+        }
+        #endregion
+
+        #region Create
+
+        public async Task<CreateProductFeatureResult> CreateProductFeature(CreateProductFeatureDto feature, long productId)
+        {
+            try
+            {
+                var product = await _productRepository.GetEntityById(productId);
+
+                if (product == null)
+                {
+                    return CreateProductFeatureResult.ProductNotFound;
+                }
+                var newFeature = new ProductFeature
+                {
+                    ProductId = feature.ProductId,
+                    FeatureTitle = feature.FeatureTitle,
+                    FeatureValue = feature.FeatureValue,
+                    //ProductFeaturesCategoryId = feature.ProductFeatureCategoryId,
+
+                };
+                await _productFeaturesRepository.AddEntity(newFeature);
+                await _productFeaturesRepository.SaveChanges();
+
+
+                return CreateProductFeatureResult.Success;
+            }
+            catch (Exception ex)
+            {
+                ////نوشتن خطای مورد نظر 
+                //Logger.ShowError(ex);
+                //// نمایش پیغام مناسب به کاربر
+                return CreateProductFeatureResult.Error;
+            }
+
+        }
+
+        #endregion
+
+        #region Edit
+
+        public async Task<EditProductFeatureDto> GetProductFeatureForEdit(long featureId)
+        {
+            var feature = await _productFeaturesRepository.GetQuery().AsQueryable().FirstOrDefaultAsync(x => x.Id == featureId);
+            if (feature == null)
+            {
+                return null;
+            }
+            return new EditProductFeatureDto
+            {
+                Id = feature.Id,
+                FeatureTitle = feature.FeatureTitle,
+                FeatureValue = feature.FeatureValue,
+            };
+        }
+
+        public async Task<EditProductFeatureResult> EditProductFeature(EditProductFeatureDto feature, long featureId)
+        {
+            var edit = await _productFeaturesRepository.GetQuery().AsQueryable().FirstOrDefaultAsync(x => x.Id == featureId);
+
+            if (edit == null)
+            {
+                return EditProductFeatureResult.ProductNotFound;
+            }
+
+            edit.FeatureTitle = feature.FeatureTitle;
+            edit.FeatureValue = feature.FeatureValue;
+            edit.ProductId = feature.ProductId;
+
+            var IsDuplicateFeature = await _productFeaturesRepository.GetQuery().AnyAsync(x => x.FeatureTitle == feature.FeatureTitle);
+            if (IsDuplicateFeature) return EditProductFeatureResult.DuplicateFeature;
+
+            _productFeaturesRepository.EditEntity(edit);
+            _productFeaturesRepository.SaveChanges();
+            return EditProductFeatureResult.Success;
+
+        }
+
         #endregion
         #endregion
 

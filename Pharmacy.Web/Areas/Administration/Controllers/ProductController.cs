@@ -2,6 +2,7 @@
 using Pharmacy.Application.DTO.Product;
 using Pharmacy.Application.DTO.ProductCategory;
 using Pharmacy.Application.DTO.ProductColor;
+using Pharmacy.Application.DTO.ProductFeatures;
 using Pharmacy.Application.Services.Implementation;
 using Pharmacy.Application.Services.Interfaces;
 using Pharmacy.Web.PresentationExtensions;
@@ -275,28 +276,24 @@ namespace Pharmacy.Web.Areas.Administration.Controllers
         }
         #endregion
 
-       
-
-
         #region Active and DeActive Category
 
         [HttpGet("active-category/{categoryId}")]
         public async Task<IActionResult> ActiveCategory(long categoryId)
         {
-           
+
             var category = await _productService.ActiveCategory(categoryId);
             return RedirectToAction("ProductCategoryList", "Product", new { area = "Administration" });
         }
         [HttpGet("deActive-category/{categoryId}")]
         public async Task<IActionResult> DeActiveCategory(long categoryId)
         {
-            
+
             var category = await _productService.DeActiveCategory(categoryId);
             return RedirectToAction("ProductCategoryList", "Product", new { area = "Administration" });
         }
 
         #endregion
-  
 
         #endregion
 
@@ -337,27 +334,27 @@ namespace Pharmacy.Web.Areas.Administration.Controllers
         public async Task<IActionResult> CreateProductColor(CreateProductColorDto color, long productId)
         {
 
-         
-                var result = await _productService.CreateProductColor(color, productId);
 
-                switch (result)
-                {
-                    case CreateProductColorResult.Error:
-                        TempData[ErrorMessage] = "در ثبت اطلاعات خطایی رخ داد";
-                        break;
-                    case CreateProductColorResult.ProductNotFound:
-                        TempData[ErrorMessage] = "محصول مورد نظر یافت نشد";
-                        break;
-                    case CreateProductColorResult.DuplicateColor:
-                        TempData[WarningMessage] = "رنگ انتخابی وارد شده تکراری می باشد";
-                        break;
+            var result = await _productService.CreateProductColor(color, productId);
 
-                    case CreateProductColorResult.Success:
-                        TempData[SuccessMessage] = $"رنگ های انتخابی با موفقیت افزوده شدند.";
-                        return RedirectToAction("FilterProductColor", "Product", new { area = "Administration", ProductId = productId });
+            switch (result)
+            {
+                case CreateProductColorResult.Error:
+                    TempData[ErrorMessage] = "در ثبت اطلاعات خطایی رخ داد";
+                    break;
+                case CreateProductColorResult.ProductNotFound:
+                    TempData[ErrorMessage] = "محصول مورد نظر یافت نشد";
+                    break;
+                case CreateProductColorResult.DuplicateColor:
+                    TempData[WarningMessage] = "رنگ انتخابی وارد شده تکراری می باشد";
+                    break;
 
-                }
-            
+                case CreateProductColorResult.Success:
+                    TempData[SuccessMessage] = $"رنگ های انتخابی با موفقیت افزوده شدند.";
+                    return RedirectToAction("FilterProductColor", "Product", new { area = "Administration", ProductId = productId });
+
+            }
+
 
 
 
@@ -382,7 +379,7 @@ namespace Pharmacy.Web.Areas.Administration.Controllers
 
         [HttpPost("edit-product-color/{colorId}/")]
         public async Task<IActionResult> EditProductColor(EditProductColorDto edit, long colorId)
-        
+
         {
             if (ModelState.IsValid)
             {
@@ -407,6 +404,114 @@ namespace Pharmacy.Web.Areas.Administration.Controllers
         #endregion
 
         #endregion
+
+        #region Product Features
+
+        #region Get
+
+        [HttpGet("filter-product-features/{productId}")]
+        public async Task<IActionResult> FilterProductFeatures(long productId)
+        {
+            ViewBag.ProductId = productId;
+
+            var productFeature = await _productService.GettAllActiveProductFeatures(productId);
+
+            if (productFeature == null)
+            {
+                return RedirectToAction("PageNotFound", "Home", new { area = "Administration" });
+            }
+
+            return View(productFeature);
+        }
+
         #endregion
+
+        #region Create
+        [HttpGet("create-product-feature/{productId}")]
+        public async Task<IActionResult> CreateProductFeature(long productId)
+        {
+
+            var model = new CreateProductFeatureDto();
+            return View(model);
+        }
+
+        [HttpPost("create-product-feature/{productId}")]
+        public async Task<IActionResult> CreateProductFeature(CreateProductFeatureDto feature, long productId)
+        {
+            var result = await _productService.CreateProductFeature(feature, productId);
+
+            switch (result)
+            {
+                case CreateProductFeatureResult.Error:
+                    TempData[ErrorMessage] = "در ثبت اطلاعات خطایی رخ داد";
+                    break;
+                case CreateProductFeatureResult.ProductNotFound:
+                    TempData[ErrorMessage] = "محصول مورد نظر یافت نشد";
+                    break;
+                case CreateProductFeatureResult.DuplicateFeature:
+                    TempData[WarningMessage] = "ویژگی انتخابی وارد شده تکراری می باشد";
+                    break;
+
+                case CreateProductFeatureResult.Success:
+                    TempData[SuccessMessage] = $"ویژگی های انتخابی با موفقیت افزوده شدند.";
+                    return RedirectToAction("FilterProductFeatures", "Product", new { area = "Administration", ProductId = productId });
+            }
+
+
+
+            return View();
+        }
+
+        #endregion
+
+        #region Edit 
+        [HttpGet("edit-product-feature/{featureId}")]
+        public async Task<IActionResult> EditProductFeature(long featureId)
+        {
+
+            var productFeature = await _productService.GetProductFeatureForEdit(featureId);
+
+            if (productFeature == null)
+            {
+                return RedirectToAction("PageNotFound", "Home");
+            }
+
+            return View(productFeature);
+        }
+        [HttpPost("edit-product-feature/{featureId}")]
+
+        public async Task<IActionResult> EditProductFeature(EditProductFeatureDto feature, long featureId)
+        
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _productService.EditProductFeature(feature, featureId);
+
+                switch (result)
+                {
+
+                    case EditProductFeatureResult.Success:
+                        TempData[SuccessMessage] = "ویرایش ویژگی محصول با موفقیت انجام شد";
+                        return RedirectToAction("FilterProductFeatures", "Product", new { area = "Administration", productId = feature.ProductId });
+                    case EditProductFeatureResult.ProductNotFound:
+                        TempData[WarningMessage] = "اطلاعات مورد نظر یافت نشد";
+                        break;
+                    case EditProductFeatureResult.DuplicateFeature:
+                        TempData[WarningMessage] = "ویژگی محصول تکراری میباشد ";
+
+                        break;
+
+                }
+            }
+
+
+            return View();
+        }
+        #endregion
+
+        #endregion
+
+        #endregion
+
     }
 }

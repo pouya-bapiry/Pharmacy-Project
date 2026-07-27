@@ -74,7 +74,8 @@
     <!-- Index js -->
     <script src="~/Admin/assets/js/index.js"></script>
 
-    @await RenderSectionAsync("Scripts", required: false)
+    @await RenderSectionAsync("Scripts",false)
+    <partial name="_SiteNotification" />
 </body>
 
 
