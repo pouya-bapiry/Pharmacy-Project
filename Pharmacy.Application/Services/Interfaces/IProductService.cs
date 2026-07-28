@@ -20,7 +20,7 @@ namespace Pharmacy.Application.Services.Interfaces
         Task<FilterProductDto> FilterProductsInAdmin(FilterProductDto filter);
         Task<CreateProductResult> CreateProduct(CreateProductDto product, IFormFile productImage);
         Task<EditProductDto> GetProductForEdit(long productId);
-        Task<EditProductResult> EditProductInAdmin(EditProductDto product, IFormFile productImage);
+        Task<EditProductResult> EditProductInAdmin(EditProductDto product, IFormFile? productImage);
 
         //Task<List<Product>> GetProductWithMaximumView(int take);
         //Task<List<Product>> GetLatestArrivalProducts(int take);
@@ -35,7 +35,7 @@ namespace Pharmacy.Application.Services.Interfaces
         Task<List<ProductCategory>> GetAllActiveProductCategories();
         Task<CreateProductCategoryResult> CreateProductCategory(CreateProductCategoryDto category, IFormFile image);
         Task<EditProductCategoryDto> GetProductCategoryForEdit(long categoryId);
-        Task<EditProductCategoryResult> EditProductCategory(EditProductCategoryDto edit, IFormFile image);
+        Task<EditProductCategoryResult> EditProductCategory(EditProductCategoryDto edit, IFormFile? image);
         Task<bool> ActiveCategory(long categoryId);
         Task<bool> DeActiveCategory(long categoryId);
 

@@ -34,7 +34,7 @@
                         <div class="form-group col-lg-12">
                             <label>توضیحات</label>
                             <textarea asp-for="Description" class="form-control" rows="10"></textarea>
-                            <span class="text-white float-right" asp-validation-for="Description"></span>
+                            <span class="text-danger " asp-validation-for="Description"></span>
                         </div>
                     </div>
                     <div class="row">
@@ -48,21 +48,21 @@
                         <div class="form-group col-lg-6">
                             <label>آدرس لینک</label>
                             <input class="form-control" asp-for="Url" />
-                            <span class="text-white float-right" asp-validation-for="Url"></span>
+                            <span class="text-danger " asp-validation-for="Url"></span>
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <label>سایز بنر</label>
                             <input class="form-control" asp-for="ColSize" />
-                            <span class="text-white float-right" asp-validation-for="ColSize"></span>
+                            <span class="text-danger " asp-validation-for="ColSize"></span>
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <label>آپلود تصویر</label>
                             <input type="file" name="bannerImage" class="form-control" accept=".png, .jpeg, .jpg" />
-                            <span class="text-white float-right" asp-validation-for="ImageName"></span>
+                            <span class="text-danger " asp-validation-for="ImageName"></span>
 
                         </div>
                     </div>

@@ -110,7 +110,7 @@ namespace Pharmacy.Application.Services.Implementation
                 return UserLoginResult.IsBlocked;
             }
 
-          
+
             if (user.Password != _passwordHasher.EncodePasswordMd5(login.Password))
             {
                 return UserLoginResult.WrongPassword;
@@ -145,7 +145,7 @@ namespace Pharmacy.Application.Services.Implementation
             };
         }
 
-        public async Task<EditUserProfileResult> EditUserProfile(EditUserProfileDto profile, long userId, IFormFile avatarImage)
+        public async Task<EditUserProfileResult> EditUserProfile(EditUserProfileDto profile, long userId, IFormFile? avatarImage)
         {
             var user = await _userRepository.GetQuery().AsQueryable().SingleOrDefaultAsync(x => x.Id == userId);
             if (user == null)
@@ -156,7 +156,7 @@ namespace Pharmacy.Application.Services.Implementation
             user.FirstName = profile.FirstName;
             user.LastName = profile.LastName;
             user.Email = profile.Email;
-           
+
             //user.EditProfile(profile.FirstName, profile.LastName, profile.Email);
 
 
@@ -169,15 +169,15 @@ namespace Pharmacy.Application.Services.Implementation
                     100, 100, PathExtension.UserAvatarThumbServer, user.Avatar);
                 user.Avatar = imageName;
 
-                _userRepository.EditEntity(user);
-                await _userRepository.SaveChanges();
-                return EditUserProfileResult.Success;
+
 
             }
 
+            _userRepository.EditEntity(user);
+            await _userRepository.SaveChanges();
+            return EditUserProfileResult.Success;
 
-
-            return EditUserProfileResult.NotImage;
+            
         }
         #endregion
 
@@ -271,7 +271,7 @@ namespace Pharmacy.Application.Services.Implementation
                 Email = user.Email,
                 Mobile = user.Mobile,
                 IsBlocked = user.IsBlocked,
-               
+
                 FirstName = user.FirstName,
                 LastName = user.LastName,
             };
@@ -293,7 +293,7 @@ namespace Pharmacy.Application.Services.Implementation
             user.Mobile = edit.Mobile;
             user.Email = edit.Email;
             user.IsBlocked = edit.IsBlocked;
-         
+
 
             _userRepository.EditEntityByUser(user, username);
             _userRepository.SaveChanges();
@@ -405,7 +405,7 @@ namespace Pharmacy.Application.Services.Implementation
             }
         }
 
-      
+
 
 
 

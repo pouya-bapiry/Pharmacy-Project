@@ -3,10 +3,11 @@
     var avatar = ViewBag.AvatarImage;
 }
 
+
 <aside class="profile-card d-xl-block d-none">
     <div class="profile-header d-flex align-items-center">
         <img src="@(!string.IsNullOrEmpty(avatar) ?
-                                   PathExtension.UserAvatarOrigin + avatar : PathExtension.DefaultAvatar)"
+                                      PathExtension.UserAvatarOrigin + avatar : PathExtension.DefaultAvatar)"
              alt="تصویر پروفایل" title="تصویر پروفایل" @* class="img-fluid rounded-circle profile-avatar" width="60" height="60" *@>
         <div class="ms-3">
             <h6 class="mt-2">@User.Identity.Name</h6>

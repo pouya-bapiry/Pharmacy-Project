@@ -35,10 +35,10 @@ namespace Pharmacy.Web.Areas.User.Controllers
         }
 
         [HttpPost("edit-profile"), ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditProfile(EditUserProfileDto editProfile, IFormFile avatar)
+        public async Task<IActionResult> EditProfile(EditUserProfileDto editProfile, IFormFile? avatar)
         {
 
-            if (ModelState.IsValid || editProfile.Avatar == null)
+            if (ModelState.IsValid)
             {
                 var result = await _userService.EditUserProfile(editProfile, User.GetUserId(), avatar);
                 switch (result)
@@ -59,7 +59,7 @@ namespace Pharmacy.Web.Areas.User.Controllers
                 }
 
             }
-            return View(editProfile);
+            return View();
         }
         #endregion
 

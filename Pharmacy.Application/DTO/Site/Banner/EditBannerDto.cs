@@ -2,13 +2,13 @@
 
 namespace Pharmacy.Application.DTO.Site.Banner
 {
-    public class EditBannerDto 
+    public class EditBannerDto
     {
         #region Properties
 
         public long Id { get; set; }
+
         [Display(Name = "تصویر")]
-        [MaxLength(200, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
         public string? ImageName { get; set; }
 
         [Display(Name = "آدرس بنر")]
@@ -32,16 +32,16 @@ namespace Pharmacy.Application.DTO.Site.Banner
         //public User User { get; set; }
 
 
-       
- public enum BannerPlacement
+
+        public enum BannerPlacement
         {
             First,
             Second,
             Third,
             Forth
         }
-   
-    } 
+
+    }
     public enum EditBannerResult
     {
         Success,

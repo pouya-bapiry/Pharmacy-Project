@@ -1,4 +1,15 @@
-﻿<div id="sidebar-wrapper" data-simplebar="" data-simplebar-auto-hide="true">
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Pharmacy.Application.Services.Interfaces
+@using Pharmacy.Application.Utilities
+@using Pharmacy.Web.PresentationExtensions
+
+@inject IAuthHelper _authHelper
+@inject IUserService _userService
+
+@{
+	var avatar = _userService.GetUserById(User.GetUserId()).Result.Avatar;
+}
+<div id="sidebar-wrapper" data-simplebar="" data-simplebar-auto-hide="true">
     <div class="brand-logo">
         <a href="index-2.html">
             <img src="~/Admin/assets/images/logo-icon.png" class="logo-icon" alt="logo icon">
@@ -7,19 +18,36 @@
     </div>
     <div class="user-details">
         <div class="media align-items-center user-pointer collapsed" data-toggle="collapse" data-target="#user-dropdown">
-            <div class="avatar"><img class="mr-3 side-user-img" src="~/Admin/assets/images/avatars/avatar-13.png" alt="user avatar"></div>
-            <div class="media-body">
-                <h6 class="side-user-name">آرش خادملو</h6>
+            <div class="avatar">
+                <img class="mr-3 side-user-img" src="@(!string.IsNullOrEmpty(avatar) ? PathExtension.UserAvatarOrigin + avatar : PathExtension.DefaultAvatar)" alt="user avatar">
             </div>
-        </div>
-        <div id="user-dropdown" class="collapse">
-            <ul class="user-setting-menu">
-                <li><a href="javaScript:void();"><i class="icon-user"></i>  پروفایل من</a></li>
-                <li><a href="javaScript:void();"><i class="icon-settings"></i> تنظیمات</a></li>
-                <li><a href="javaScript:void();"><i class="icon-power"></i> خروج</a></li>
-            </ul>
-        </div>
-    </div>
+
+            @if (User.Identity.IsAuthenticated)
+            {
+                <div class="media-body">
+                    <h6 class="side-user-name">@User.Identity.Name</h6>
+					@switch (_authHelper.CurrentAccountRole())
+                    {
+						case Roles.Administrator:
+							<h6 class="side-user-name">(@Roles.GetRoleBy(long.Parse(Roles.Administrator)))</h6>
+							break;
+						case Roles.ContentUploader:
+							<h6 class="side-user-name">(@Roles.GetRoleBy(long.Parse(Roles.ContentUploader)))</h6>
+							break;
+						case Roles.AdminAssistant:
+							<h6 class="side-user-name">(@Roles.GetRoleBy(long.Parse(Roles.AdminAssistant)))</h6>
+							break;
+					}
+				</div>
+			}
+		</div>
+		<div id="user-dropdown" class="collapse">
+			<ul class="user-setting-menu">
+				<li><a asp-area="Administration" asp-controller="Home" asp-action="GetUserProfile"><i class="icon-user"></i>  پروفایل من</a></li>
+				<li><a asp-area="Administration" asp-controller="Home" asp-action="Logout"><i class="icon-power"></i> خروج</a></li>
+			</ul>
+		</div>
+	</div>
 	<ul class="sidebar-menu do-nicescrol">
 
 		<li class="sidebar-header">منوی اصلی</li>

@@ -52,28 +52,28 @@ namespace Pharmacy.Web.Areas.Administration.Controllers
         [HttpPost("create-product"), ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateProduct(CreateProductDto product, IFormFile productImage)
         {
-            if (ModelState.IsValid)
-            {
-                var result = await _productService.CreateProduct(product, productImage);
+            //if (ModelState.IsValid)
+            //{
+            var result = await _productService.CreateProduct(product, productImage);
 
-                switch (result)
-                {
-                    case CreateProductResult.HasNoImage:
-                        TempData[WarningMessage] = "لطفا تصویر محصول را آپلود نمایید";
-                        TempData[InfoMessage] = "فرمت تصاویر باید به صورت jpg, jpeg, png  باشد";
-                        break;
-                    case CreateProductResult.ImageErrorType:
-                        TempData[WarningMessage] = "لطفا تصویر محصول را طبق فرمت های ذکر شده وارد نمایید";
-                        TempData[InfoMessage] = "فرمت تصاویر باید به صورت jpg, jpeg, png  باشد";
-                        break;
-                    case CreateProductResult.Error:
-                        TempData[ErrorMessage] = "عملیات ثبت محصول با خطا مواجه شد";
-                        break;
-                    case CreateProductResult.Success:
-                        TempData[SuccessMessage] = $"محصول مورد نظر با عنوان {product.Title} با موفقیت ثبت شد";
-                        return RedirectToAction("FilterProduct", "Product");
-                }
+            switch (result)
+            {
+                case CreateProductResult.HasNoImage:
+                    TempData[WarningMessage] = "لطفا تصویر محصول را آپلود نمایید";
+                    TempData[InfoMessage] = "فرمت تصاویر باید به صورت jpg, jpeg, png  باشد";
+                    break;
+                case CreateProductResult.ImageErrorType:
+                    TempData[WarningMessage] = "لطفا تصویر محصول را طبق فرمت های ذکر شده وارد نمایید";
+                    TempData[InfoMessage] = "فرمت تصاویر باید به صورت jpg, jpeg, png  باشد";
+                    break;
+                case CreateProductResult.Error:
+                    TempData[ErrorMessage] = "عملیات ثبت محصول با خطا مواجه شد";
+                    break;
+                case CreateProductResult.Success:
+                    TempData[SuccessMessage] = $"محصول مورد نظر با عنوان {product.Title} با موفقیت ثبت شد";
+                    return RedirectToAction("FilterProduct", "Product");
             }
+            //}
 
 
             return View(product);
@@ -97,7 +97,7 @@ namespace Pharmacy.Web.Areas.Administration.Controllers
         }
 
         [HttpPost("edit-product/{productId}"), ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditProduct(EditProductDto edit, long productId, IFormFile productImage)
+        public async Task<IActionResult> EditProduct(EditProductDto edit, long productId, IFormFile? productImage)
         {
             if (ModelState.IsValid)
             {
@@ -124,7 +124,7 @@ namespace Pharmacy.Web.Areas.Administration.Controllers
                 }
 
             }
-            return View();
+            return View(edit);
             //    ViewBag.Categories = await _productService.GetAllActiveProductCategories();
 
         }
@@ -254,9 +254,9 @@ namespace Pharmacy.Web.Areas.Administration.Controllers
         }
 
         [HttpPost("edit-product-category/{id}"), ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditProductCategory(EditProductCategoryDto edit, IFormFile categoryImage)
+        public async Task<IActionResult> EditProductCategory(EditProductCategoryDto edit, IFormFile? categoryImage)
         {
-            if (ModelState.IsValid || edit.Image == null)
+            if (ModelState.IsValid)
             {
                 var result = await _productService.EditProductCategory(edit, categoryImage);
 
@@ -481,7 +481,7 @@ namespace Pharmacy.Web.Areas.Administration.Controllers
         [HttpPost("edit-product-feature/{featureId}")]
 
         public async Task<IActionResult> EditProductFeature(EditProductFeatureDto feature, long featureId)
-        
+
         {
             if (ModelState.IsValid)
             {

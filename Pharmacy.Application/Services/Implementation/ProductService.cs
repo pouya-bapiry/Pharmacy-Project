@@ -213,7 +213,7 @@ namespace Pharmacy.Application.Services.Implementation
             };
         }
 
-        public async Task<EditProductResult> EditProductInAdmin(EditProductDto product, IFormFile productImage)
+        public async Task<EditProductResult> EditProductInAdmin(EditProductDto product, IFormFile? productImage)
         {
             var mainProduct = await _productRepository
                 .GetQuery()
@@ -245,6 +245,7 @@ namespace Pharmacy.Application.Services.Implementation
 
                 mainProduct.Image = imageName;
             }
+           
 
 
 
@@ -434,7 +435,7 @@ namespace Pharmacy.Application.Services.Implementation
             };
         }
 
-        public async Task<EditProductCategoryResult> EditProductCategory(EditProductCategoryDto category, IFormFile image)
+        public async Task<EditProductCategoryResult> EditProductCategory(EditProductCategoryDto category, IFormFile? image)
         {
             var mainCategory = await _productCategoryRepository
                 .GetQuery()

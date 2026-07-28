@@ -19,7 +19,7 @@ namespace Pharmacy.Application.Services.Interfaces
         Task<List<FilterSliderDto>> GetAllSlider();
         Task<CreateSliderResult> CreateSlider(CreateSliderDto slider, IFormFile sliderImage, IFormFile mobileSliderImage);
         Task<EditSliderDto> GetSliderForEdit(long sliderId);
-        Task<EditSliderResult> EditSlider(EditSliderDto edit, IFormFile sliderImage, IFormFile mobileSliderImage, string username);
+        Task<EditSliderResult> EditSlider(EditSliderDto edit, IFormFile? sliderImage, IFormFile? mobileSliderImage, string username);
         Task<bool> ActiveSlider(long sliderId, string username);
         Task<bool> DeActiveSlider(long sliderId, string username);
 
@@ -32,7 +32,7 @@ namespace Pharmacy.Application.Services.Interfaces
         Task<List<FilterBannerDto>> GetAllBanners();
         Task<CreateBannerResult> CreateBanner(CreateBannerDto banner, IFormFile bannerImage, string username);
         Task<EditBannerDto> GetBannerForEdit(long bannerId);
-        Task<EditBannerResult> EditBanner(EditBannerDto edit, IFormFile bannerImage, string username);
+        Task<EditBannerResult> EditBanner(EditBannerDto edit, IFormFile? bannerImage, string username);
         Task<bool> ActiveBanner(long bannerId, string username);
         Task<bool> DeActiveBanner(long bannerId, string username);
 

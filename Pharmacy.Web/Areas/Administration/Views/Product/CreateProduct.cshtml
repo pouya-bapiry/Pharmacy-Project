@@ -238,7 +238,7 @@
                                 <div class="center">
                                     <div class="form-input">
                                         <label for="file-ip-1"><i class="bi bi-cloud-upload-fill" style="padding-left: 5px;"></i>آپلود تصویر محصول</label>
-                                        <input type="file" name="productImage" id="file-ip-1" accept="image/*" onchange="showPreview(event, 1);">
+                                        <input type="file" name="productImage" asp-for="ProductImage" id="file-ip-1" accept="image/*" onchange="showPreview(event, 1);">
                                         <hr />
                                         <span asp-validation-for="ProductImage" class="text-white"></span>
                                     </div>

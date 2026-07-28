@@ -78,15 +78,16 @@ namespace Pharmacy.Web.Areas.Administration.Controllers
         }
 
         [HttpPost("edit-slider/{sliderId}")]
-        public async Task<IActionResult> EditSlider(EditSliderDto edit, IFormFile sliderImage,
-            IFormFile mobileSliderImage)
+        public async Task<IActionResult> EditSlider(EditSliderDto edit, IFormFile? sliderImage,
+            IFormFile? mobileSliderImage)
         {
-            var user = await _userService.GetUserById(User.GetUserId());
-            var username = user.FirstName + " " + user.LastName;
-            var result = await _siteImagesService.EditSlider(edit, sliderImage, mobileSliderImage, username);
 
-            if (ModelState.IsValid || edit.ImageName == null || edit.MobileImageName == null)
+
+            if (ModelState.IsValid)
             {
+                var user = await _userService.GetUserById(User.GetUserId());
+                var username = user.FirstName + " " + user.LastName;
+                var result = await _siteImagesService.EditSlider(edit, sliderImage, mobileSliderImage, username);
 
                 switch (result)
                 {
@@ -215,9 +216,9 @@ namespace Pharmacy.Web.Areas.Administration.Controllers
         }
 
         [HttpPost("edit-banner/{bannerId}"), ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditBanner(EditBannerDto edit, IFormFile bannerImage)
+        public async Task<IActionResult> EditBanner(EditBannerDto edit, IFormFile? bannerImage)
         {
-            if (ModelState.IsValid || edit.ImageName != null)
+            if (ModelState.IsValid)
             {
                 var user = await _userService.GetUserById(User.GetUserId());
                 var username = user.FirstName + " " + user.LastName;
