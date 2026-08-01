@@ -10,7 +10,7 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
     <title>داش ترم - قالب مدیریت چند منظوره بوت استرپ 4</title>
- <partial name="_HeaderReferences" />
+    <partial name="_HeaderReferences" />
 
 </head>
 
@@ -22,7 +22,7 @@
         <div class="loader-wrapper"><div class="lds-ring"><div></div><div></div><div></div><div></div></div></div>
 
         <!--Start sidebar-wrapper-->
-       <partial name="_AdminSidebarMenu" />
+        <partial name="_AdminSidebarMenu" />
         <!--End sidebar-wrapper-->
         <!--Start topbar header-->
         <partial name="_TopBarHeader" />
@@ -34,8 +34,6 @@
             <div class="container-fluid">
 
                 <!--Start Dashboard Content-->
-
-
                 @RenderBody()
 
              
@@ -59,22 +57,23 @@
         <!--End footer-->
         <!--start color switcher-->
         <partial name="_SiteColorSidebar" />
-       
+
         <!--end color cwitcher-->
 
     </div><!--End wrapper-->
     <!-- Bootstrap core JavaScript-->
-   <partial name="_FooterReferences" />
+    <partial name="_FooterReferences" />
 
     <script>
-        $(function() {
-            $(".knob").knob();
-        });
+            $(function() {
+                $(".knob").knob();
+            });
     </script>
     <!-- Index js -->
     <script src="~/Admin/assets/js/index.js"></script>
 
-    @await RenderSectionAsync("Scripts",false)
+    @await RenderSectionAsync("Scripts", false)
+    @await RenderSectionAsync("styles", required: false)
     <partial name="_SiteNotification" />
 </body>
 

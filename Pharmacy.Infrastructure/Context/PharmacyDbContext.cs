@@ -30,6 +30,8 @@ namespace Pharmacy.Infrastructure.Context
         public DbSet<ProductSelectedCategory> ProductSelectedCategories { get; set; }
         public DbSet<ProductColor> ProductColors { get; set; }
         public DbSet<ProductFeature> ProductFeatures { get; set; }
+        public DbSet<ProductDiscount> ProductDiscounts { get; set; }
+        public DbSet<ProductDiscountUse> ProductDiscountUses { get; set; }
 
         #endregion
 

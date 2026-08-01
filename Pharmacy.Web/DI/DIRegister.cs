@@ -30,7 +30,7 @@ namespace Pharmacy.Web.DI
             services.AddScoped<IContactService, ContactService>();
             services.AddScoped<ISiteImagesService, SiteImagesService>();
             services.AddScoped<IProductService, ProductService>();
-            //services.AddScoped<IProductDiscountService, ProductDiscountService>();
+            services.AddScoped<IProductDiscountService, ProductDiscountService>();
 
 
 
