@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Pharmacy.Infrastructure.Context;
 
@@ -11,9 +12,11 @@ using Pharmacy.Infrastructure.Context;
 namespace Pharmacy.Infrastructure.Migrations
 {
     [DbContext(typeof(PharmacyDbContext))]
-    partial class PharmacyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260801142951_add_product_galleries")]
+    partial class add_product_galleries
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,7 +52,7 @@ namespace Pharmacy.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles", (string)null);
+                    b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("Pharmacy.Domain.Entities.Account.User", b =>
@@ -110,7 +113,7 @@ namespace Pharmacy.Infrastructure.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Pharmacy.Domain.Entities.Contact.ContactUs", b =>
@@ -164,7 +167,7 @@ namespace Pharmacy.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ContactUs", (string)null);
+                    b.ToTable("ContactUs");
                 });
 
             modelBuilder.Entity("Pharmacy.Domain.Entities.Product.Product", b =>
@@ -222,7 +225,7 @@ namespace Pharmacy.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("Pharmacy.Domain.Entities.Product.ProductCategory", b =>
@@ -273,7 +276,7 @@ namespace Pharmacy.Infrastructure.Migrations
 
                     b.HasIndex("ParentId");
 
-                    b.ToTable("ProductCategories", (string)null);
+                    b.ToTable("ProductCategories");
                 });
 
             modelBuilder.Entity("Pharmacy.Domain.Entities.Product.ProductColor", b =>
@@ -316,7 +319,7 @@ namespace Pharmacy.Infrastructure.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductColors", (string)null);
+                    b.ToTable("ProductColors");
                 });
 
             modelBuilder.Entity("Pharmacy.Domain.Entities.Product.ProductDiscount", b =>
@@ -355,7 +358,7 @@ namespace Pharmacy.Infrastructure.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductDiscounts", (string)null);
+                    b.ToTable("ProductDiscounts");
                 });
 
             modelBuilder.Entity("Pharmacy.Domain.Entities.Product.ProductDiscountUse", b =>
@@ -388,7 +391,7 @@ namespace Pharmacy.Infrastructure.Migrations
 
                     b.HasIndex("ProductDiscountId");
 
-                    b.ToTable("ProductDiscountUses", (string)null);
+                    b.ToTable("ProductDiscountUses");
                 });
 
             modelBuilder.Entity("Pharmacy.Domain.Entities.Product.ProductFeature", b =>
@@ -427,7 +430,7 @@ namespace Pharmacy.Infrastructure.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductFeatures", (string)null);
+                    b.ToTable("ProductFeatures");
                 });
 
             modelBuilder.Entity("Pharmacy.Domain.Entities.Product.ProductGallery", b =>
@@ -465,7 +468,7 @@ namespace Pharmacy.Infrastructure.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductGalleries", (string)null);
+                    b.ToTable("ProductGalleries");
                 });
 
             modelBuilder.Entity("Pharmacy.Domain.Entities.Product.ProductSelectedCategory", b =>
@@ -500,7 +503,7 @@ namespace Pharmacy.Infrastructure.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductSelectedCategories", (string)null);
+                    b.ToTable("ProductSelectedCategories");
                 });
 
             modelBuilder.Entity("Pharmacy.Domain.Entities.Site.AboutUs", b =>
@@ -534,7 +537,7 @@ namespace Pharmacy.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AboutUs", (string)null);
+                    b.ToTable("AboutUs");
                 });
 
             modelBuilder.Entity("Pharmacy.Domain.Entities.Site.SiteBanner", b =>
@@ -585,7 +588,7 @@ namespace Pharmacy.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("SiteBanners", (string)null);
+                    b.ToTable("SiteBanners");
                 });
 
             modelBuilder.Entity("Pharmacy.Domain.Entities.Site.SiteSetting", b =>
@@ -647,7 +650,7 @@ namespace Pharmacy.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SiteSettings", (string)null);
+                    b.ToTable("SiteSettings");
                 });
 
             modelBuilder.Entity("Pharmacy.Domain.Entities.Site.Slider", b =>
@@ -695,7 +698,7 @@ namespace Pharmacy.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Sliders", (string)null);
+                    b.ToTable("Sliders");
                 });
 
             modelBuilder.Entity("Pharmacy.Domain.Entities.Account.User", b =>

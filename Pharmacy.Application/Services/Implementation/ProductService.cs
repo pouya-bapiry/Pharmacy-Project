@@ -6,6 +6,7 @@ using Pharmacy.Application.DTO.Product;
 using Pharmacy.Application.DTO.ProductCategory;
 using Pharmacy.Application.DTO.ProductColor;
 using Pharmacy.Application.DTO.ProductFeatures;
+using Pharmacy.Application.DTO.ProductGallery;
 using Pharmacy.Application.Extensions;
 using Pharmacy.Application.Services.Interfaces;
 using Pharmacy.Application.Utilities;
@@ -28,15 +29,21 @@ namespace Pharmacy.Application.Services.Implementation
         private readonly IGenericRepository<ProductSelectedCategory> _productSelectedRepository;
         private readonly IGenericRepository<ProductColor> _productColorRepository;
         private readonly IGenericRepository<ProductFeature> _productFeaturesRepository;
+        private readonly IGenericRepository<ProductGallery> _productGalleryRepository;
 
-        public ProductService(IGenericRepository<Product> productRepository, IGenericRepository<ProductCategory> productCategoryRepository,
-        IGenericRepository<ProductSelectedCategory> productSelectedRepository, IGenericRepository<ProductColor> productColorRepository, IGenericRepository<ProductFeature> productFeaturesRepository)
+        public ProductService(IGenericRepository<Product> productRepository,
+        IGenericRepository<ProductCategory> productCategoryRepository,
+        IGenericRepository<ProductSelectedCategory> productSelectedRepository,
+        IGenericRepository<ProductColor> productColorRepository,
+        IGenericRepository<ProductFeature> productFeaturesRepository,
+        IGenericRepository<ProductGallery> productGalleryRepository)
         {
             _productRepository = productRepository;
             _productCategoryRepository = productCategoryRepository;
             _productSelectedRepository = productSelectedRepository;
             _productColorRepository = productColorRepository;
             _productFeaturesRepository = productFeaturesRepository;
+            _productGalleryRepository = productGalleryRepository;
         }
 
         #endregion
@@ -185,7 +192,7 @@ namespace Pharmacy.Application.Services.Implementation
                 _productSelectedRepository.SaveChanges();
             }
 
-          
+
 
             return CreateProductResult.Success;
 
@@ -252,7 +259,7 @@ namespace Pharmacy.Application.Services.Implementation
 
                 mainProduct.Image = imageName;
             }
-           
+
 
 
 
@@ -618,11 +625,11 @@ namespace Pharmacy.Application.Services.Implementation
             mainColor.ColorCode = color.ColorCode;
             mainColor.Price = color.Price;
             mainColor.ProductId = color.ProductId;
-           
-                var isDuplicateColorTitle =
-                        await _productColorRepository.GetQuery().AnyAsync(x => x.ColorName == mainColor.ColorName && x.Price==mainColor.Price );
 
-                if (isDuplicateColorTitle) return EditProductColorResult.DuplicateColor;
+            var isDuplicateColorTitle =
+                    await _productColorRepository.GetQuery().AnyAsync(x => x.ColorName == mainColor.ColorName && x.Price == mainColor.Price);
+
+            if (isDuplicateColorTitle) return EditProductColorResult.DuplicateColor;
 
 
 
@@ -736,6 +743,106 @@ namespace Pharmacy.Application.Services.Implementation
 
         #endregion
         #endregion
+
+        #region ProductGallery
+        #region Get
+        public async Task<List<FilterProductGallery>> FilterProductGalleries(long productId)
+        {
+            return await _productGalleryRepository.GetQuery().AsQueryable().Where(x => x.ProductId == productId).Select(x => new FilterProductGallery
+            {
+                Id = x.Id,
+                ProductId = productId,
+                ImageName = x.ImageName,
+                DisplayPriority = x.DisplayPriority,
+                CreateDate = x.CreateDate.ToStringShamsiDate(),
+            }).ToListAsync();
+        }
+        #endregion
+
+        #region Create
+        public async Task<CreateProductGalleryResult> CreateProductGallery(CreateProductGallery gallery, long productId, IFormFile galleryImage)
+        {
+            var product = await _productRepository.GetEntityById(productId);
+
+            if (product == null)
+            {
+                return CreateProductGalleryResult.ProductNotFound;
+            }
+
+            if (galleryImage == null || !galleryImage.IsImage())
+            {
+                return CreateProductGalleryResult.ImageIsNull;
+            }
+
+            var imageName = Guid.NewGuid().ToString("N") + Path.GetExtension(galleryImage.FileName);
+            galleryImage.AddImageToServer(imageName, PathExtension.ProductGalleryOriginServer, 100, 100, PathExtension.ProductGalleryThumbServer);
+
+            var newGallery = new ProductGallery
+            {
+                ProductId = productId,
+                ImageName = imageName,
+                DisplayPriority = (int)gallery.DisplayPriority
+            };
+
+            await _productGalleryRepository.AddEntity(newGallery);
+            await _productGalleryRepository.SaveChanges();
+
+            return CreateProductGalleryResult.Success;
+        }
+        #endregion
+        #region Edit
+        public async Task<EditProductGallery> GetProductGalleryForEdit(long galleryId)
+        {
+            var gallery = await _productGalleryRepository
+                .GetQuery()
+                .AsQueryable()
+                .Include(x => x.Product)
+                .FirstOrDefaultAsync(x => x.Id == galleryId);
+
+            if (gallery == null)
+            {
+                return null;
+            }
+
+            return new EditProductGallery
+            {
+                ImageName = gallery.ImageName,
+                DisplayPriority = gallery.DisplayPriority,
+                ProductId=gallery.ProductId
+            };
+        }
+        public async Task<EditProductGalleryResult> EditProductGallery(EditProductGallery gallery, long galleryId, IFormFile? galleryImage)
+        {
+            var mainGallery = await _productGalleryRepository
+                .GetQuery()
+                .Include(x => x.Product)
+                .FirstOrDefaultAsync(x => x.Id == galleryId);
+
+            if (mainGallery == null)
+            {
+                return EditProductGalleryResult.ProductNotFound;
+            }
+
+            if (galleryImage != null)
+            {
+
+                var imageName = Guid.NewGuid().ToString("N") + Path.GetExtension(galleryImage.FileName);
+                galleryImage.AddImageToServer(imageName, PathExtension.ProductGalleryOriginServer, 100, 100,
+                    PathExtension.ProductGalleryThumbServer, mainGallery.ImageName);
+
+                mainGallery.ImageName = imageName;
+            }
+
+            mainGallery.DisplayPriority = gallery.DisplayPriority;
+
+            _productGalleryRepository.EditEntity(mainGallery);
+            await _productGalleryRepository.SaveChanges();
+
+            return EditProductGalleryResult.Success;
+        }
+        #endregion
+        #endregion
+
 
 
         #region Add or Remove Product Color

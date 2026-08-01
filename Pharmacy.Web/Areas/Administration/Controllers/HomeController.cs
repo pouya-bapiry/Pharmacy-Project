@@ -46,10 +46,10 @@ namespace Pharmacy.Web.Areas.Administration.Controllers
 
         #region Edit Site Setting
 
-        [HttpGet("edit-sitesetting/{settingId}")]
-        public async Task<IActionResult> EditSiteSetting(long settingId)
+        [HttpGet("edit-sitesetting/{id}")]
+        public async Task<IActionResult> EditSiteSetting(long id)
         {
-            var edit = await _siteSettingService.GetSiteSettingForEdit(settingId);
+            var edit = await _siteSettingService.GetSiteSettingForEdit(id);
 
             return View(edit);
 

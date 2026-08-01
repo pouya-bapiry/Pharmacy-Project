@@ -3,6 +3,7 @@ using Pharmacy.Application.DTO.Product;
 using Pharmacy.Application.DTO.ProductCategory;
 using Pharmacy.Application.DTO.ProductColor;
 using Pharmacy.Application.DTO.ProductFeatures;
+using Pharmacy.Application.DTO.ProductGallery;
 using Pharmacy.Application.Services.Implementation;
 using Pharmacy.Application.Services.Interfaces;
 using Pharmacy.Web.PresentationExtensions;
@@ -511,6 +512,97 @@ namespace Pharmacy.Web.Areas.Administration.Controllers
         }
         #endregion
 
+        #endregion
+
+        #region Product Gallery
+
+        #region Get
+        [HttpGet("product-gallery-list/{productId}")]
+        public async Task<IActionResult> FilterProductGallery(long productId)
+        {
+            ViewBag.ProductId = productId;
+
+            var productGallery = await _productService.FilterProductGalleries(productId);
+
+            if (productGallery == null)
+            {
+                return RedirectToAction("PageNotFound", "Home", new { area = "Administration" });
+            }
+
+            return View(productGallery);
+        }
+        #endregion
+
+        #region Create
+        [HttpGet("create-product-gallery/{productId}")]
+        public async Task<IActionResult> CreateProductGallery(long productId)
+        {
+            var model = new CreateProductGallery();
+            return View(model);
+        }
+
+        [HttpPost("create-product-gallery/{productId}"), ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateProductGallery(CreateProductGallery gallery, long productId, IFormFile imageName)
+        {
+           
+                var result = await _productService.CreateProductGallery(gallery, productId, imageName);
+
+                switch (result)
+                {
+                    case CreateProductGalleryResult.Error:
+                        TempData[ErrorMessage] = "در ثبت اطلاعات خطایی رخ داد";
+                        break;
+                    case CreateProductGalleryResult.ProductNotFound:
+                        TempData[ErrorMessage] = "محصول مورد نظر یافت نشد";
+                        break;
+                    case CreateProductGalleryResult.Success:
+                        TempData[SuccessMessage] = $"گالری تصویر با موفقیت افزوده گردید";
+                        return RedirectToAction("FilterProductGallery", "Product",
+                            new { area = "Administration", ProductId = productId });
+                }
+            
+
+
+            return View(gallery);
+        }
+
+
+        #endregion
+
+        #region Edit
+        [HttpGet("Edit-product-gallery/{galleryId}")]
+        public async Task<IActionResult> EditProductGallery(long galleryId)
+        {
+            var productGallery = await _productService.GetProductGalleryForEdit(galleryId);
+            return View(productGallery);
+        }
+
+        [HttpPost("edit-product-gallery/{galleryId}")]
+        public async Task<IActionResult> EditProductGallery(EditProductGallery gallery, long galleryId, IFormFile? imageName)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _productService.EditProductGallery(gallery, galleryId, imageName);
+
+                switch (result)
+                {
+                    case EditProductGalleryResult.Error:
+                        TempData[ErrorMessage] = "در ثبت اطلاعات خطایی رخ داد";
+                        break;
+                    case EditProductGalleryResult.ProductNotFound:
+                        TempData[ErrorMessage] = "محصول مورد نظر یافت نشد";
+                        break;
+                    case EditProductGalleryResult.Success:
+                        TempData[SuccessMessage] = $"گالری تصویر با موفقیت ویرایش گردید";
+                        return RedirectToAction("FilterProductGallery", "Product",
+                            new { area = "Administration", productId = gallery.ProductId });
+                }
+            }
+
+
+            return View(gallery);
+        }
+        #endregion
         #endregion
 
         #endregion

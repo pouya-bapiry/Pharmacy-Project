@@ -3,6 +3,7 @@ using Pharmacy.Application.DTO.Product;
 using Pharmacy.Application.DTO.ProductCategory;
 using Pharmacy.Application.DTO.ProductColor;
 using Pharmacy.Application.DTO.ProductFeatures;
+using Pharmacy.Application.DTO.ProductGallery;
 using Pharmacy.Domain.Entities.Product;
 using System;
 using System.Collections.Generic;
@@ -54,6 +55,15 @@ namespace Pharmacy.Application.Services.Interfaces
         Task<CreateProductFeatureResult> CreateProductFeature(CreateProductFeatureDto feature, long productId);
         Task<EditProductFeatureDto> GetProductFeatureForEdit(long featureId);
         Task<EditProductFeatureResult> EditProductFeature(EditProductFeatureDto feature,long featureId);
+        #endregion
+
+        #region ProductGallery
+
+        Task<List<FilterProductGallery>> FilterProductGalleries(long productId);
+        Task<CreateProductGalleryResult> CreateProductGallery(CreateProductGallery gallery, long productId, IFormFile galleryImage);
+        Task<EditProductGallery> GetProductGalleryForEdit(long galleryId);
+        Task<EditProductGalleryResult> EditProductGallery(EditProductGallery gallery, long galleryId, IFormFile galleryImage);
+
         #endregion
 
     }
