@@ -30,11 +30,12 @@ namespace Pharmacy.Application.DTO.ProductCategory
         [Display(Name = "فعال / غیرفعال")]
         public bool IsActive { get; set; }
 
-       
+        public string ParentName { get; set; }
 
         #endregion
 
-        
+
+
     }
 
     public enum CreateProductCategoryResult

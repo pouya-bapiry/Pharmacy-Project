@@ -43,7 +43,7 @@ namespace Pharmacy.Application.DTO.Product
         //public List<CreateProductColorDto> ProductColors { get; set; }
         //public List<CreateProductSizeDto> ProductSize { get; set; }
         //public List<CreateProductFeatureDto> ProductFeatures { get; set; }
-        //public List<long> SelectedCategories { get; set; }
+        public List<long> SelectedCategories { get; set; }
 
     }
 

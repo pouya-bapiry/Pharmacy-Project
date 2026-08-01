@@ -173,12 +173,19 @@ namespace Pharmacy.Application.Services.Implementation
                 ShortDescription = product.ShortDescription,
                 ViewCount = 0,
                 SellCount = 0
+
             };
-
-
-
             await _productRepository.AddEntity(newProduct);
             await _productRepository.SaveChanges();
+            //add product selected category
+            if (product.SelectedCategories != null)
+            {
+                //create product category
+                await AddProductSelectedCategories(newProduct.Id, product.SelectedCategories);
+                _productSelectedRepository.SaveChanges();
+            }
+
+          
 
             return CreateProductResult.Success;
 
@@ -756,6 +763,30 @@ namespace Pharmacy.Application.Services.Implementation
         }
 
         #endregion
+
+        public async Task AddProductSelectedCategories(long productId, List<long> selectedCategories)
+        {
+            var productSelectedCategories = new List<ProductSelectedCategory>();
+
+            foreach (var categoryId in selectedCategories)
+            {
+                productSelectedCategories.Add(new ProductSelectedCategory
+                {
+                    ProductCategoryId = categoryId,
+                    ProductId = productId
+                });
+            }
+            await _productSelectedRepository.AddRangeEntities(productSelectedCategories);
+        }
+        public async Task RemoveAllProductSelectedCategories(long productId)
+        {
+            var productSelectedCategory = await _productSelectedRepository
+                .GetQuery()
+                .AsQueryable()
+                .Where(x => x.ProductId == productId).ToListAsync();
+
+            _productSelectedRepository.DeletPermanentEntities(productSelectedCategory);
+        }
     }
 }
 

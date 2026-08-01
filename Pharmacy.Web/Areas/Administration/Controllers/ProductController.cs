@@ -43,7 +43,7 @@ namespace Pharmacy.Web.Areas.Administration.Controllers
         [HttpGet("create-product")]
         public async Task<IActionResult> CreateProduct()
         {
-
+            ViewBag.Categories = await _productService.GetAllActiveProductCategories();
             var model = new CreateProductDto();
             return View(model);
 
@@ -52,28 +52,30 @@ namespace Pharmacy.Web.Areas.Administration.Controllers
         [HttpPost("create-product"), ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateProduct(CreateProductDto product, IFormFile productImage)
         {
-            //if (ModelState.IsValid)
-            //{
-            var result = await _productService.CreateProduct(product, productImage);
-
-            switch (result)
+            ViewBag.Categories = await _productService.GetAllActiveProductCategories();
+            if (ModelState.IsValid)
             {
-                case CreateProductResult.HasNoImage:
-                    TempData[WarningMessage] = "لطفا تصویر محصول را آپلود نمایید";
-                    TempData[InfoMessage] = "فرمت تصاویر باید به صورت jpg, jpeg, png  باشد";
-                    break;
-                case CreateProductResult.ImageErrorType:
-                    TempData[WarningMessage] = "لطفا تصویر محصول را طبق فرمت های ذکر شده وارد نمایید";
-                    TempData[InfoMessage] = "فرمت تصاویر باید به صورت jpg, jpeg, png  باشد";
-                    break;
-                case CreateProductResult.Error:
-                    TempData[ErrorMessage] = "عملیات ثبت محصول با خطا مواجه شد";
-                    break;
-                case CreateProductResult.Success:
-                    TempData[SuccessMessage] = $"محصول مورد نظر با عنوان {product.Title} با موفقیت ثبت شد";
-                    return RedirectToAction("FilterProduct", "Product");
+                var result = await _productService.CreateProduct(product, productImage);
+
+                switch (result)
+                {
+                    case CreateProductResult.HasNoImage:
+                        TempData[WarningMessage] = "لطفا تصویر محصول را آپلود نمایید";
+                        TempData[InfoMessage] = "فرمت تصاویر باید به صورت jpg, jpeg, png  باشد";
+                        break;
+                    case CreateProductResult.ImageErrorType:
+                        TempData[WarningMessage] = "لطفا تصویر محصول را طبق فرمت های ذکر شده وارد نمایید";
+                        TempData[InfoMessage] = "فرمت تصاویر باید به صورت jpg, jpeg, png  باشد";
+                        break;
+                    case CreateProductResult.Error:
+                        TempData[ErrorMessage] = "عملیات ثبت محصول با خطا مواجه شد";
+                        break;
+                    case CreateProductResult.Success:
+                        TempData[SuccessMessage] = $"محصول مورد نظر با عنوان {product.Title} با موفقیت ثبت شد";
+                        return RedirectToAction("FilterProduct", "Product");
+                }
             }
-            //}
+
 
 
             return View(product);
