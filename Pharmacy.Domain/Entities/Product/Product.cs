@@ -51,6 +51,7 @@ namespace Pharmacy.Domain.Entities.Product
         public ICollection<ProductColor> ProductColors { get; set; }
         public ICollection<ProductFeature> ProductFeatures { get; set; }
         public ICollection<ProductGallery> ProductGallery { get; set; }
+        public ICollection<ProductDiscount> ProductDiscounts { get; set; }
 
         #endregion
     }

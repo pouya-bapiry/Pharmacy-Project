@@ -56,25 +56,25 @@ namespace ServiceHost.ViewComponents
     }
     #endregion
 
-    //#region Latest Arrivals
+    #region Latest Arrivals
 
-    //public class LatestArrivalProductViewComponent : ViewComponent
-    //{
-    //    private readonly IProductService _productService;
+    public class LatestArrivalProductViewComponent : ViewComponent
+    {
+        private readonly IProductService _productService;
 
-    //    public LatestArrivalProductViewComponent(IProductService productService)
-    //    {
-    //        _productService = productService;
-    //    }
+        public LatestArrivalProductViewComponent(IProductService productService)
+        {
+            _productService = productService;
+        }
 
-    //    public async Task<IViewComponentResult> InvokeAsync()
-    //    {
-    //        var latestArrival = await _productService.GetLatestArrivalProducts(15);
-    //        return View("LatestArrivalProduct", latestArrival);
-    //    }
-    //}
+        public async Task<IViewComponentResult> InvokeAsync()
+        {
+            var latestArrival = await _productService.GetLatestArrivalProducts(15);
+            return View("LatestArrivalProduct", latestArrival);
+        }
+    }
 
-    //#endregion
+    #endregion
 
     //#region Product Discount Amazing
 
