@@ -76,23 +76,23 @@ namespace ServiceHost.ViewComponents
 
     #endregion
 
-    //#region Product Discount Amazing
+    #region Product Discount Amazing
 
-    //public class ProductDiscountAmazingViewComponent : ViewComponent
-    //{
-    //    private readonly IProductDiscountService _productDiscountService;
+    public class ProductDiscountAmazingViewComponent : ViewComponent
+    {
+        private readonly IProductDiscountService _productDiscountService;
 
-    //    public ProductDiscountAmazingViewComponent(IProductDiscountService productDiscountService)
-    //    {
-    //        _productDiscountService = productDiscountService;
-    //    }
+        public ProductDiscountAmazingViewComponent(IProductDiscountService productDiscountService)
+        {
+            _productDiscountService = productDiscountService;
+        }
 
-    //    public async Task<IViewComponentResult> InvokeAsync()
-    //    {
-    //        var discountAmazing = await _productDiscountService.GetProductDiscountAmazing();
-    //        return View("ProductDiscountAmazing", discountAmazing);
-    //    }
-    //}
-    //#endregion
+        public async Task<IViewComponentResult> InvokeAsync()
+        {
+            var discountAmazing = await _productDiscountService.GetProductDiscountAmazing();
+            return View("ProductDiscountAmazing", discountAmazing);
+        }
+    }
+    #endregion
 }
 
