@@ -54,8 +54,8 @@ namespace Pharmacy.Web.Areas.Administration.Controllers
         public async Task<IActionResult> CreateProduct(CreateProductDto product, IFormFile productImage)
         {
             ViewBag.Categories = await _productService.GetAllActiveProductCategories();
-            if (ModelState.IsValid)
-            {
+            //if (ModelState.IsValid)
+            //{
                 var result = await _productService.CreateProduct(product, productImage);
 
                 switch (result)
@@ -75,7 +75,7 @@ namespace Pharmacy.Web.Areas.Administration.Controllers
                         TempData[SuccessMessage] = $"محصول مورد نظر با عنوان {product.Title} با موفقیت ثبت شد";
                         return RedirectToAction("FilterProduct", "Product");
                 }
-            }
+            //}
 
 
 

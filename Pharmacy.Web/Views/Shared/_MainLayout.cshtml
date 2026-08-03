@@ -10,6 +10,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     <partial name="_HeaderReferences" />
+    @await RenderSectionAsync("style", false)
+
 
 </head>
 <body>
@@ -218,6 +220,7 @@
             });
             stories()
         </script>
+    
 
 </body>
 </html>

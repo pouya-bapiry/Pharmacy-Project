@@ -17,7 +17,7 @@ namespace Pharmacy.Application.Services.Interfaces
     {
 
         #region Product
-        // Task<FilterProductDto> FilterProducts(FilterProductDto filter);
+         Task<FilterProductDto> FilterProducts(FilterProductDto filter);
         Task<FilterProductDto> FilterProductsInAdmin(FilterProductDto filter);
         Task<CreateProductResult> CreateProduct(CreateProductDto product, IFormFile productImage);
         Task<EditProductDto> GetProductForEdit(long productId);
