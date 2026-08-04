@@ -25,7 +25,7 @@ namespace Pharmacy.Application.Services.Interfaces
 
         //Task<List<Product>> GetProductWithMaximumView(int take);
         Task<List<Product>> GetLatestArrivalProducts(int take);
-        //Task<ProductDetailsDto> GetProductDetails(long productId);
+        Task<ProductDetailsDto> GetProductDetails(long productId);
         #endregion
 
         #region Product Category

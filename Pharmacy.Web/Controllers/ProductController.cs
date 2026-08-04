@@ -42,6 +42,24 @@ namespace Pharmacy.Web.Controllers
         }
         #endregion
 
+        #region ProductDetail
+
+        [HttpGet("products/{productId}/{title}")]
+        public async Task<IActionResult> ProductDetails(long productId/*, FilterProductCommentDto comment*/, string title)
+        {
+           // ViewBag.Comment = await _productService.FilterProductComment(comment, productId);
+            var product = await _productService.GetProductDetails(productId);
+
+            if (product == null)
+            {
+                return RedirectToAction("PageNotFound", "Home");
+            }
+
+            return View(product);
+        }
+
+        #endregion
+
         #endregion
     }
 }

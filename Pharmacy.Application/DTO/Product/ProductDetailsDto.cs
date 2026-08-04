@@ -10,13 +10,13 @@
         public string ShortDescription { get; set; }
         public string Description { get; set; }
         public int? View { get; set; }
-        //public List<Entities.Product.ProductGallery> ProductGalleries { get; set; }
-        ////public List<ProductColor> ProductColors { get; set; }
-        //public List<Entities.Product.ProductCategory> ProductCategories { get; set; }
-        //public List<Entities.Product.ProductFeatures> ProductFeatures { get; set; }
-        //public List<Entities.Product.Product> RelatedProducts { get; set; }
-        //public List<Entities.ProductComment.ProductComment> ProductComments { get; set; }
-     //   public Entities.ProductDiscount.ProductDiscount ProductDiscount { get; set; }
-        //public ProductBrand ProductBrand { get; set; }
+        public List<Domain.Entities.Product.ProductGallery> ProductGalleries { get; set; }
+        public List<Domain.Entities.Product.ProductColor> ProductColors { get; set; }
+        public List<Domain.Entities.Product.ProductCategory> ProductCategories { get; set; }
+        public List<Domain.Entities.Product.ProductFeature> ProductFeatures { get; set; }
+       public List<Domain.Entities.Product.Product> RelatedProducts { get; set; }
+       // public List<Domain.Entities.Product> ProductComments { get; set; }
+       public Domain.Entities.Product.ProductDiscount ProductDiscount { get; set; }
+       // public ProductBrand ProductBrand { get; set; }
     }
 }

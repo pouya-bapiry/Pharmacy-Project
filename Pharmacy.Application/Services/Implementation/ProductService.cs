@@ -30,13 +30,15 @@ namespace Pharmacy.Application.Services.Implementation
         private readonly IGenericRepository<ProductColor> _productColorRepository;
         private readonly IGenericRepository<ProductFeature> _productFeaturesRepository;
         private readonly IGenericRepository<ProductGallery> _productGalleryRepository;
+        private readonly IGenericRepository<ProductDiscount> _productDiscountRepository;
 
         public ProductService(IGenericRepository<Product> productRepository,
         IGenericRepository<ProductCategory> productCategoryRepository,
         IGenericRepository<ProductSelectedCategory> productSelectedRepository,
         IGenericRepository<ProductColor> productColorRepository,
         IGenericRepository<ProductFeature> productFeaturesRepository,
-        IGenericRepository<ProductGallery> productGalleryRepository)
+        IGenericRepository<ProductGallery> productGalleryRepository,
+        IGenericRepository<ProductDiscount> productDiscountRepository)
         {
             _productRepository = productRepository;
             _productCategoryRepository = productCategoryRepository;
@@ -44,6 +46,7 @@ namespace Pharmacy.Application.Services.Implementation
             _productColorRepository = productColorRepository;
             _productFeaturesRepository = productFeaturesRepository;
             _productGalleryRepository = productGalleryRepository;
+            _productDiscountRepository= productDiscountRepository;
         }
 
         #endregion
@@ -385,6 +388,67 @@ namespace Pharmacy.Application.Services.Implementation
             return latestArrival.Count > take ? latestArrival.Skip(14).Take(1).ToList() : latestArrival;
         }
 
+
+
+        #endregion
+
+        #region Product Details
+        public async Task<ProductDetailsDto> GetProductDetails(long productId)
+        {
+            var product = await _productRepository
+                   .GetQuery()
+                   .AsQueryable()
+                   .Include(x => x.ProductColors)
+                   .Include(x => x.ProductFeatures)
+                   .Include(x => x.ProductDiscounts)
+                   .Include(x => x.ProductGallery)
+                   .Include(x => x.ProductSelectedCategories)
+                   .ThenInclude(x => x.ProductCategory)
+                   .FirstOrDefaultAsync(x => x.Id == productId);
+
+            var productDiscount = await _productDiscountRepository
+                .GetQuery()
+                .Include(x => x.ProductDiscountUse)
+                .OrderByDescending(x => x.CreateDate)
+                .FirstOrDefaultAsync(x => x.ProductId == productId && x.ExpireDate >= DateTime.Now);
+
+            var selectedCategoriesIds = product.ProductSelectedCategories.Select(x => x.ProductCategoryId).ToList();
+
+            //var relatedProducts = await _productRepository
+            //    .GetQuery()
+            //    .Include(x => x.ProductDiscounts)
+            //    .Where(x => x.ProductSelectedCategories.Any(c => selectedCategoriesIds.Contains(c.ProductCategoryId)) && x.Id != productId)
+            //    .ToListAsync();
+
+            product.ViewCount += 1;
+            await _productRepository.SaveChanges();
+
+            var productDetail = new ProductDetailsDto
+            {
+                ProductId = productId,
+                Title = product.Title,
+                Code = product.Code,
+                Price = product.Price,
+                Image = product.Image,
+                View = product.ViewCount,
+                ShortDescription=product.ShortDescription,
+                Description = product.Description,
+                ProductColors = product.ProductColors.ToList(),
+                ProductFeatures = product.ProductFeatures.ToList(),
+                ProductGalleries = product.ProductGallery.Take(10).ToList(),
+                ProductDiscount = productDiscount,
+                ProductCategories = product.ProductSelectedCategories.Select(x => x.ProductCategory).ToList(),
+                //RelatedProducts = relatedProducts,
+                //ProductBrand = product.ProductBrand,
+                //ProductComments = product.ProductComments
+                //    .Where(x => x.CommentAcceptanceState == CommentAcceptanceState.Accepted && !x.IsDelete)
+                //    .OrderByDescending(x => x.Id)
+                //    .ToList(),
+            };
+
+            return productDetail;
+
+        }
 
 
         #endregion
