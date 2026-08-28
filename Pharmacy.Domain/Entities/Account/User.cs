@@ -1,12 +1,8 @@
 ﻿using Pharmacy.Domain.Common;
 using Pharmacy.Domain.Entities.Contact;
+using Pharmacy.Domain.Entities.ProductOrder;
 using Pharmacy.Domain.Entities.Site;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Pharmacy.Domain.Entities.Account
 {
@@ -62,6 +58,7 @@ namespace Pharmacy.Domain.Entities.Account
         public Role Role { get; set; }
         public ICollection<ContactUs> ContactUs { get; set; }
         public ICollection<SiteBanner> SiteBanner { get; set; }
+        public ICollection<BikeDelivery> BikeDeliveries { get; set; }
         #endregion
 
     }

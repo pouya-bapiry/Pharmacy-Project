@@ -1,0 +1,111 @@
+﻿@using Pharmacy.Application.DTO.ProductOrder
+@using Pharmacy.Application.Utilities
+@model UserOpenOrderDto
+
+@{
+    var totalPrice = Model.GetTotalPriceWithoutDiscount().ToString("#,0 تومان");
+    var totalPriceWithDiscount = Model.GetTotalPriceWithDiscount().ToString("#,0 تومان");
+}
+
+
+
+
+
+<section class="offcanvas offcanvas-end py-2" tabindex="-1" id="offcanvasCart" aria-labelledby="offcanvasCartLabel">
+    <div class="offcanvas-header shadow-md">
+        <h5 class="offcanvas-title fw-bold" id="offcanvasCartLabel">
+            سبد خرید <small class="text-muted fw-bold font-14 ms-1">
+            (@Model.Details.Count()
+            مورد)
+        </small>
+    </h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+</div>
+<div class="offcanvas-body">
+    @if (Model.Details != null && Model.Details.Any())
+    {
+        <ul class="navbar-nav cart-canvas-parent">
+
+            @foreach (var detail in Model.Details)
+            {
+                <li class="nav-item">
+                    <div class="cart-canvas">
+                        <div class="row align-items-center">
+                            <div class="col-4 ps-0">
+                                <img src="@(!string.IsNullOrEmpty(detail.ProductImage) ? PathExtension.ProductOrigin + detail.ProductImage : PathExtension.NoImage)"
+                                     alt="@detail.ProductTitle" title="@detail.ProductTitle" class="img-fluid" width="100">
+                            </div>
+                            <div class="col-8">
+                                <h3 class="text-overflow-3 font-16">
+                                    @detail.ProductTitle
+                                </h3>
+                                <div class="product-box-suggest-price my-2  d-flex align-items-center justify-content-between">
+                                    @if (detail.DiscountPercentage != null && detail.DiscountPercentage != 0)
+                                    {
+                                        <del class="font-16">
+                                            @detail.ProductPrice.ToString("#,0 تومان")
+                                        </del>
+                                        <ins class="font-25">
+                                            @(((decimal)detail.Count * detail.DiscountPercentage * detail.ProductPrice / 100m).ToString())
+                                        </ins>
+                                    }
+                                    else
+                                    {
+                                        <ins class="font-25">
+                                            @detail.ProductPrice.ToString("#,0 تومان")
+                                        </ins>
+                                    }
+
+                                </div>
+                                <div class="cart-canvas-foot d-flex align-items-center justify-content-between">
+                                    <div class="cart-canvas-count">
+                                        <span>تعداد:</span>
+                                        <span class="fw-bold">@detail.Count</span>
+                                    </div>
+                                    <div class="cart-canvas-delete">
+                                        <a onclick="removeProductFromOrder(@detail.Id)" class="btn"><i class="bi bi-x"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            }
+
+        </ul>
+    }
+    else
+    {
+        <div class="empty-cart">
+            <img src="~/Theme/assets/image/empty-cart.svg" class="d-block mx-auto" alt="">
+            <h5 class="h5 text-center my-3">سبد خرید شما خالی است</h5>
+        </div>
+    }
+
+
+    <div class="row flex-column justify-content-center align-items-center">
+        <span class="main-color-three-bg text-white p-2 mb-2 mt-2 w-75 center rounded-3"><i class="bi bi-currency-dollar"></i> مبلغ کل : @totalPrice</span>
+        <span class="main-color-two-bg text-white p-2 mb-2 mt-2 w-75 center rounded-3"><i class="bi bi-currency-exchange"></i> مبلغ قابل پرداخت : @totalPriceWithDiscount</span>
+        <a asp-area="User" asp-controller="Order" asp-action="UserOpenOrder" asp-route-userId="@Model.UserId" class="btn main-color-one-bg p-2 mt-2 w-75"><i class="bi bi-cart-check-fill"></i> مشاهده و پرداخت خرید</a>
+    </div>
+
+    @*     <div class="cart-canvas-foots bg-white shadow-md">
+        <div class="row align-items-center">
+            <div class="col-6">
+                <div class="cart-canvas-foot-sum">
+                    <p class="text-muted mb-2">جمع کل</p>
+                    <h5>11,000,000 تومان</h5>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="cart-canvas-foot-link text-end">
+                    <a href="" class="btn border-0 main-color-green ">
+                        <i class="bi bi-arrow-left me-1"></i> تکمیل خرید
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div> *@
+</div>
+
+</section>

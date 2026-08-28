@@ -1,11 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Pharmacy.Domain.Entities.Account;
+using Pharmacy.Domain.Entities.Blog;
 using Pharmacy.Domain.Entities.Contact;
 using Pharmacy.Domain.Entities.Product;
+using Pharmacy.Domain.Entities.ProductOrder;
 using Pharmacy.Domain.Entities.Site;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -33,6 +36,14 @@ namespace Pharmacy.Infrastructure.Context
         public DbSet<ProductDiscount> ProductDiscounts { get; set; }
         public DbSet<ProductDiscountUse> ProductDiscountUses { get; set; }
         public DbSet<ProductGallery> ProductGalleries { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderDetail> OrderDetails { get; set; }
+        public DbSet<UserAddress> UserAddresses { get; set; }
+        public DbSet<BikeDelivery> BikeDeliveries { get; set; }
+        public DbSet<Blog> Blogs { get; set; }
+
+
+
 
         #endregion
 

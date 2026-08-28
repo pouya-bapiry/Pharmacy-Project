@@ -1,0 +1,22 @@
+﻿@using Pharmacy.Application.DTO.ProductOrder
+@model AddProductToOrderDto
+
+<form method="post"
+      asp-area="User"
+      asp-controller="Order"
+      asp-action="AddProductToOrder"
+      id="addProductToOrderForm">
+
+    @Html.AntiForgeryToken()
+
+    <input type="hidden"
+           id="add_product_to_order_ProductId"
+           asp-for="ProductId" />
+
+    <input type="hidden"
+           asp-for="Count"
+           id="add_product_to_order_Count" />
+</form>
+
+
+

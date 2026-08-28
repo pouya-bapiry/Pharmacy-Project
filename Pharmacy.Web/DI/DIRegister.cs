@@ -1,4 +1,6 @@
-﻿using Pharmacy.Application.Services.Implementation;
+﻿using MarketPlace.Application.Services.Implementations;
+using MarketPlace.Application.Services.Interfaces;
+using Pharmacy.Application.Services.Implementation;
 using Pharmacy.Application.Services.Implementations;
 using Pharmacy.Application.Services.Interfaces;
 using Pharmacy.Application.Utilities;
@@ -31,7 +33,8 @@ namespace Pharmacy.Web.DI
             services.AddScoped<ISiteImagesService, SiteImagesService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IProductDiscountService, ProductDiscountService>();
-
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IBlogService, BlogService>();
 
 
 

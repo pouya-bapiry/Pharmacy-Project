@@ -1,4 +1,5 @@
 ﻿@model Pharmacy.Application.DTO.Product.ProductDetailsDto
+@using Pharmacy.Application.DTO.ProductOrder
 @using Pharmacy.Application.Utilities
 
 
@@ -9,8 +10,12 @@
     var comment = ViewBag.Comment;
 }
 
+
+
 @section script
 {
+    <partial name="_JqueryValidators" />
+
     <script>
         $('.btn-number').click(function (e) {
             e.preventDefault();
@@ -84,6 +89,7 @@
             }
         });
 
+        
 
     </script>
 }
@@ -109,6 +115,7 @@
     <div class="container-fluid">
         <div class="content-box">
             <div class="row gy-4">
+                <partial name="_AddProductToCartPartial" model="@(new AddProductToOrderDto{Count = 1, ProductId = Model.ProductId})" />
                 <div class="col-lg-4">
                     @if (Model.ProductDiscount != null && Model.ProductDiscount.ExpireDate >= DateTime.Now)
                     {

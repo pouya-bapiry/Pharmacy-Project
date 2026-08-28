@@ -1,15 +1,33 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MarketPlace.Application.Services.Implementations;
+using MarketPlace.Application.Services.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using Pharmacy.Application.Services.Interfaces;
+using Pharmacy.Web.PresentationExtensions;
 
 
 namespace ServiceHost.ViewComponents
 {
+
+
     #region Site Header
+
+
 
     public class SiteHeaderViewComponent : ViewComponent
     {
+
+        private readonly IProductService _productService;
+        private readonly IOrderService _orderService;
+
+        public SiteHeaderViewComponent(IProductService productService, IOrderService orderService)
+        {
+            _productService = productService;
+            _orderService = orderService;
+        }
         public async Task<IViewComponentResult> InvokeAsync()
         {
+            var orderDetail = await _orderService.GetUserOpenOrderDetail(User.GetUserId());
+            ViewBag.OrderDetailCount = orderDetail.Details.Count;
             return View("SiteHeader");
         }
     }
@@ -47,10 +65,20 @@ namespace ServiceHost.ViewComponents
         //{
         //    _productService = productService;
         //}
+
+        private readonly IProductService _productService;
+        private readonly IOrderService _orderService;
+
+        public MegaMenuViewComponent(IProductService productService, IOrderService orderService)
+        {
+            _productService = productService;
+            _orderService = orderService;
+        }
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            //var category = await _productService.GetAllActiveProductCategories();
-            //ViewBag.ProductCategories = await _productService.GetAllActiveProductCategories();
+            
+            var orderDetail = await _orderService.GetUserOpenOrderDetail(User.GetUserId());
+            ViewBag.OrderDetailCount = orderDetail.Details.Count;
             return View("MegaMenu");
         }
     }
@@ -93,6 +121,26 @@ namespace ServiceHost.ViewComponents
             return View("ProductDiscountAmazing", discountAmazing);
         }
     }
+    #endregion
+
+    #region Cart Canvas
+
+    public class CartCanvasViewComponent : ViewComponent
+    {
+        private readonly IOrderService _orderService;
+
+        public CartCanvasViewComponent(IOrderService orderService)
+        {
+            _orderService = orderService;
+        }
+
+        public async Task<IViewComponentResult> InvokeAsync()
+        {
+            var openOrder = await _orderService.GetUserOpenOrderDetail(User.GetUserId());
+            return View("CartCanvas", openOrder);
+        }
+    }
+
     #endregion
 }
 

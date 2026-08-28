@@ -291,7 +291,14 @@
                         <a data-bs-toggle="offcanvas" href="#offcanvasCart" role="button" aria-controls="offcanvasCart" class="btn btn-xl ms-3 rounded-4 font-16 bg-white border-1 focus-ring focus-ring-dark border-dark-subtle z-3">
                             <i class="bi bi-cart"></i>
                             <span class="ms-2 add-to-cart-btn-text fw-4">سبد خرید</span>
-                            <span class="badge main-color-one-bg rounded-circle ms-2">0</span>
+                            @if (ViewBag.OrderDetailCount != 0)
+                            {
+                                <span class="badge main-color-one-bg rounded-circle ms-2">@ViewBag.OrderDetailCount</span>
+                            }
+                            else
+                            {
+                                <span class="badge main-color-one-bg rounded-circle ms-2">0</span>
+                            }
                         </a>
                     </div>
                 </div>

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Pharmacy.Infrastructure.Context;
 
@@ -11,9 +12,11 @@ using Pharmacy.Infrastructure.Context;
 namespace Pharmacy.Infrastructure.Migrations
 {
     [DbContext(typeof(PharmacyDbContext))]
-    partial class PharmacyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260804152632_add_order_entities_and_user_address_and_bike_delievery")]
+    partial class add_order_entities_and_user_address_and_bike_delievery
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -111,54 +114,6 @@ namespace Pharmacy.Infrastructure.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("Pharmacy.Domain.Entities.Blog.Blog", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<string>("BlogCategory")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime>("CreateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Image")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastUpdateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ShortDescription")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
-
-                    b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Blogs");
                 });
 
             modelBuilder.Entity("Pharmacy.Domain.Entities.Contact.ContactUs", b =>
@@ -652,8 +607,14 @@ namespace Pharmacy.Infrastructure.Migrations
                     b.Property<string>("OrderAmount")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("OrderDelivered")
+                        .HasColumnType("int");
+
                     b.Property<string>("OrderDiscount")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("OrderPaymentType")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("PaymentDate")
                         .HasColumnType("datetime2");
@@ -700,10 +661,25 @@ namespace Pharmacy.Infrastructure.Migrations
                     b.Property<long>("OrderId")
                         .HasColumnType("bigint");
 
+                    b.Property<long?>("ProductColorId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("ProductColorPrice")
+                        .HasColumnType("int");
+
                     b.Property<long>("ProductId")
                         .HasColumnType("bigint");
 
                     b.Property<int>("ProductPrice")
+                        .HasColumnType("int");
+
+                    b.Property<long?>("ProductSelectedId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("ProductSizeId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("ProductSizePrice")
                         .HasColumnType("int");
 
                     b.Property<string>("UserName")
@@ -712,6 +688,8 @@ namespace Pharmacy.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductColorId");
 
                     b.HasIndex("ProductId");
 
@@ -769,6 +747,12 @@ namespace Pharmacy.Infrastructure.Migrations
 
                     b.Property<long>("OrderId")
                         .HasColumnType("bigint");
+
+                    b.Property<int>("OrderPeriodTime")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PaymentMethod")
+                        .HasColumnType("int");
 
                     b.Property<string>("PlaqueNo")
                         .HasMaxLength(50)
@@ -1129,6 +1113,11 @@ namespace Pharmacy.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("Pharmacy.Domain.Entities.Product.ProductColor", "ProductColor")
+                        .WithMany()
+                        .HasForeignKey("ProductColorId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("Pharmacy.Domain.Entities.Product.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
@@ -1138,6 +1127,8 @@ namespace Pharmacy.Infrastructure.Migrations
                     b.Navigation("Order");
 
                     b.Navigation("Product");
+
+                    b.Navigation("ProductColor");
                 });
 
             modelBuilder.Entity("Pharmacy.Domain.Entities.ProductOrder.UserAddress", b =>
