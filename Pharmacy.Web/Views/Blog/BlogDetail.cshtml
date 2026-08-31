@@ -1,0 +1,336 @@
+﻿@using Pharmacy.Application.Utilities
+@model Pharmacy.Application.DTO.Blog.FilterBlogDto
+
+<section class="content mt-xl-0 mt-5 pt-5">
+    <div class="container-fluid">
+        <!-- blog title -->
+        <div class="blog-header mt-xl-0 mt-3">
+            <div class="row gy-3">
+                <div class="col-md-8">
+                    <div class="blog-header-title slider-title-desc">
+                        <div class="section-title">
+                            <div class="section-title-title">
+                                <h2 class="fw-900 h4">
+                                    وبلاگ<span class="with-highlight ms-1">سایت</span>
+                                </h2>
+                                <div class="Dottedsquare"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+    
+        <!-- blog post -->
+        <div class="row gy-4 mt-4">
+            <div class="col-lg-9">
+                <div class="blog-title">
+                    <div class="content-box">
+                        <div class="container-fluid">
+                            <div class="blog-title-title">
+                                <h2>@Model.Title</h2>
+                            </div>
+                            <div class="blog-content-meta-detail">
+                                <div class="row gy-4 justify-content-center">
+                                    <div class="col-lg-3 col-sm-6">
+                                        <div class="blog-content-meta-detail-item">
+                                            <i class="bi bi-stack"></i>
+                                            <h6>دسته بندی: </h6>
+                                            <a href="" class="badge bg-danger font-14">@Model.BlogCategory</a>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-sm-6">
+                                        <div class="blog-content-meta-detail-item">
+                                            <i class="bi bi-clock"></i>
+                                            <h6>زمان مطالعه: </h6>
+                                            <span>3 دقیقه</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-sm-6">
+                                        <div class="blog-content-meta-detail-item">
+                                            <i class="bi bi-calendar-check"></i>
+                                            <h6>آخرین بروزرسانی: </h6>
+                                            <span>@Model.LastUpdateDate</span>
+                                        </div>
+                                    </div>
+                                   
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="blog-content mt-3">
+                    <div class="content-box">
+                        <div class="container-fluid">
+                            <div class="blog-single-content">
+                                <div class="text-center mb-4">
+                                    <img "
+                                         src="@(!string.IsNullOrEmpty(Model.Image) ? PathExtension.ArticleOrigin + Model.Image : PathExtension.DefaultAvatar)" title="@Model.Title" class="img-thumbnail" alt="">
+                                </div>
+                                <div class="product-desc-content">
+                                    <input class="read-more-state" id="readMore2" type="checkbox">
+                                    <!-- والد بیشتر ، کمتر ، تمام متن توضیحات باید داخل این تگ قرار بگیرند -->
+                                    <div class="read-more-wrap">
+                                        <h6 class="font-26 mb-2 title-font title-line-bottom">
+                                           @Model.ShortDescription
+                                        </h6>
+                                        <p>
+                                           @Model.Description
+                                        </p>
+                                        <!-- متن بیشتر -->
+                                       
+                                        <!-- پایان متن بیشتر -->
+                                    </div>
+                                    <!-- پایان والد بیشتر کمتر -->
+                                    @* <label class="read-more-trigger" for="readMore2"></label> *@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+           @*  <div class="col-lg-3">
+                <div class="position-sticky top-0">
+                    <div class="blog-side-author mb-4 blog-side text-center bg-white shadow-box p-3 rounded-3">
+                        <div class="blog-side-author-img">
+                            <img src="assets/image/user/user.jpg" class="rounded-circle border-4 border-primary p-2 border" alt="">
+                        </div>
+                        <div class="blog-side-author-name my-3"><h5>امیر رضایی</h5></div>
+                        <div class="blog-side-created-at pb-4 border-bottom"><p class="badge bg-secondary-subtle text-dark font-18">13 دی 1402</p></div>
+                        <div class="blog-side-share mt-3">
+                            <p class="text-muted">
+                                اشتراک گذاری در شبکه های اجتماعی
+                            </p>
+                            <nav class="navbar navbar-expand justify-content-center">
+                                <ul class="navbar-nav">
+                                    <li class="nav-item"><a href="" class="nav-link text-muted-two"><i class="bi bi-instagram"></i></a></li>
+                                    <li class="nav-item"><a href="" class="nav-link text-muted-two"><i class="bi bi-twitter"></i></a></li>
+                                    <li class="nav-item"><a href="" class="nav-link text-muted-two"><i class="bi bi-linkedin"></i></a></li>
+                                    <li class="nav-item"><a href="" class="nav-link text-muted-two"><i class="bi bi-telegram"></i></a></li>
+                                    <li class="nav-item"><a href="" class="nav-link text-muted-two"><i class="bi bi-whatsapp"></i></a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                  @*   <div class="card blog-card mb-4 shadow-box mb-4">
+                        <div class="card-header bg-transparent border-0">
+                            <h5 class="title-line-bottom">آخرین مطالب</h5>
+                        </div>
+                        <div class="card-body pb-0">
+
+                             <nav class="navbar">
+                                <ul class="navbar-nav">
+                                    <li class="nav-item">
+                                        <a href="" class="nav-link">
+                                            <div class="mini-blog-item">
+                                                <div class="image">
+                                                    <img src="assets/image/blog/blog-1.jpg" class="img-thumbnail" alt="">
+                                                </div>
+                                                <div class="d-flex align-items-start desc flex-wrap flex-column justify-content-between">
+                                                    <h6 class="title mct-hover">آخرین پرچمداران گوشی شیائومی</h6>
+                                                    <div class="d-flex align-items-center">
+                                                        <p class="text-muted mb-0">17 دی ماه 1402</p>
+                                                        <div class="text-end ms-2"><i class="bi bi-arrow-left main-color-one-color"></i></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="" class="nav-link">
+                                            <div class="mini-blog-item">
+                                                <div class="image">
+                                                    <img src="assets/image/blog/blog-2.jpg" class="img-thumbnail" alt="">
+                                                </div>
+                                                <div class="d-flex align-items-start desc flex-wrap flex-column justify-content-between">
+                                                    <h6 class="title mct-hover">آخرین پرچمداران گوشی شیائومی</h6>
+                                                    <div class="d-flex align-items-center">
+                                                        <p class="text-muted mb-0">17 دی ماه 1402</p>
+                                                        <div class="text-end ms-2"><i class="bi bi-arrow-left main-color-one-color"></i></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="" class="nav-link">
+                                            <div class="mini-blog-item">
+                                                <div class="image">
+                                                    <img src="assets/image/blog/blog-3.jpg" class="img-thumbnail" alt="">
+                                                </div>
+                                                <div class="d-flex align-items-start desc flex-wrap flex-column justify-content-between">
+                                                    <h6 class="title mct-hover">آخرین پرچمداران گوشی شیائومی</h6>
+                                                    <div class="d-flex align-items-center">
+                                                        <p class="text-muted mb-0">17 دی ماه 1402</p>
+                                                        <div class="text-end ms-2"><i class="bi bi-arrow-left main-color-one-color"></i></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="" class="nav-link">
+                                            <div class="mini-blog-item">
+                                                <div class="image">
+                                                    <img src="assets/image/blog/blog-4.jpg" class="img-thumbnail" alt="">
+                                                </div>
+                                                <div class="d-flex align-items-start desc flex-wrap flex-column justify-content-between">
+                                                    <h6 class="title mct-hover">آخرین پرچمداران گوشی شیائومی</h6>
+                                                    <div class="d-flex align-items-center">
+                                                        <p class="text-muted mb-0">17 دی ماه 1402</p>
+                                                        <div class="text-end ms-2"><i class="bi bi-arrow-left main-color-one-color"></i></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav> 
+
+                        </div>
+                    </div> 
+                   
+                </div>
+            </div>
+        </div> *@
+       @*  <!-- blog comment -->
+        <div class="blog-comments mt-4">
+            <div class="content-box">
+                <div class="container-fluid">
+                    <div class="blog-comment">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="title-panel">
+                                    <h6 class="f-800 text-start">
+                                        <span>1</span>
+                                        <span>دیدگاه برای</span>
+                                        <span>
+                                            تلفن همراه شگفت انگیز glx که این روزا غوغا کرده در بازار
+                                        </span>
+                                    </h6>
+                                </div>
+                                <div class="comment-item">
+                                    <div class="comment-item-avatar d-sm-flex d-none">
+                                        <div class="comment-item-avatar-img ">
+                                            <a href="" class="rounded-circle">
+                                                <img src="assets/image/user/user.jpg" class="rounded-circle" width="40" alt="">
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="comment-item-desc">
+                                        <div class="comment-item-avatar d-sm-none d-flex mb-2">
+                                            <div class="comment-item-avatar-img ">
+                                                <a href="" class="rounded-circle">
+                                                    <img src="assets/image/user/user.png" class="rounded-circle" width="40" alt="">
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="comment-item-title">
+                                            <div class="comment-date">
+                                                <p class="text-muted comment-date-auther">amirrezaie</p>
+                                                <p class="text-muted comment-date-speractor">–</p>
+                                                <p class="text-muted comment-date-date">۲۳ تیر ۱۴۰۱</p>
+                                            </div>
+                                        </div>
+                                        <div class="comment-item-content">
+                                            <p>
+                                                گوشیه خوبیه. ارزش خرید داره.
+                                            </p>
+                                            <div class="comment-item">
+                                                <div class="comment-item-avatar d-sm-flex d-none">
+                                                    <div class="comment-item-avatar-img ">
+                                                        <a href="" class="rounded-circle">
+                                                            <img src="assets/image/user/user.png" class="rounded-circle" width="40" alt="">
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="comment-item-desc com-response">
+                                                    <div class="comment-item-avatar d-sm-none d-flex mb-2">
+                                                        <div class="comment-item-avatar-img ">
+                                                            <a href="" class="rounded-circle">
+                                                                <img src="assets/image/user/user.png" class="rounded-circle" width="40" alt="">
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="comment-item-title">
+                                                        <div class="comment-date">
+                                                            <p class="text-muted comment-date-auther">amirrezaie</p>
+                                                            <p class="text-muted comment-date-speractor">–</p>
+                                                            <p class="text-muted comment-date-date">۲۳ تیر ۱۴۰۱</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="comment-item-content">
+                                                        <p>
+                                                            اره واقعا عالیه من که ازش خیلی راضی ام
+                                                        </p>
+                                                    </div>
+                                                    <a href="" class="btn main-color-one-bg px-4 btn-sm">پاسخ</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <a href="" class="btn main-color-one-bg px-4 btn-sm">پاسخ</a>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- blog form -->
+        <div class="mt-4">
+            <div class="content-box">
+                <div class="container-fluid">
+                    <div class="comment-form">
+                        <div class="title-panel mb-3">
+                            <h6 class="font-18">دیدگاه خود را بنویسید</h6>
+                        </div>
+                        <form>
+                            <div class="form-group mb-2">
+                                <label for="commentbody" class="form-label my-3">دیدگاه شما <span class="text-danger ms-1">*</span></label>
+                                <textarea id="commentbody" rows="7" class="form-control" placeholder="دیدگاه شما" required=""></textarea>
+                            </div>
+                            <div class="form-group mb-2">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-inline w-100">
+                                            <label for="commentName" class="form-label my-3">
+                                                نام شما
+                                                <span class="text-danger ms-1">*</span>
+                                            </label>
+                                            <input type="text" id="commentName" class="form-control py-3" placeholder="نام شما" required="">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-inline w-100 mb-2">
+                                            <label for="commentEmail" class="form-label my-3">
+                                                ایمیل
+                                                شما<span class="text-danger ms-1">*</span>
+                                            </label>
+                                            <input type="email" id="commentEmail" class="form-control text-end py-3" placeholder="ایمیل شما" required="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input type="checkbox" id="commentCheckBox" class="form-check-input" required="">
+                                <label for="commentCheckBox" class="form-check-label text-muted">
+                                    ذخیره
+                                    نام، ایمیل و وبسایت من در مرورگر برای زمانی که دوباره دیدگاهی
+                                    می‌نویسم.
+                                </label>
+                            </div>
+                            <input type="submit" value="ثبت" class="btn main-color-three-bg px-5  rounded-3 mt-3" style="padding:10px 100px !important">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div> *@
+    </div>
+</section>

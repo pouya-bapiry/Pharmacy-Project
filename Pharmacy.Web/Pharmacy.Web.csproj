@@ -6,10 +6,6 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Include="E:\Yaran_Online_Shopping_Website\ServiceHost\Areas\User\Controllers\OrderController.cs" Link="Areas\User\Controllers\OrderController.cs" />
-  </ItemGroup>
-
 	<ItemGroup>
 		<PackageReference Include="GoogleReCaptcha.V3" Version="1.3.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.3.0" />

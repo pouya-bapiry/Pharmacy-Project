@@ -83,6 +83,8 @@ namespace Pharmacy.Application.Services.Implementation
                 Title = blog.Title,
                 ShortDescription = blog.ShortDescription,
                 Description = blog.Description,
+                BlogCategory=blog.BlogCategory,
+                LastUpdateDate=blog.LastUpdateDate.ToStringShamsiDate(),
                 Image = blog.Image
             };
         }
@@ -130,7 +132,7 @@ namespace Pharmacy.Application.Services.Implementation
                 Title = blog.Title,
             };
         }
-        public async Task<EditBlogResult> EditBlog(EditBlogDto edit, IFormFile image)
+        public async Task<EditBlogResult> EditBlog(EditBlogDto edit, IFormFile? image)
         {
             var blog = await _blogRepository.GetQuery().AsQueryable().FirstOrDefaultAsync(x => x.Id == edit.Id);
 

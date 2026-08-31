@@ -85,6 +85,7 @@ namespace Pharmacy.Application.Services.Implementation
                 .Include(x => x.ProductColors)
                 .Include(x => x.ProductFeatures)
                 .Include(x => x.ProductGallery)
+                .Where(x=>x.IsActive==true)
                 .AsQueryable();
 
         #region State

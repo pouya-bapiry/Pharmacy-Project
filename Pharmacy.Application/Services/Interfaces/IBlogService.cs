@@ -13,7 +13,7 @@ namespace Pharmacy.Application.Services.Interfaces
         Task<FilterBlogDto> FilterBlogs(FilterBlogDto filter);
         Task<CreateBlogResult> CreateBlog(CreateBlogDto create, IFormFile image);
         Task<EditBlogDto> GetBlogForEdit(long id);
-        Task<EditBlogResult> EditBlog(EditBlogDto edit, IFormFile image);
+        Task<EditBlogResult> EditBlog(EditBlogDto edit, IFormFile? image);
         Task<FilterBlogDto> GetBlogDetail(long id);
     }
 }

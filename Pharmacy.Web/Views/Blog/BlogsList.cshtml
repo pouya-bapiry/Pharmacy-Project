@@ -1,0 +1,64 @@
+﻿@model Pharmacy.Application.DTO.Blog.FilterBlogDto
+@using Pharmacy.Application.Utilities
+<section class="content mt-xl-0 mt-5 pt-5">
+    <div class="container-fluid">
+        <!-- blog title -->
+        <div class="blog-header mt-xl-0 mt-3">
+            <div class="row gy-3">
+                <div class="col-md-8">
+                    <div class="blog-header-title slider-title-desc">
+                        <div class="section-title">
+                            <div class="section-title-title">
+                                <h2 class="fw-900 h4">
+                                    وبلاگ<span class="with-highlight ms-1">آبتین</span>
+                                </h2>
+                                <div class="Dottedsquare"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="search-bar">
+                        <form>
+                            <div class="search-filed w-100">
+                                <label class="d-block w-100 position-relative flex-grow-1">
+                                    <input type="text" asp-for="Title" class="form-control py-3 rounded-4 w-100 bg-white" placeholder="جستجوی مطالب ...">
+                                    <button class="position-absolute me-3 end-0 top-50 translate-middle-y"><i class="bi bi-search"></i> </button>
+                                </label>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- blog menu in desktop -->
+        <!-- blog item -->
+        <div class="row mt-5">
+            @foreach (var blog in Model.Blogs)
+            {
+                <div class="col-lg-4 mb-5 pb-4">
+                    <div class="card blog-card border-0 position-relative">
+                        <div class="card-img">
+                            <img class="img-fluid rounded-5" @* style="width: 90px; height: 60px; *@"
+                                 src="@(!string.IsNullOrEmpty(blog.Image) ? PathExtension.ArticleOrigin + blog.Image : PathExtension.DefaultAvatar)" title="@blog.Title" />
+                        </div>
+                        <div class="card-body blog-card-text bg-white rounded-3 shadow-box mt-3 border-ui">
+                            <h6 class="text-overflow-1 h5">
+                                @blog.Title
+                            </h6>
+                            <div class="d-flex mt-3 align-items-center justify-content-between">
+                                <div>
+                                    <i class="bi bi-calendar4-week"></i>
+                                    <span class="ms-2">@blog.CreateDate.ToStringShamsiDate()</span>
+                                </div>
+                                <a asp-controller="Blog" asp-action="BlogDetail" asp-route-blogId="@blog.Id" class="btn btn-sm main-color-one-bg">مشاهده <i class="bi bi-arrow-left-short"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+           
+           
+        </div>
+    </div>
+</section>

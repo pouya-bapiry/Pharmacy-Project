@@ -17,6 +17,7 @@ namespace Pharmacy.Application.DTO.Product
         public string ProductTitle { get; set; }
         public string ProductCode { get; set; }
         public string ProductBrand { get; set; }
+        public bool IsActive { get; set; }
         public string Category { get; set; }
         public int FilterMinPrice { get; set; }
         public int FilterMaxPrice { get; set; }

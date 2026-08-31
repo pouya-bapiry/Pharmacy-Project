@@ -83,7 +83,6 @@
                                                              src="@(!string.IsNullOrEmpty(article.Image) ? PathExtension.ArticleOrigin + article.Image : PathExtension.DefaultAvatar)" title="@article.Title" />
                                                     </td>
                                                     <td>@article.Title</td>
-                                                    <td>@article.Image</td>
                                                     <td>@article.BlogCategory</td>
                                                     <td>@(article.ShortDescription.Substring(0, Math.Min(article.ShortDescription.Length, 50)) + " ...")</td>
                                                     <td>@article.CreateDate.ToStringShamsiDate()</td>
@@ -91,7 +90,7 @@
                                                     <td>
                                                         <a class="btn btn-sm btn-warning"
                                                            asp-area="Administration" asp-controller="Blog" asp-action="EditBlog"
-                                                           asp-route-articleId="@article.Id">
+                                                           asp-route-Id="@article.Id">
                                                             ویرایش مقاله
                                                         </a>
                                                     </td>
