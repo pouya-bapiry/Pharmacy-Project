@@ -1,0 +1,252 @@
+﻿@using Pharmacy.Application.Utilities
+@model Pharmacy.Application.DTO.ProductOrder.UserOpenOrderDto
+@{
+    ViewData["Title"] = "سبد خرید";
+
+    var totalPriceWithoutDiscount = Model.GetTotalPriceWithoutDiscount();
+    var totalPriceWithDiscount = Model.GetTotalPriceWithDiscount();
+    var totalDiscountPrice = Model.GetTotalDiscountPrice();
+
+}
+
+@* @section script
+{
+    <partial name="_JqueryValidators" />
+
+    <script>
+        $('.btn-number').click(function(e) {
+            e.preventDefault();
+
+            fieldName = $(this).attr('data-field');
+            type = $(this).attr('data-type');
+            var input = $("input[name='" + fieldName + "']");
+            var currentVal = parseInt(input.val());
+            if (!isNaN(currentVal)) {
+                if (type == 'minus') {
+
+                    if (currentVal > input.attr('min')) {
+                        input.val(currentVal - 1).change();
+                    }
+                    if (parseInt(input.val()) == input.attr('min')) {
+                        $(this).attr('disabled', true);
+                    }
+
+                } else if (type == 'plus') {
+
+                    if (currentVal < input.attr('max')) {
+                        input.val(currentVal + 1).change();
+                    }
+                    if (parseInt(input.val()) == input.attr('max')) {
+                        $(this).attr('disabled', true);
+                    }
+
+                }
+            } else {
+                input.val(0);
+            }
+        });
+        $('.input-number').focusin(function() {
+            $(this).data('oldValue', $(this).val());
+        });
+        $('.input-number').change(function() {
+
+            minValue = parseInt($(this).attr('min'));
+            maxValue = parseInt($(this).attr('max'));
+            valueCurrent = parseInt($(this).val());
+
+            name = $(this).attr('name');
+            if (valueCurrent >= minValue) {
+                $(".btn-number[data-type='minus'][data-field='" + name + "']").removeAttr('disabled');
+            } else {
+                alert('Sorry, the minimum value was reached');
+                $(this).val($(this).data('oldValue'));
+            }
+            if (valueCurrent <= maxValue) {
+                $(".btn-number[data-type='plus'][data-field='" + name + "']").removeAttr('disabled');
+            } else {
+                alert('Sorry, the maximum value was reached');
+                $(this).val($(this).data('oldValue'));
+            }
+
+
+        });
+        $(".input-number").keydown(function(e) {
+            // Allow: backspace, delete, tab, escape, enter and .
+            if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 190]) !== -1 ||
+                // Allow: Ctrl+A
+                (e.keyCode == 65 && e.ctrlKey === true) ||
+                // Allow: home, end, left, right
+                (e.keyCode >= 35 && e.keyCode <= 39)) {
+                // let it happen, don't do anything
+                return;
+            }
+            // Ensure that it is a number and stop the keypress
+            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                e.preventDefault();
+            }
+        });
+
+        
+
+    </script>
+} *@
+
+<section class="content">
+    <div class="container-fluid">
+        <ul class="nav nav-tabs mt-xl-3 mt-5 pt-xl-0 pt-5" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link bg-transparent cart-tab active" id="home-tab"  data-bs-toggle="tab" data-bs-target="#cart-tab-pane" type="button" role="tab" aria-controls="cart-tab-pane" aria-selected="true">سبد خرید(@Model.Details.Count)</button>
+            </li>
+           
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            <!-- cart -->
+            <div class="tab-pane fade active show" id="cart-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+
+                <div class="row gy-4 my-1">
+                    <div class="col-xl-9">
+                        @foreach (var order in Model.Details)
+                        {
+                            <div class="content-box">
+                                <div class="row text-end">
+                                   
+
+                                   
+                                        <div class=" text-end">
+                                        <div class="cart-canvas-delete">
+                                            <a onclick="removeProductFromOrder(@order.Id)" class="btn bs-bg-danger-600 "><i class="bi bi-x text-danger fw-bold"></i></a>
+                                        </div>
+                                        </div>
+                                    
+                                    </div>
+                                <div class="border-bottom end-item-no-border border-1 my-3 py-3">
+                                    <div class="row">
+                                        <div class="col-xl-2">
+                                            <div class="card-img">
+                                                <img  src="@(!string.IsNullOrEmpty(order.ProductImage) ? PathExtension.ProductOrigin + order.ProductImage : PathExtension.NoImage)" class="img-thumbnail h-150-px w-150-px object-fit-cover"  alt="">
+                                            </div>
+
+                                            <div class="d-flex align-items-xl-center align-items-start my-xl-0 my-3 flex-column justify-content-xl-center justify-content-start">
+                                                @if (order.DiscountPercentage!=null)
+                                                {
+                                                    <span class="text-danger fw-bold"> پیشنهاد شگفت انگیز</span>
+                                                }
+                                                
+                                                @if (order.DiscountExpireDate.HasValue && order.DiscountExpireDate.Value > DateTime.Now)
+                                                {
+                                                    <div class="countdown mt-2 me-3"
+                                                         data-date="@order.DiscountExpireDate.Value.ToString("yyyy-MM-dd")"
+                                                         data-time="@order.DiscountExpireDate.Value.ToString("HH:mm:ss")">
+
+                                                        <div class="countdown-container seconds">
+                                                            <span class="countdown-value seconds-bottom">00</span>
+                                                            <span class="countdown-heading seconds-top">ثانیه</span>
+                                                        </div>
+
+                                                        <div class="countdown-container minutes">
+                                                            <span class="countdown-value minutes-bottom">00</span>
+                                                            <span class="countdown-heading minutes-top">دقیقه</span>
+                                                        </div>
+
+                                                        <div class="countdown-container hours">
+                                                            <span class="countdown-value hours-bottom">00</span>
+                                                            <span class="countdown-heading hours-top">ساعت</span>
+                                                        </div>
+
+                                                        <div class="countdown-container days">
+                                                            <span class="countdown-value days-bottom">00</span>
+                                                            <span class="countdown-heading days-top">روز</span>
+                                                        </div>
+
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-10">
+                                            <h3 class="mb-3 font-16">
+                                                @order.ProductTitle
+                                            </h3>
+
+                                            
+                                            <div class="counter justify-content-center">
+                                                <span class="font-14   fw-bold ">
+                                                    تعداد کالا:  @order.Count
+                                                </span>
+                                            </div>
+
+                                            <div class="cart-item-feature d-flex flex-column align-items-start flex-wrap">
+                                            </div>
+                                            <div class="d-flex align-items-end justify-content-between">
+                                                <div class="product-box-suggest-price my-2  d-flex align-items-start flex-column justify-content-start">
+                                                    @if (order.DiscountExpireDate == null)
+                                                    {
+                                                        <span class="font-16 fw-bold my-2">@order.ProductPrice.ToString("N0") تومان</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <del class="font-16 my-2">
+                                                            
+                                                            @order.ProductPrice.ToString("N0")
+                                                        </del>
+                                                        <span class="badge bg-danger rounded-pill me-2">%@order.DiscountPercentage </span>
+
+                                                        <ins class="font-25 ms-0">
+                                                            @{
+                                                                decimal price = Convert.ToDecimal(order.ProductPrice);
+                                                                int percent = Convert.ToInt32(order.DiscountPercentage);
+
+                                                                decimal finalPrice = price - (price * percent / 100m);
+                                                            }
+
+                                                            @finalPrice.ToString("N0") 
+                                                            <span>تومان</span> 
+
+                                                        </ins>
+                                                    }
+                                                  
+                                                </div>
+                                               
+                                            </div>
+                                            <a asp-controller="Product" asp-action="ProductDetails" asp-route-productId="@order.ProductId" asp-route-title="@order.ProductTitle.FixTextForUrl()" class="font-12 fw-bold text-info">جزئیات محصول <i class="bi bi-chevron-left fs-6"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <div class="col-xl-3">
+                        <div class="cart-canvases position-sticky top-0">
+                            <div class="item">
+                                <div class="factor">
+                                    <div class="d-flex factor-item mb-3 align-items-center justify-content-between">
+                                        <h5 class="fw-bold mb-0 h6">قیمت کالا ها(@Model.Details.Count کالا)</h5>
+                                        <p class="mb-0 font-17">@totalPriceWithoutDiscount.ToString("N0")</p>
+                                    </div>
+
+                                    <div class="d-flex factor-item mb-3 align-items-center justify-content-between">
+                                        <h5 class="fw-bold mb-0 h6">تخفیف کالا ها</h5>
+                                        <p class="mb-0 font-18 text-danger fw-bold">@totalDiscountPrice.ToString("N0")</p>
+                                    </div>
+
+                                    <div class="d-flex factor-item mb-3 align-items-center justify-content-between">
+                                        <h5 class="fw-bold mb-0 h6">قابل پرداخت</h5>
+                                        <p class="mb-0 font-18">@totalPriceWithDiscount.ToString("N0")</p>
+                                    </div>
+
+                                    <div class="action mt-3 d-flex align-items-center justify-content-center">
+                                        <a href="#" class="btn main-color-two-bg text-white py-2 rounded-3 rounded-3 d-block w-100">
+                                            تسویه
+                                            حساب
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>

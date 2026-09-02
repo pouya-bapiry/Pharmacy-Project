@@ -1,6 +1,4 @@
-﻿using MarketPlace.Application.Services.Implementations;
-using MarketPlace.Application.Services.Interfaces;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Pharmacy.Application.Services.Interfaces;
 using Pharmacy.Web.PresentationExtensions;
 

@@ -2,7 +2,7 @@
 using Pharmacy.Application.DTO.ProductOrder;
 using Pharmacy.Domain.Entities.ProductOrder;
 
-namespace MarketPlace.Application.Services.Interfaces
+namespace Pharmacy.Application.Services.Interfaces
 {
     public interface IOrderService : IAsyncDisposable
     {

@@ -1,6 +1,4 @@
-﻿using MarketPlace.Application.Services.Implementations;
-using MarketPlace.Application.Services.Interfaces;
-using Pharmacy.Application.Services.Implementation;
+﻿using Pharmacy.Application.Services.Implementation;
 using Pharmacy.Application.Services.Implementations;
 using Pharmacy.Application.Services.Interfaces;
 using Pharmacy.Application.Utilities;

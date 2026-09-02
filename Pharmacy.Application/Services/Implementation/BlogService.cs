@@ -7,7 +7,6 @@ using Pharmacy.Application.Services.Interfaces;
 using Pharmacy.Application.Utilities;
 using Pharmacy.Domain.Entities.Blog;
 using Pharmacy.Domain.IRepository;
-using static System.Net.WebRequestMethods;
 
 namespace Pharmacy.Application.Services.Implementation
 {

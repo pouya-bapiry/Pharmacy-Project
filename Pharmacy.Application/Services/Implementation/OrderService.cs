@@ -1,14 +1,13 @@
-﻿using MarketPlace.Application.Services.Interfaces;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Pharmacy.Application.DTO.Paging;
 using Pharmacy.Application.DTO.ProductOrder;
-using Pharmacy.Application.Utilities;
+using Pharmacy.Application.Services.Interfaces;
 using Pharmacy.Domain.Entities.Product;
 using Pharmacy.Domain.Entities.ProductOrder;
 using Pharmacy.Domain.IRepository;
 
 
-namespace MarketPlace.Application.Services.Implementations
+namespace Pharmacy.Application.Services.Implementations
 {
     public class OrderService : IOrderService
     {
