@@ -50,7 +50,7 @@ namespace Pharmacy.Application.Services.Implementation
                     ImageName = x.ImageName,
                     Link = x.Link,
                     MobileImageName = x.MobileImageName,
-                    UserName=x.UserName
+                    UserName = x.UserName
 
                 })
                 .ToListAsync();
@@ -61,15 +61,15 @@ namespace Pharmacy.Application.Services.Implementation
 
             return await _sliderRepository.GetQuery().Where(x => !x.IsDelete).Select(x => new FilterSliderDto
             {
-                Id = x.Id,  
+                Id = x.Id,
                 Description = x.Description,
                 ImageName = x.ImageName,
                 Link = x.Link,
                 MobileImageName = x.MobileImageName,
                 IsActive = x.IsActive,
-                CreateDate= x.CreateDate.ToStringShamsiDate(),
-                LastUpdateDate=x.LastUpdateDate.ToStringShamsiDate(),
-                
+                CreateDate = x.CreateDate.ToStringShamsiDate(),
+                LastUpdateDate = x.LastUpdateDate.ToStringShamsiDate(),
+
 
             }).ToListAsync();
         }
@@ -186,7 +186,7 @@ namespace Pharmacy.Application.Services.Implementation
             {
                 return EditSliderResult.NotFound;
             }
-           
+
 
 
             if (sliderImage != null && sliderImage.IsImage())
@@ -206,8 +206,8 @@ namespace Pharmacy.Application.Services.Implementation
                 mainSlider.MobileImageName = mobileImageName;
 
             }
-           
-                
+
+
             mainSlider.Link = edit.Link;
             //if (edit.Description==null)
             //{
@@ -234,20 +234,27 @@ namespace Pharmacy.Application.Services.Implementation
 
         #region Site Banners
 
-        public async Task<List<FilterBannerDto>> GetBannersByPlacement(BannerPlacement placement)
+        public async Task<List<FilterBannerDto>> GetBannersByPlacement( )
         {
             return await _siteBannerRepository
-                .GetQuery()
-                .AsQueryable()
-                .Where(b => b.Placement == placement).Select(x => new FilterBannerDto
-                {
-                    ColSize = x.ColSize,
-                    Description = x.Description,
-                    Url = x.Url,
-                   
+             .GetQuery()
+             .AsQueryable()
+             .Where(x=>x.IsDelete==false)
+             .Select(x => new FilterBannerDto
+             {
+                 Id = x.Id,
+                 Url = x.Url,
+                 ColSize = x.ColSize,
+                 Description = x.Description,
+                 CreateDate = x.CreateDate,
+                 ImageName = x.ImageName,
+                 LastUpdateDate = x.LastUpdateDate,
+                 UserName = x.UserName,
+                 IsDelete = x.IsDelete,
 
-                })
-                .ToListAsync();
+
+
+             }).OrderByDescending(x => x.CreateDate).ToListAsync();
 
         }
         public async Task<List<FilterBannerDto>> GetAllBanners()
@@ -255,21 +262,21 @@ namespace Pharmacy.Application.Services.Implementation
             return await _siteBannerRepository
             .GetQuery()
             .AsQueryable()
-            .Select(x=>new FilterBannerDto 
-            { 
-            Id = x.Id,
-            Url = x.Url,    
+            .Select(x => new FilterBannerDto
+            {
+                Id = x.Id,
+                Url = x.Url,
                 ColSize = x.ColSize,
                 Description = x.Description,
-                CreateDate =x.CreateDate,
+                CreateDate = x.CreateDate,
                 ImageName = x.ImageName,
-                LastUpdateDate=x.LastUpdateDate,
-                UserName=x.UserName,
-                IsDelete=x.IsDelete,
-               
-                
-            
-            }).OrderByDescending(x=>x.CreateDate).ToListAsync();
+                LastUpdateDate = x.LastUpdateDate,
+                UserName = x.UserName,
+                IsDelete = x.IsDelete,
+
+
+
+            }).OrderByDescending(x => x.CreateDate).ToListAsync();
         }
         public async Task<CreateBannerResult> CreateBanner(CreateBannerDto banner, IFormFile bannerImage, string username)
         {

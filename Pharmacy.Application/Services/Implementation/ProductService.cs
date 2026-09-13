@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Pharmacy.Application.DTO.Paging;
 using Pharmacy.Application.DTO.Product;
 using Pharmacy.Application.DTO.ProductCategory;
@@ -12,11 +11,7 @@ using Pharmacy.Application.Services.Interfaces;
 using Pharmacy.Application.Utilities;
 using Pharmacy.Domain.Entities.Product;
 using Pharmacy.Domain.IRepository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Pharmacy.Application.Services.Implementation
 {
@@ -85,6 +80,7 @@ namespace Pharmacy.Application.Services.Implementation
                 .Include(x => x.ProductColors)
                 .Include(x => x.ProductFeatures)
                 .Include(x => x.ProductGallery)
+                .Include(x=>x.ProductDiscounts)
                 .Where(x=>x.IsActive==true)
                 .AsQueryable();
 

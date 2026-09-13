@@ -23,7 +23,7 @@ namespace ServiceHost.Areas.User.Controllers
         private string MerchantId { get; }
 
 
-        public OrderController(IOrderService orderService, IUserService userService,  IConfiguration configuration, IWebHostEnvironment hostingEnvironment)
+        public OrderController(IOrderService orderService, IUserService userService, IConfiguration configuration, IWebHostEnvironment hostingEnvironment)
         {
             _orderService = orderService;
             _userService = userService;
@@ -137,41 +137,44 @@ namespace ServiceHost.Areas.User.Controllers
         [HttpPost("user-address/{userId}"), ValidateAntiForgeryToken]
         public async Task<IActionResult> AddUserAddress(UserAddressDto address, long userId)
         {
-            var openOrder = await _orderService.GetUserLatestOpenOrder(userId);
-            address.OrderId = openOrder.Id;
+           
+                var openOrder = await _orderService.GetUserLatestOpenOrder(userId);
+                address.OrderId = openOrder.Id;
 
-            var result = await _orderService.AddUserAddress(address, userId);
+                var result = await _orderService.AddUserAddress(address, userId);
 
-            switch (result)
-            {
-                case AddUserAddressResult.Error:
-                    TempData[ErrorMessage] = "ثبت و ذخیره اطلاعات با شکست مواجه شد";
-                    break;
-                case AddUserAddressResult.OrderExist:
-                    TempData[ErrorMessage] = "سفارش خود را مجددا ثبت نمایید";
-                    break;
-                case AddUserAddressResult.Success:
-                    TempData[InfoMessage] = "اطلاعات شما با موفقیت ذخیره و ثبت گردید";
-                    return RedirectToAction("PayUserOrderPrice", "Order");
-            }
+                switch (result)
+                {
+                    case AddUserAddressResult.Error:
+                        TempData[ErrorMessage] = "ثبت و ذخیره اطلاعات با شکست مواجه شد";
+                        break;
+                    case AddUserAddressResult.OrderExist:
+                        TempData[ErrorMessage] = "سفارش خود را مجددا ثبت نمایید";
+                        break;
+                    case AddUserAddressResult.Success:
+                        TempData[InfoMessage] = "اطلاعات شما با موفقیت ذخیره و ثبت گردید";
+                        return RedirectToAction("PayUserOrderPrice", "Order");
+                }
+
+           
 
             return View();
         }
 
         #endregion
 
-       
 
-        
 
-        
+
+
+
 
         #region User Order List
 
         [HttpGet("user-order")]
         public async Task<IActionResult> GetUserOrder(FilterUserOrderDto filter)
         {
-            filter.TakeEntity = 5;
+            
             filter.UserId = User.GetUserId();
             filter.FilterUserOrderState = FilterUserOrderState.All;
 

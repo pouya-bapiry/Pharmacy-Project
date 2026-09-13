@@ -1,13 +1,40 @@
 ﻿@using Pharmacy.Application.Utilities
 @{
     var avatar = ViewBag.AvatarImage;
+    var id = ViewBag.UserId;
 }
 
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+
+        const currentUrl = window.location.pathname
+            .replace(/\/+$/, '')
+            .toLowerCase();
+
+        const menuLinks = document.querySelectorAll('.profile-menu a');
+
+        menuLinks.forEach(function(link) {
+
+            const linkUrl = new URL(link.href, window.location.origin)
+                .pathname
+                .replace(/\/+$/, '')
+                .toLowerCase();
+
+            link.classList.remove('active');
+
+            if (linkUrl === currentUrl) {
+                link.classList.add('active');
+            }
+
+        });
+
+    });
+</script>
 
 <aside class="profile-card d-xl-block d-none">
     <div class="profile-header d-flex align-items-center">
         <img src="@(!string.IsNullOrEmpty(avatar) ?
-                                      PathExtension.UserAvatarOrigin + avatar : PathExtension.DefaultAvatar)"
+                                              PathExtension.UserAvatarOrigin + avatar : PathExtension.DefaultAvatar)"
              alt="تصویر پروفایل" title="تصویر پروفایل" @* class="img-fluid rounded-circle profile-avatar" width="60" height="60" *@>
         <div class="ms-3">
             <h6 class="mt-2">@User.Identity.Name</h6>
@@ -19,11 +46,11 @@
         </div>
     </div>
     <div class="profile-menu">
-        <a href="#" class="active"><i class="bi bi-shop-window"></i> خلاصه فعالیت</a>
-        <a @* asp-area="User" asp-controller="Order" asp-action="UserOpenOrder" asp-route-userId="@Model.userId" *@><i class="bi bi-bag"></i> سبد خرید</a>
-        <a href="#"><i class="bi bi-bell"></i> دیدگاه‌ها</a>
-        <a href="#"><i class="bi bi-heart"></i> لیست علاقه‌مندی</a>
-        <a href="#"><i class="bi bi-person"></i> اطلاعات حساب کاربری</a>
+        <a ><i class="bi bi-person"></i> اطلاعات حساب کاربری</a>
+        <a asp-controller="Order" asp-action="GetUserOrder" ><i class="bi bi-shop-window"></i> سفارش ها </a>
+        <a asp-area="User" asp-controller="Order" asp-action="UserOpenOrder" asp-route-userId="id"><i class="bi bi-bag"></i> سبد خرید</a>
+        <a asp-controller="Account" asp-action="ChangePassword"><i class="text-danger bi bi-lock-fill"></i> ‌تغییر رمز ورود</a>
+        <a asp-controller="Account" asp-action="EditProfile"><i class="text-warning bi bi-pencil-square"></i>  ویرایش اطلاعات شخصی‌</a>
         <a asp-controller="Account" asp-action="Logout" class="logout"><i class="bi bi-box-arrow-right"></i> خروج</a>
     </div>
 </aside>

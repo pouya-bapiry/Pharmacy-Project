@@ -1,0 +1,122 @@
+﻿@model Pharmacy.Application.DTO.ProductOrder.UserAddressDto
+
+<section class="content my-xl-3 my-5 py-xl-4 py-5">
+    <div class="container-fluid">
+        <div class="row gy-4">
+
+            <!-- main content -->
+            <div class="col-xl-12">
+                <div class="section-title mb-3">
+                    <div class="section-title-title">
+                        <h2 class="fw-900 h4">
+                            صفحه<span class="with-highlight ms-1">خالی</span>
+                        </h2>
+                        <div class="Dottedsquare"></div>
+                    </div>
+                </div>
+                <div class="slider-parent content-box rounded-3">
+                    <div class="container-fluid">
+                        <form asp-controller="Order" asp-action="AddUserAddress" asp-area="User" method="post">
+                            <div class="row gy-3">
+                                <div class="col-md-3">
+                                    <div class="comment-item mb-3">
+                                        <input type="text" asp-for="Name" class="form-control" id="floatingInput" placeholder="نام خود را وارد کنید">
+                                        <label for="floatingInputoldPasswd" class="form-label label-float fw-bold">
+                                            نام
+                                        </label>
+                                    </div>
+                                    <span asp-validation-for="Name" class="text-danger"></span>
+
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="comment-item mb-3">
+                                        <input type="text" asp-for="Family" class="form-control" id="floatingInput" placeholder="نام خانوادگی خود را وارد کنید">
+                                        <label for="floatingInputNewPasswd" class="form-label label-float fw-bold">
+                                            نام خانوادگی
+                                        </label>
+                                    </div>
+                                    <span asp-validation-for="Family" class="text-danger"></span>
+
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="comment-item mb-3">
+                                        <input type="text" asp-for="Company" class="form-control" id="floatingInput" placeholder="نام شرکت خود را وارد کنید (اختیاری)">
+                                        <label for="floatingInputConfirmPasswd" class="form-label label-float fw-bold">
+                                            نام شرکت
+                                        </label>
+                                    </div>
+                                    <span asp-validation-for="Company" class="text-danger"></span>
+
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="comment-item mb-3">
+                                        <input type="text" asp-for="State" class="form-control" id="floatingInput" placeholder="نام استان خود را وارد کنید">
+                                        <label for="floatingInputConfirmPasswd" class="form-label label-float fw-bold">
+                                            نام استان
+                                        </label>
+                                    </div>
+                                    <span asp-validation-for="State" class="text-danger"></span>
+
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="comment-item mb-3">
+                                        <input type="text" asp-for="City" class="form-control" id="floatingInput" placeholder="نام شهر خود را وارد کنید">
+
+                                        <label for="floatingInputConfirmPasswd" class="form-label label-float fw-bold">
+                                            نام شهر
+                                        </label>
+
+                                    </div>
+                                    <span asp-validation-for="City" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="comment-item mb-3">
+                                        <input type="text" asp-for="PostalCode" class="form-control" id="floatingInput" placeholder=" کد پستی خود را وارد کنید (اختیاری)">
+                                        <label for="floatingInputConfirmPasswd" class="form-label label-float fw-bold">
+                                            کد پستی
+                                        </label>
+                                    </div>
+                                    <span asp-validation-for="PostalCode" class="text-danger"></span>
+
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="comment-item mb-3">
+                                        <input type="text" asp-for="PlaqueNo" class="form-control" id="floatingInput" placeholder="   پلاک خود را وارد کنید (اختیاری)">
+                                        <label for="floatingInputConfirmPasswd" class="form-label label-float fw-bold">
+                                            پلاک
+                                        </label>
+                                    </div>
+                                    <span asp-validation-for="PlaqueNo" class="text-danger"></span>
+
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="comment-item mb-3">
+                                        <input type="text" asp-for="Mobile" class="form-control" id="floatingInput" placeholder="تلفن همراه خود را وارد کنید">
+                                        <label for="floatingInputConfirmPasswd" class="form-label label-float fw-bold">
+                                            تلفن همراه
+                                        </label>
+                                    </div>
+                                    <span asp-validation-for="Mobile" class="text-danger"></span>
+
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="comment-item mb-3">
+                                        <input type="text" asp-for="Street" class="form-control" id="floatingInput" placeholder="آدرس کامل خود را وارد کنید">
+                                        <label for="floatingInputConfirmPasswd" class="form-label label-float fw-bold">
+                                            آدرس کامل
+                                        </label>
+                                    </div>
+                                    <span asp-validation-for="Street" class="text-danger"></span>
+
+                                </div>
+                                <div class="col-12">
+                                    <input type="submit" value="ثبت آدرس " class="btn main-color-one-bg px-5 w-100-in-400 pt-2">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

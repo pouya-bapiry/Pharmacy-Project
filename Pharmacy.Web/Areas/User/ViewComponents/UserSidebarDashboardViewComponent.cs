@@ -19,8 +19,8 @@ namespace Pharmacy.Web.Areas.User.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-
-            //ViewBag.AvatarImage=await _userService.GetUserImage(User.GetUserId()) ??string.Empty;
+            ViewBag.UserId = await _userService.GetUserById(User.GetUserId());
+            ViewBag.AvatarImage = await _userService.GetUserImage(User.GetUserId()) ?? string.Empty;
             return View("UserSidebarDashboard");
         }
 

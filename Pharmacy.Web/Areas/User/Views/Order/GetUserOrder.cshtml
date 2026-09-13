@@ -1,0 +1,224 @@
+﻿@model List<Pharmacy.Application.DTO.ProductOrder.FilterUserOrderDto>
+@using Pharmacy.Application.Utilities
+
+
+
+@{
+    ViewData["Title"] = "سفارشات";
+
+    // var totalPriceWithoutDiscount = Model.GetTotalPriceWithoutDiscount();
+    // var totalPriceWithDiscount = Model.GetTotalPriceWithDiscount();
+    // var totalDiscountPrice = Model.GetTotalDiscountPrice();
+}
+
+<section class="content my-xl-3 my-5 py-xl-4 py-5">
+    <div class="container-fluid">
+        <div class="row gy-3">
+            <!-- side nav -->
+            <div class="col-xl-3">
+                <!--   start panel menu mobile  -->
+                @await Component.InvokeAsync("UserMobileDashboard")
+                <!--   end panel menu mobile   -->
+                <!--   start panel menu desktop  -->
+                @await Component.InvokeAsync("UserSidebarDashboard")
+                <!--   end panel menu desktop  -->
+            </div>
+            <!-- main content -->
+            <div class="col-xl-9">
+                <div class="section-title mb-3">
+                    <div class="section-title-title">
+                        <h2 class="fw-900 h4">
+                            آخرین<span class="with-highlight ms-1">سفارشات</span>
+                        </h2>
+                        <div class="Dottedsquare"></div>
+                    </div>
+                </div>
+                <!-- order -->
+                <div class="order-widget mt-4">
+                    <ul class="nav nav-tabs mt-3 border-0" id="orderTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link active cart-tab" data-bs-toggle="tab" href="#delivered" aria-selected="true" role="tab">تحویل شده</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link cart-tab" data-bs-toggle="tab" href="#current" aria-selected="false" tabindex="-1" role="tab">جاری</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link cart-tab" data-bs-toggle="tab" href="#returned" aria-selected="false" tabindex="-1" role="tab">مرجوع شده</a>
+                        </li>
+                    </ul>
+                    <form asp-area="User" asp-controller="Order" asp-action="GetUserOrder" id="filter-form" method="get">
+                     
+                    </form>
+                    @if (Model != null && Model.Any())
+                    {
+                        <div class="tab-content mt-3">
+                            <div class="tab-pane fade show active" id="delivered" role="tabpanel">
+                                <div class="orders-container">
+                                    @foreach (var order in Model)
+                                    {
+
+                                        <div class="orders">
+                                            <div class="order-item">
+                                                <a asp-area="User" asp-controller="Order" asp-action="GetUserOrderDetailItem" asp-route-orderId="@order.Id">
+                                                    <div class="order-item-status">
+                                                        <div class="order-item-status-item">
+                                                            <p>
+
+                                                                <i class="bi bi-bag-check-fill"></i>
+                                                                <span>@order.OrderAcceptanceState</span>
+                                                            </p>
+                                                        </div>
+                                                        <div class="order-item-status-item">
+                                                            <p>
+                                                                <i class="bi bi-arrow-left pointer text-dark"></i>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="order-item-detail">
+                                                        <ul class="nav">
+                                                            <li class="nav-item text-muted">
+                                                                @order.PaymentDate
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <span class="text-mute">کد سفارش</span>
+                                                                <strong>@order.TrackingCode</strong>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <span class="text-mute">مبلغ</span>
+                                                                <strong>@order.OrderAmount</strong>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                   
+                                                </a>
+                                            </div>
+                                            <div class="order-item">
+                                                <a href="">
+                                                    <div class="order-item-status">
+                                                        <div class="order-item-status-item">
+                                                            <p>
+                                                                <i class="bi bi-bag-check-fill"></i>
+                                                                <span>تحویل شده</span>
+                                                            </p>
+                                                        </div>
+                                                        <div class="order-item-status-item">
+                                                            <p>
+                                                                <i class="bi bi-arrow-left pointer text-dark"></i>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="order-item-detail">
+                                                        <ul class="nav">
+                                                            <li class="nav-item text-muted">
+                                                                29 خرداد 1399
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <span class="text-mute">کد سفارش</span>
+                                                                <strong>17745651</strong>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <span class="text-mute">مبلغ</span>
+                                                                <strong>25,000,000 تومان</strong>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="order-item-product-list">
+                                                        <div class="order-item-product-list-item">
+                                                            <img src="assets/image/product/product-image1.jpg" alt="" class="img-thumbnail" width="70" height="70">
+                                                        </div>
+                                                        <div class="order-item-product-list-item">
+                                                            <img src="assets/image/product/product-image3.jpg" alt="" class="img-thumbnail" width="70" height="70">
+                                                        </div>
+                                                        <div class="order-item-product-list-item">
+                                                            <img src="assets/image/product/product-image4.jpg" alt="" class="img-thumbnail" width="70" height="70">
+                                                        </div>
+                                                        <div class="order-item-product-list-item">
+                                                            <img src="assets/image/product/product-image5.jpg" alt="" class="img-thumbnail" width="70" height="70">
+                                                        </div>
+                                                        <div class="order-item-product-list-item">
+                                                            <img src="assets/image/product/product-image6.jpg" alt="" class="img-thumbnail" width="70" height="70">
+                                                        </div>
+                                                    </div>
+                                                    <div class="order-item-show">
+                                                        <p><i class="bi bi-card-list"></i> مشاهده فاکتور</p>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                    }
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="current" role="tabpanel">
+                                <div class="orders-container">
+                                    <div class="orders">
+                                        <div class="order-item">
+                                            <a href="">
+                                                <div class="order-item-status">
+                                                    <div class="order-item-status-item">
+                                                        <p>
+                                                            <i class="bi bi-circle-half"></i>
+                                                            <span>پردازش انبار</span>
+                                                        </p>
+                                                    </div>
+                                                    <div class="order-item-status-item">
+                                                        <p>
+                                                            <i class="bi bi-arrow-left pointer text-dark"></i>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="order-item-detail">
+                                                    <ul class="nav">
+                                                        <li class="nav-item text-muted">
+                                                            29 خرداد 1399
+                                                        </li>
+                                                        <li class="nav-item">
+                                                            <span class="text-mute">کد سفارش</span>
+                                                            <strong>17745651</strong>
+                                                        </li>
+                                                        <li class="nav-item">
+                                                            <span class="text-mute">مبلغ</span>
+                                                            <strong>25,000,000 تومان</strong>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="order-item-product-list">
+                                                    <div class="order-item-product-list-item">
+                                                        <img src="assets/image/product/product-image1.jpg" alt="" class="img-thumbnail" width="70" height="70">
+                                                    </div>
+                                                    <div class="order-item-product-list-item">
+                                                        <img src="assets/image/product/product-image3.jpg" alt="" class="img-thumbnail" width="70" height="70">
+                                                    </div>
+                                                    <div class="order-item-product-list-item">
+                                                        <img src="assets/image/product/product-image4.jpg" alt="" class="img-thumbnail" width="70" height="70">
+                                                    </div>
+                                                    <div class="order-item-product-list-item">
+                                                        <img src="assets/image/product/product-image5.jpg" alt="" class="img-thumbnail" width="70" height="70">
+                                                    </div>
+                                                    <div class="order-item-product-list-item">
+                                                        <img src="assets/image/product/product-image6.jpg" alt="" class="img-thumbnail" width="70" height="70">
+                                                    </div>
+                                                </div>
+                                                <div class="order-item-show">
+                                                    <p><i class="bi bi-card-list"></i> مشاهده فاکتور</p>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="returned" role="tabpanel">
+                                <div class="orders-container">
+                                    <div class="empty-state">
+                                        <img src="assets/image/no-food.gif" alt="جعبه خالی">
+                                        <p class="mt-2 text-muted">هیچ سفارشی مرجوع نشده است.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

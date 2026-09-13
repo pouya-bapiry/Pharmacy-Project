@@ -39,7 +39,7 @@ namespace Pharmacy.Web.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var banners = await _siteImagesService.GetAllBanners();
+            var banners = await _siteImagesService.GetBannersByPlacement();
             return View("SiteBannerHome1", banners);
         }
     }

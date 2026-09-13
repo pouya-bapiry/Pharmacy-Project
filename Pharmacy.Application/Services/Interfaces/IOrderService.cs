@@ -18,7 +18,7 @@ namespace Pharmacy.Application.Services.Interfaces
         public Task<int> GetSuccessOrder(long userId);
         public Task<int> GetCancelOrder(long userId);
         public Task<int> GetUnderProgressOrder(long userId);
-        public Task<FilterUserOrderDto> GetUserOrder(FilterUserOrderDto filter);
+        public Task<List<FilterUserOrderDto>> GetUserOrder(FilterUserOrderDto filter);
         Task<Order> GetOrderBy(long id);
 
 

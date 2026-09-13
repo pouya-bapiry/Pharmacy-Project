@@ -378,28 +378,64 @@
                                             </h6>
                                         </div>
                                         <div class="product-action bs-bg-gray-200 border-ui  rounded-3">
-                                            <div class="discount mt-1">
-                                                <span class="btn main-color-one-bg"><i class="bi bi-cart"></i></span>
+                                            @if (product.ProductDiscounts != null && product.ProductDiscounts.Any(x => x.ExpireDate >= DateTime.Now))
+                                            {
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    @foreach (var discount in product.ProductDiscounts)
+                                                    {
+                                                        <div class="discount mt-1">
+                                                            <span class="btn main-color-one-bg"><i class="bi bi-cart"></i></span>
+                                                            <div class="countdown mt-1" data-date="@discount.ExpireDate.ToString("yyyy-M-d")" data-time="00:00"></div>
+
+                                                        </div>
+                                                        <div class="price d-flex justify-content-end flex-column align-content-end">
+                                                            <p class="new-price me-0 text-end">
+                                                                @{
+                                                                    decimal price = Convert.ToDecimal(product.Price);
+                                                                    int percent = Convert.ToInt32(discount.Percentage);
+
+                                                                    decimal finalPrice = price - (price * percent / 100m);
+                                                                }
+
+                                                                <p class="new-price me-0 text-end">
+                                                                    @finalPrice.ToString("N0")
+                                                                    <span class="fw-normal">تومان</span>
+                                                                </p>
+
+                                                                <p class="old-price mt-2">
+                                                                    <span class="badge bg-danger rounded-pill me-2">
+                                                                        %@percent
+                                                                    </span>
+                                                                    @price.ToString("N0")
+
+                                                                </p>
+
+                                                            </div>
+                                                        }
+                                                    </div>
+
+                                                }
+                                        else
+                                                {
+                                                    <span class="btn main-color-one-bg"><i class="bi bi-cart"></i></span>
+                                                    <div class="price d-flex justify-content-end flex-column align-content-end">
+                                                        <p class="new-price me-0 text-end">
+                                                            @product.Price.ToString("##,###") <span class="fw-normal">تومان</span>
+                                                        </p>
+                                                    </div>
+                                                }
                                             </div>
-                                            <div class="price d-flex justify-content-end flex-column align-content-end">
-                                                <p class="new-price me-0 text-end"> @product.Price.ToString("##,###") <span class="fw-normal">تومان</span></p>
-                                                @* <p class="old-price">
-                                                    <span class="badge bg-danger rounded-pill me-2">25%</span>
-                                                    @product.Price.ToString("##,### تومان" )
-                                                </p> *@
-                                            </div>
-                                        </div>
-                                    </a>
+                                        </a>
+                                    </div>
                                 </div>
-                            </div>
+                            }
                         }
-                    }
-                </div>
-                <div class="my-paginate mt-5">
-                    <partial name="_PagingPartial"  />
+                    </div>
+                    <div class="my-paginate mt-5">
+                        <partial name="_PagingPartial" />
+                    </div>
                 </div>
             </div>
-        </div>
 
-    </div>
-</section>
+        </div>
+    </section>

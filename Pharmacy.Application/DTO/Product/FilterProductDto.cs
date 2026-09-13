@@ -29,6 +29,7 @@ namespace Pharmacy.Application.DTO.Product
         public FilterProductState ProductState { get; set; }
         public FilterProductOrderBy OrderBy { get; set; }
         public FilterProductOrder ProductOrder { get; set; }
+        public Domain.Entities.Product.ProductDiscount ProductDiscount { get; set; }
         //public List<long> SelectedProductCategories { get; set; }
         //   public List<Entities.Product.ProductCategory> ProductCategories { get; set; }
 

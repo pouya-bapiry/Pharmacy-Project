@@ -5,6 +5,8 @@ using Pharmacy.Application.Services.Interfaces;
 using Pharmacy.Domain.Entities.Product;
 using Pharmacy.Domain.Entities.ProductOrder;
 using Pharmacy.Domain.IRepository;
+using Pharmacy.Application.Utilities;
+
 
 
 namespace Pharmacy.Application.Services.Implementations
@@ -19,7 +21,7 @@ namespace Pharmacy.Application.Services.Implementations
         private readonly IGenericRepository<ProductDiscountUse> _productDiscountUseRepository;
         private readonly IGenericRepository<UserAddress> _userAddressRepository;
         private readonly IGenericRepository<Product> _productRepository;
-        
+
 
 
 
@@ -34,7 +36,7 @@ namespace Pharmacy.Application.Services.Implementations
             _productDiscountUseRepository = productDiscountUseRepository;
             _productRepository = productRepository;
             _userAddressRepository = userAddressRepository;
-           
+
         }
 
         #endregion
@@ -278,91 +280,106 @@ namespace Pharmacy.Application.Services.Implementations
 
             return order.Count;
         }
-        public async Task<FilterUserOrderDto> GetUserOrder(FilterUserOrderDto filter)
+        public async Task<List<FilterUserOrderDto>> GetUserOrder(FilterUserOrderDto filter)
         {
-            var query = _orderRepository
-               .GetQuery()
-               .Include(x => x.OrderDetails)
-               .Include(x => x.UserAddress)
-               .AsQueryable()
-               .OrderByDescending(x => x.Id)
-               .Where(x => x.TrackingCode != null);
+            var order = await _orderRepository
+                .GetQuery()
+                .Include(x => x.OrderDetails)
+                .Include(x => x.UserAddress)
+                .Where(x =>
+                    x.UserId == filter.UserId &&
+                    x.TrackingCode != null &&
+                    !x.IsDelete)
+                .OrderByDescending(x => x.Id)
+                .Select(x => new FilterUserOrderDto
+                {
+                    Id=filter.Id,
+                  TrackingCode = x.TrackingCode,
+                  PaymentDate= x.PaymentDate,
+                  OrderAmount=x.OrderAmount,
+                  OrderAcceptanceState=filter.OrderAcceptanceState,
+                  
+                })
+                .OrderByDescending(x => x.PaymentDate)
+                .ToListAsync();
 
-            #region State
+            return order;
+        
+            //#region State
 
-            switch (filter.FilterUserOrderState)
-            {
-                case FilterUserOrderState.All:
-                    query = query.Where(x => !x.IsDelete);
-                    break;
-                case FilterUserOrderState.PaymentSuccessful:
-                    query = query.Where(x => x.OrderAcceptanceState == OrderAcceptanceState.PaymentSuccessful && !x.IsDelete);
-                    break;
-                case FilterUserOrderState.PaymentNotSuccessful:
-                    query = query.Where(x => x.OrderAcceptanceState == OrderAcceptanceState.PaymentNotSuccessful && !x.IsPaid && !x.IsDelete);
-                    break;
-                case FilterUserOrderState.PaymentCancel:
-                    query = query.Where(x => x.OrderAcceptanceState == OrderAcceptanceState.PaymentCancel && x.IsPaid && !x.IsDelete);
-                    break;
-                case FilterUserOrderState.UnderProgress:
-                    query = query.Where(x => x.OrderAcceptanceState == OrderAcceptanceState.UnderProgress && !x.IsDelete);
-                    break;
-            }
+            //switch (filter.FilterUserOrderState)
+            //{
+            //    case FilterUserOrderState.All:
+            //        query = query.Where(x => !x.IsDelete);
+            //        break;
+            //    case FilterUserOrderState.PaymentSuccessful:
+            //        query = query.Where(x => x.OrderAcceptanceState == OrderAcceptanceState.PaymentSuccessful && !x.IsDelete);
+            //        break;
+            //    case FilterUserOrderState.PaymentNotSuccessful:
+            //        query = query.Where(x => x.OrderAcceptanceState == OrderAcceptanceState.PaymentNotSuccessful && !x.IsPaid && !x.IsDelete);
+            //        break;
+            //    case FilterUserOrderState.PaymentCancel:
+            //        query = query.Where(x => x.OrderAcceptanceState == OrderAcceptanceState.PaymentCancel && x.IsPaid && !x.IsDelete);
+            //        break;
+            //    case FilterUserOrderState.UnderProgress:
+            //        query = query.Where(x => x.OrderAcceptanceState == OrderAcceptanceState.UnderProgress && !x.IsDelete);
+            //        break;
+            //}
 
-            switch (filter.FilterPaymentMethod)
-            {
-                case FilterPaymentMethod.All:
-                    query = query.Where(x => !x.IsDelete);
-                    break;
-               
-            }
+            //switch (filter.FilterPaymentMethod)
+            //{
+            //    case FilterPaymentMethod.All:
+            //        query = query.Where(x => !x.IsDelete);
+            //        break;
 
-            switch (filter.FilterOrderPeriodTime)
-            {
-                case FilterOrderPeriodTime.All:
-                    query = query.Where(x => !x.IsDelete);
-                    break;
-               
-            }
+            //}
 
-            switch (filter.FilterOrderDelivered)
-            {
-                case FilterOrderDelivered.All:
-                    query = query.Where(x => !x.IsDelete);
-                    break;
-                
-            }
+            //switch (filter.FilterOrderPeriodTime)
+            //{
+            //    case FilterOrderPeriodTime.All:
+            //        query = query.Where(x => !x.IsDelete);
+            //        break;
 
-            #endregion
+            //}
 
-            #region Filter
+            //switch (filter.FilterOrderDelivered)
+            //{
+            //    case FilterOrderDelivered.All:
+            //        query = query.Where(x => !x.IsDelete);
+            //        break;
 
-            if (filter.UserId != null && filter.UserId != 0)
-            {
-                query = query.Where(x => x.UserId == filter.UserId);
-            }
+            //}
 
-            if (!string.IsNullOrEmpty(filter.TrackingCode))
-            {
-                query = query.Where(x => EF.Functions.Like(x.TrackingCode, $"%{filter.TrackingCode}%"));
-            }
+            //#endregion
 
-            #endregion
+            //#region Filter
 
-            #region Paging
+            //if (filter.UserId != null && filter.UserId != 0)
+            //{
+            //    query = query.Where(x => x.UserId == filter.UserId);
+            //}
 
+            //if (!string.IsNullOrEmpty(filter.TrackingCode))
+            //{
+            //    query = query.Where(x => EF.Functions.Like(x.TrackingCode, $"%{filter.TrackingCode}%"));
+            //}
 
-            var orderCount = await query.CountAsync();
-
-            var pager = Pager.Build(filter.PageId, orderCount, filter.TakeEntity,
-                filter.HowManyShowPageAfterAndBefore);
-
-            var allEntities = await query.Paging(pager).ToListAsync();
+          
+          
+            //#region Paging
 
 
-            #endregion
+            //var orderCount = await query.CountAsync();
 
-            return filter.SetPaging(pager).SetUserOrders(allEntities);
+            //var pager = Pager.Build(filter.PageId, orderCount, filter.TakeEntity,
+            //    filter.HowManyShowPageAfterAndBefore);
+
+            //var allEntities = await query.Paging(pager).ToListAsync();
+
+
+            //#endregion
+
+            //return filter.SetPaging(pager).SetUserOrders(allEntities);
         }
         public async Task<Order> GetOrderBy(long id)
         {
@@ -380,7 +397,7 @@ namespace Pharmacy.Application.Services.Implementations
             return order;
         }
 
-        #endregion
+#endregion
 
         #region Order Detail
 
@@ -486,7 +503,7 @@ namespace Pharmacy.Application.Services.Implementations
                 .GetQuery()
                 .AsQueryable()
 
-
+                .Include(x=>x.UserAddress)
                 .Include(x => x.OrderDetails)
                 .ThenInclude(x => x.Product)
 
@@ -507,7 +524,7 @@ namespace Pharmacy.Application.Services.Implementations
                 OrderId = x.Id,
                 ProductId = x.ProductId,
                 ProductTitle = x.Product.Title,
-                ProductCode = x.Product.Code,     
+                ProductCode = x.Product.Code,
                 Count = x.Count,
                 ProductPrice = x.ProductPrice,
                 OriginalProductPrice = CalculateProductPrice(x.Product),
@@ -529,19 +546,19 @@ namespace Pharmacy.Application.Services.Implementations
             return items;
 
         }
-        
+
         public async Task<List<UserOrderDetailItemDto>> GetOrderDetailItemForBikeDelivery(long orderId)
         {
             var order = await _orderRepository
                 .GetQuery()
                 .AsQueryable()
 
-                
+
 
                 .Include(x => x.OrderDetails)
                 .ThenInclude(x => x.Product)
 
-               
+
 
                 .FirstOrDefaultAsync(x => x.Id == orderId);
 
@@ -561,7 +578,7 @@ namespace Pharmacy.Application.Services.Implementations
                 ProductId = x.ProductId,
                 ProductTitle = x.Product.Title,
                 ProductCode = x.Product.Code,
-               
+
                 Count = x.Count,
                 ProductPrice = x.ProductPrice,
                 OriginalProductPrice = CalculateProductPrice(x.Product),
@@ -592,7 +609,7 @@ namespace Pharmacy.Application.Services.Implementations
             // Initialize the product price with the main price
             var productPrice = product.Price;
 
-           
+
 
             return productPrice;
         }
@@ -627,7 +644,7 @@ namespace Pharmacy.Application.Services.Implementations
             {
                 await _userAddressRepository.DisposeAsync();
             }
-          
+
         }
 
         #endregion

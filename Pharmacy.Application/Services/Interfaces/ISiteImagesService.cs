@@ -28,7 +28,7 @@ namespace Pharmacy.Application.Services.Interfaces
         #region banners
 
 
-        Task<List<FilterBannerDto>> GetBannersByPlacement(BannerPlacement placement);
+        Task<List<FilterBannerDto>> GetBannersByPlacement();
         Task<List<FilterBannerDto>> GetAllBanners();
         Task<CreateBannerResult> CreateBanner(CreateBannerDto banner, IFormFile bannerImage, string username);
         Task<EditBannerDto> GetBannerForEdit(long bannerId);

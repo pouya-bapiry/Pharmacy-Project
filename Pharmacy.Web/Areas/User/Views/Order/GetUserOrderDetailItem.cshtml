@@ -1,0 +1,163 @@
+﻿@model List<Pharmacy.Application.DTO.ProductOrder.UserOrderDetailItemDto>
+
+
+
+<section class="content my-xl-3 my-5 py-xl-4 py-5">
+    <div class="container-fluid">
+        <div class="row gy-3">
+            <!-- side nav -->
+            <div class="col-xl-3">
+                <!--   start panel menu mobile  -->
+                @await Component.InvokeAsync("UserMobileDashboard")
+                <!--   end panel menu mobile   -->
+                <!--   start panel menu desktop  -->
+                @await Component.InvokeAsync("UserSidebarDashboard")
+                <!--   end panel menu desktop  -->
+            </div>
+            <!-- main content -->
+            <div class="col-xl-9">
+                <div class="section-title mb-3">
+                    <div class="section-title-title">
+                        <h2 class="fw-900 h4">
+                            سفارش<span class="with-highlight ms-1">2563</span>
+                        </h2>
+                        <div class="Dottedsquare"></div>
+                    </div>
+                </div>
+                <!-- order -->
+                <div class="content-box mt-4">
+                    <div class="orders">
+                        <div class="order-item">
+                            <div class="order-item-detail">
+                                <ul class="nav">
+                                    <li class="nav-item">
+                                        <span class="text-mute">کد پیگیری سفارش</span>
+                                        <strong>@Model</strong>
+                                    </li>
+                                    <li class="nav-item">
+                                        <span class="text-mute">تاریخ ثبت سفارش</span>
+                                        <strong>13 آبان 1401</strong>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="order-item-detail pt-3">
+                                <ul class="nav">
+                                    <li class="nav-item">
+                                        <span class="text-mute">تحویل گیرنده</span>
+                                        <strong>علی علوی</strong>
+                                    </li>
+                                    <li class="nav-item">
+                                        <span class="text-mute">شماره موبایل</span>
+                                        <strong>@Model.</strong>
+                                    </li>
+                                    <li class="nav-item">
+                                        <span class="text-mute">آدرس</span>
+                                        <strong></strong>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="order-item-detail pt-3">
+                                <ul class="nav">
+                                    <li class="nav-item">
+                                        <span class="text-mute">مبلغ</span>
+                                        <strong>25,000,000 تومان</strong>
+                                    </li>
+                                    <li class="nav-item">
+                                        <strong>پرداخت اینترنتی</strong>
+                                    </li>
+                                    <li class="nav-item">
+                                        <span class="text-mute">کد تخفیف</span>
+                                        <strong>2,000,000 تومان</strong>
+                                    </li>
+                                    <li class="nav-item">
+                                        <span class="text-mute">هزینه ارسال</span>
+                                        <strong>200,000 تومان</strong>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="order-item-detail pt-3">
+                                <ul class="nav">
+                                    <li class="nav-item">
+                                        <strong>مرسوله 1 از 1</strong>
+                                    </li>
+                                    <li class="nav-item">
+                                        <strong class="text-danger">ارسال عادی</strong>
+                                    </li>
+                                    <li class="nav-item">
+                                        <span class="text-mute">زمان تحویل</span>
+                                        <strong>سه‌شنبه ۳ تیر بازه ۹ - ۲۲</strong>
+                                    </li>
+                                    <li class="nav-item">
+                                        <span class="text-mute">هزینه ارسال</span>
+                                        <strong>200,000 تومان</strong>
+                                    </li>
+                                    <li class="nav-item">
+                                        <span class="text-mute">مبلغ مرسوله</span>
+                                        <strong>200,000 تومان</strong>
+                                    </li>
+                                </ul>
+
+                                <div class="order-progress py-3">
+                                    <h6 class="fw-bold mb-2 font-14">تحویل به مشتری <i class="bi bi-check text-success fs-3"></i></h6>
+                                    <div class="progress" role="progressbar" aria-label="Animated striped example" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+                                        <div class="progress-bar main-color-green progress-bar-striped progress-bar-animated" style="width: 100%"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="product-list-row product-list-row-lg">
+                                <div class="product-row">
+                                    <a href="product.html">
+                                        <div class="product-row-desc">
+                                            <div class="product-row-desc-item">
+                                                <div class="product-row-img">
+                                                    <img src="assets/image/product/product-image1.jpg" alt="" class="img-thumbnail" width="100">
+                                                </div>
+                                                <div class="product-row-title">
+                                                    <h6>گوشی موبایل سامسونگ مدل Galaxy A50 SM-A505F/DS دو سیم کارت ظرفیت 128گیگابایت</h6>
+                                                    <div class="product-price mt-3">
+                                                        <div class="product-box-suggest-price my-2  d-flex align-items-center justify-content-between">
+                                                            <ins class="font-25 ms-0">2,500,000 <span>تومان</span></ins>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <div class="order-item-comment">
+                                        <a href=""><i class="bi bi-chat-dots me-2"></i>ثبت دیدگاه</a>
+                                    </div>
+                                </div>
+                                <div class="product-row">
+                                    <a href="product.html">
+                                        <div class="product-row-desc">
+                                            <div class="product-row-desc-item">
+                                                <div class="product-row-img">
+                                                    <img src="assets/image/product/product-image3.jpg" alt="" class="img-thumbnail" width="100">
+                                                </div>
+                                                <div class="product-row-title">
+                                                    <h6>گوشی موبایل سامسونگ مدل Galaxy A50 SM-A505F/DS دو سیم کارت ظرفیت 128گیگابایت</h6>
+                                                    <div class="product-price mt-3">
+                                                        <div class="product-box-suggest-price my-2  d-flex align-items-center justify-content-between">
+                                                            <ins class="font-25 ms-0">2,500,000 <span>تومان</span></ins>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <div class="order-item-comment">
+                                        <a href=""><i class="bi bi-chat-dots me-2"></i>ثبت دیدگاه</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Pharmacy.Application.DTO.ProductOrder
 {
-    public class FilterUserOrderDto : BasePaging
+    public class FilterUserOrderDto : UserOpenOrderDetailItemDto
     {
         #region Constructor
 
@@ -35,6 +35,10 @@ namespace Pharmacy.Application.DTO.ProductOrder
 
         [Display(Name = "توضیحات")]
         public string Description { get; set; }
+        public int ProductPrice { get; set; }
+        public OrderAcceptanceState OrderAcceptanceState { get; set; }
+
+
 
         public FilterUserOrderState FilterUserOrderState { get; set; }
         public FilterUserOrder OrderBy { get; set; }
@@ -43,39 +47,74 @@ namespace Pharmacy.Application.DTO.ProductOrder
         public FilterOrderDelivered FilterOrderDelivered { get; set; }
         public List<Order> Orders { get; set; }
         public List<OrderDetail> OrderDetails { get; set; }
+        public UserOpenOrderDetailItemDto Details { get; set; }
 
         #endregion
 
-        #region Methods
+        //#region Methods
 
-        public FilterUserOrderDto SetUserOrders(List<Order> orders)
-        {
-            this.Orders = orders;
-            return this;
-        }
+        //public FilterUserOrderDto SetUserOrders(List<Order> orders)
+        //{
+        //    this.Orders = orders;
+        //    return this;
+        //}
 
-        public FilterUserOrderDto SetUserOrderDetails(List<OrderDetail> orderDetails)
-        {
-            this.OrderDetails = orderDetails;
-            return this;
-        }
+        //public FilterUserOrderDto SetUserOrderDetails(List<OrderDetail> orderDetails)
+        //{
+        //    this.OrderDetails = orderDetails;
+        //    return this;
+        //}
 
-        public FilterUserOrderDto SetPaging(BasePaging paging)
-        {
-            this.PageId = paging.PageId;
-            this.AllEntitiesCount = paging.AllEntitiesCount;
-            this.StartPage = paging.StartPage;
-            this.EndPage = paging.EndPage;
-            this.HowManyShowPageAfterAndBefore = paging.HowManyShowPageAfterAndBefore;
-            this.TakeEntity = paging.TakeEntity;
-            this.SkipEntity = paging.SkipEntity;
-            this.PageCount = paging.PageCount;
+        //public FilterUserOrderDto SetPaging(BasePaging paging)
+        //{
+        //    this.PageId = paging.PageId;
+        //    this.AllEntitiesCount = paging.AllEntitiesCount;
+        //    this.StartPage = paging.StartPage;
+        //    this.EndPage = paging.EndPage;
+        //    this.HowManyShowPageAfterAndBefore = paging.HowManyShowPageAfterAndBefore;
+        //    this.TakeEntity = paging.TakeEntity;
+        //    this.SkipEntity = paging.SkipEntity;
+        //    this.PageCount = paging.PageCount;
 
-            return this;
-        }
+        //    return this;
+        //}
 
-        #endregion
+        //#endregion
+       
+
+        //public decimal GetTotalPriceWithoutDiscount()
+        //{
+        //    return Details.Sum(x => (decimal)x.Count * x.ProductPrice);
+        //}
+
+        //public decimal GetTotalDiscountPrice()
+        //{
+        //    return (decimal)Details.Sum(x =>
+        //        ((decimal)x.Count * x.DiscountPercentage * x.ProductPrice) / 100m
+        //    );
+        //}
+        //public decimal GetTotalPriceWithDiscount()
+        //{
+        //    return GetTotalPriceWithoutDiscount() - GetTotalDiscountPrice();
+        //}
+
     }
+
+    //public enum OrderAcceptanceState
+    //{
+
+    //    [Display(Name = "پرداخت شده")]
+    //    PaymentSuccessful,
+
+    //    [Display(Name = "لغو شده")]
+    //    PaymentCancel,
+
+    //    [Display(Name = "پرداخت نشده")]
+    //    PaymentNotSuccessful,
+
+    //    [Display(Name = "درحال بررسی")]
+    //    UnderProgress
+    //}
 
     public enum FilterUserOrderState
     {

@@ -25,7 +25,8 @@
         public string StoreName { get; set; }
         public int? DiscountPercentage { get; set; }
         public int DiscountPrice { get; set; }
-      
+        public string Street { get; set; }
+
 
         #endregion
 
