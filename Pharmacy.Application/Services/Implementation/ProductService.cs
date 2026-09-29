@@ -379,7 +379,7 @@ namespace Pharmacy.Application.Services.Implementation
                 .AsQueryable()
                 .Where(x => !x.IsDelete && x.IsActive.Value)
                 .Take(take)
-                .Include(x => x.ProductDiscounts)
+                .Include(x => x.ProductDiscounts)           
                 .OrderByDescending(x => x.Id)
                 .ToListAsync();
             return latestArrival.Count > take ? latestArrival.Skip(14).Take(1).ToList() : latestArrival;

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Pharmacy.Application.DTO.Blog;
+using Pharmacy.Domain.Entities.Blog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,5 +16,6 @@ namespace Pharmacy.Application.Services.Interfaces
         Task<EditBlogDto> GetBlogForEdit(long id);
         Task<EditBlogResult> EditBlog(EditBlogDto edit, IFormFile? image);
         Task<FilterBlogDto> GetBlogDetail(long id);
+        Task<List<Blog>> GetLatestBlogs(int take);
     }
 }

@@ -87,6 +87,20 @@ namespace Pharmacy.Application.Services.Implementation
                 Image = blog.Image
             };
         }
+
+        public async Task<List<Blog>> GetLatestBlogs(int take)
+        {
+            var latest = await _blogRepository
+              .GetQuery()
+              .AsQueryable()
+              .Where(x => !x.IsDelete)
+              .Take(take)     
+              .OrderByDescending(x => x.Id)
+              .ToListAsync();
+            return latest.Count > take ? latest.Skip(14).Take(1).ToList() : latest;
+        }
+
+
         #endregion
 
         #region Create
@@ -160,7 +174,7 @@ namespace Pharmacy.Application.Services.Implementation
             return EditBlogResult.Success;
         }
 
-
+      
 
 
         #endregion

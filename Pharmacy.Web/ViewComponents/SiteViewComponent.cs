@@ -140,5 +140,25 @@ namespace ServiceHost.ViewComponents
     }
 
     #endregion
+
+    #region Latest Blogs
+
+    public class LatestBlog : ViewComponent
+    {
+        private readonly IBlogService _blogService;
+
+        public LatestBlog(IBlogService blogService)
+        {
+            _blogService = blogService;
+        }
+
+        public async Task<IViewComponentResult> InvokeAsync()
+        {
+            var latest = await _blogService.GetLatestBlogs(15);
+            return View("LatestBlog", latest);
+        }
+    }
+
+    #endregion
 }
 

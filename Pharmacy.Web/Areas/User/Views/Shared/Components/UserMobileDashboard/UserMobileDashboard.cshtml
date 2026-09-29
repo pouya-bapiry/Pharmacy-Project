@@ -4,6 +4,8 @@
 
 @{
     var avatar = ViewBag.AvatarImage;
+    var id = ViewBag.UserId;
+
 }
 
 
@@ -48,10 +50,10 @@
                         سفارش ها
                     </a>
 
-                    <a asp-area="User"
-                       asp-controller="Order"
-                       asp-action="UserOpenCart"
-                       asp-route-userId="id">
+                    <a     asp-area="User"
+                    asp-controller="Order" 
+                    asp-action="UserOpenOrder"
+                    asp-route-userId="id">
                        
                         <i class="bi bi-bag"></i>
                         سبد خرید

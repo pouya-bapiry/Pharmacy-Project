@@ -37,7 +37,7 @@
     <!--============ end cart drawer ==============-->
     <!--============ start floatings button ==============-->
 
-    <div class="float-btn fw-light fw-bolder py-0">
+   @*  <div class="float-btn fw-light fw-bolder py-0">
         <div class="container-fluid">
             <!-- go to top -->
             <div class="progress-wrap">
@@ -51,7 +51,7 @@
             <div class="" id="contactOverlay"></div>
             <!-- end contact us floating -->
         </div>
-    </div>
+    </div> *@
 
     <!--============ end floatings button ==============-->
     <!--============ start mobile menu ==============-->
@@ -66,22 +66,21 @@
                 </div>
             </li>
             <li class="d-table-cell">
-                <a href="" class="mf-link nav-link text-center">
+                <a asp-area="User" asp-controller="Home" asp-action="Dashboard"  class="mf-link nav-link text-center">
                     <div class="mf-link-icon position-relative d-table mx-auto">
-                        <i class="bi bi-heart font-20"></i>
-                        <span class="position-absolute main-color-one-bg rounded-pill font-10 text-white badge"
-                              style="right:-40%;bottom:-5px;">0</span>
+                        <i class="bi bi-person font-20"></i>
+                       
                     </div>
-                    <span class="mt-1 font-12 fw-bold mf-link-title">علاقه مندی ها</span>
+                    <span class="mt-1 font-12 fw-bold mf-link-title">پنل کاربری</span>
                 </a>
             </li>
             <li class="d-table-cell">
-                <a href="" class="mf-link nav-link text-center">
+                <a href="/" class="mf-link nav-link text-center">
                     <span class="d-block mf-link-icon"><i class="bi bi-house font-20"></i></span>
                     <span class="mt-1 font-12 fw-bold mf-link-title">صفحه اصلی</span>
                 </a>
             </li>
-            <li class="d-table-cell">
+            @* <li class="d-table-cell">
                 <a href="" class="mf-link nav-link text-center">
                     <div class="position-relative mf-link-icon d-table mx-auto">
                         <span class="d-block mf-link-icon"><i class="bi bi-arrow-left-right font-20"></i></span>
@@ -90,13 +89,12 @@
                     </div>
                     <span class="mt-1 font-12 fw-bold mf-link-title">مقایسه</span>
                 </a>
-            </li>
+            </li> *@
             <li class="d-table-cell">
                 <a class="mf-link nav-link text-center" data-bs-toggle="offcanvas" href="#offcanvasCart" role="button" aria-controls="offcanvasCart">
                     <div class="position-relative mf-link-icon d-table mx-auto">
                         <span class="d-block mf-link-icon"><i class="bi bi-bag font-20"></i></span>
-                        <span class="position-absolute main-color-one-bg rounded-pill font-10 text-white badge"
-                              style="right:-60%;bottom:-5px;">0</span>
+                       
                     </div>
                     <span class="mt-1 font-12 fw-bold mf-link-title">سبد خرید</span>
                 </a>
